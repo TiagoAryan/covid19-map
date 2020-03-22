@@ -9,7 +9,7 @@
   var circle_size = 20000;
   var circle = [];
   var c = 0;
-
+  let country_clicked;
   let res;
   let pop_total = 7772494610;
 
