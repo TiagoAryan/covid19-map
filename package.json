@@ -1,6 +1,6 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "covid19-map",
+  "description": "covid19-map",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
