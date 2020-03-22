@@ -1,13 +1,14 @@
 <script>
+  import { onMount } from "svelte";
+  import Total from "../components/total.svelte";
+  import data from "jhucsse.covid";
+
   var map;
   var selected_country;
   var colors = ["#FF4E34", "#FFC831", "#40C0A5"];
   var circle_size = 20000;
   var circle = [];
-
-  import { onMount } from "svelte";
-  import Total from "../components/total.svelte";
-  import data from "jhucsse.covid";
+  let country_clicked;
 
   let res;
   let pop_total = 7772494610;
@@ -199,8 +200,6 @@
   onMount(() => {
     setTimeout(() => init(), 50);
   });
-
-  let country_clicked = "IT";
 </script>
 
 <style>
