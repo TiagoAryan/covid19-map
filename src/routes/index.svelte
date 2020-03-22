@@ -8,7 +8,7 @@
   var colors = ["#FF4E34", "#FFC831", "#40C0A5"];
   var circle_size = 20000;
   var circle = [];
-  let country_clicked;
+  var c = 0;
 
   let res;
   let pop_total = 7772494610;
@@ -16,11 +16,21 @@
   data.all().then(function(result) {
     res = result;
     console.log(result);
+
+    placeCircles(res.confirmed, 1, "yellow");
+    placeCircles(res.deaths, 0, "red");
+    placeCircles(res.recovered, 2, "green");
+    console.log(circle);
+  });
+
+  function placeCircles(data, color_rgy, type) {
+    console.log(color_rgy);
     var i = 0;
     var c = 0;
-    for (var k = 0; k < res.confirmed.locations.length; k++) {
-      var country_name = res.confirmed.locations[k].country;
-      var country_code = res.confirmed.locations[k].country_code;
+
+    for (var k = 0; k < data.locations.length; k++) {
+      var country_name = data.locations[k].country;
+      var country_code = data.locations[k].country_code;
       var country_in_map = countries_bounds[country_name];
 
       if (country_in_map === undefined) {
@@ -34,8 +44,11 @@
         }
       }
       if (country_in_map !== undefined) {
+        if (color_rgy != 1) {
+          console.log("redd");
+        }
         var random = parseInt(1 + Math.floor(Math.random() * 20));
-        var random = parseInt(res.confirmed.locations[k].latest / 1000);
+        var random = parseInt(data.locations[k].latest / 500);
         i = 0;
 
         //console.log(random);
@@ -47,10 +60,20 @@
         var y_max = bound.getSouth();
         var y_min = bound.getNorth();
         var j = 0;
-        circle.push({ country: country_in_map.id, circles: [] });
+        if (color_rgy == 1) {
+          circle.push({
+            country: country_in_map.id,
+            circles_green: [],
+            circles_yellow: [],
+            circles_red: [],
+            type: type
+          });
+        }
+        //circle.push({ country: country_in_map.id, circles: [] , type : type});
         while (j < random) {
           var rand_color = parseInt(1 + Math.floor(Math.random() * 100));
-          var cor = colors[1];
+          var cor = colors[color_rgy];
+
           var circleOptions = {
             color: cor,
             fillColor: cor,
@@ -70,10 +93,25 @@
             ) {
               //console.log("IS INSIDEEEEE");
               if (inside(lat, lng, country_in_map.geometry.coordinates[m][0])) {
-                circle[c].circles.push(
-                  new L.Circle(point_pos, circle_size, circleOptions)
-                );
-                map.addLayer(circle[c].circles[i]);
+                if (color_rgy == 1) {
+                  circle[c].circles_yellow.push(
+                    new L.Circle(point_pos, circle_size, circleOptions)
+                  );
+                  //map.addLayer(circle[c].circles_yellow[i]);
+                  circle[c].circles_yellow[i].addTo(map);
+                } else if (color_rgy == 2) {
+                  circle[c].circles_green.push(
+                    new L.Circle(point_pos, circle_size, circleOptions)
+                  );
+                  //map.addLayer(circle[c].circles_green[i]);
+                  circle[c].circles_green[i].addTo(map);
+                } else {
+                  circle[c].circles_red.push(
+                    new L.Circle(point_pos, circle_size, circleOptions)
+                  );
+                  //map.addLayer(circle[c].circles_red[i]);
+                  circle[c].circles_red[i].addTo(map);
+                }
 
                 i++;
                 j++;
@@ -83,10 +121,25 @@
             //console.log("--------one shape--------")
             if (inside(lat, lng, country_in_map.geometry.coordinates[0])) {
               //console.log("IS INSIDEEEEE");
-              circle[c].circles.push(
-                new L.Circle(point_pos, circle_size, circleOptions)
-              );
-              map.addLayer(circle[c].circles[i]);
+              if (color_rgy == 1) {
+                circle[c].circles_yellow.push(
+                  new L.Circle(point_pos, circle_size, circleOptions)
+                );
+                //map.addLayer(circle[c].circles_yellow[i]);
+                circle[c].circles_yellow[i].addTo(map);
+              } else if (color_rgy == 2) {
+                circle[c].circles_green.push(
+                  new L.Circle(point_pos, circle_size, circleOptions)
+                );
+                //map.addLayer(circle[c].circles_green[i]);
+                circle[c].circles_green[i].addTo(map);
+              } else {
+                circle[c].circles_red.push(
+                  new L.Circle(point_pos, circle_size, circleOptions)
+                );
+                //map.addLayer(circle[c].circles_red[i]);
+                circle[c].circles_red[i].addTo(map);
+              }
               i++;
               j++;
             }
@@ -95,8 +148,8 @@
         c++;
       }
     }
-  });
-
+    return c;
+  }
   function init() {
     map = L.map("map", {
       minZoom: 3,
