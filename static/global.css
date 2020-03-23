@@ -1,3 +1,92 @@
 html,body{
     margin:0;
+    font-family: 'Open Sans', sans-serif;
+    color:#D6D6D7;
+    font-weight: 300;
+    font-size: 15pt;
+}
+h1{
+    font-size: 2.3rem;
+}
+h2{
+    font-size: 1.95rem;
+}
+h3{
+    font-size: 1.73rem;
+}
+h4{
+    font-size: 1.44rem;
+}
+h5{
+    font-weight: 500;
+    font-size: 1.2rem;
+    padding: 5px 0px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+div{
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;    
+}
+p{
+    font-size: 1rem;
+    font-weight: 400;
+}
+label{
+    font-size: 0.8rem;
+}
+
+.container-basic-info {
+    background-color:#1E1E21;
+    box-shadow: 3px 3px 10px black;
+    padding: 18px 0px 32px 0px;
+    position: relative;
+    display: block;
+}
+
+.progress{
+    background-color: rgba(235, 238, 255, 0.1);
+    height: 16px;
+    border-radius: 12px;
+}
+.progress-bar{
+    display: inline-block;
+    border: 2px solid #40C0A5;
+    background-color: rgba(64, 192, 165, .2);
+    height: 14px;
+    margin: 0;
+    float: left;
+    border-radius: 0px 20px 20px 0px;
+}
+.bg-danger{
+    border: 2px solid #FF4E34;
+    background-color: rgba(255, 78, 52, .2);
+    border-radius: 20px 0px 0px 20px;
+}
+.bg-warning{
+    border: 2px solid #FFC831;
+    background-color: rgba(255, 200, 49, 0.2)!important;
+    border-radius: 0px;
+
+}
+
+.dot{
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 4px;
+    border-radius: 14px;
+}
+.dot_red{
+    border: 2px solid #FF4E34;
+    background-color: rgba(255, 78, 52, .2);
+}
+.dot_green{
+    border: 2px solid #40C0A5;
+    background-color: rgba(64, 192, 165, .2);
+}
+.dot_yellow{
+    border: 2px solid #FFC831;
+    background-color: rgba(255, 200, 49, 0.2)!important;
 }

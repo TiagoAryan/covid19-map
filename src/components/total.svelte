@@ -72,13 +72,13 @@
   Loading...
 {:else}
 
-  <h2>{country ? country : 'World'} - {pop_total}</h2>
+  <h5 class="container-title">{country ? country : 'World'} - {pop_total}</h5>
   <table>
     <thead>
       <tr>
-        <th scope="col">Deaths</th>
-        <th scope="col">Confirmed</th>
-        <th scope="col">Recovered</th>
+        <th scope="col"><i class="dot dot_red"></i>Deaths</th>
+        <th scope="col"><i class="dot dot_yellow"></i>Confirmed</th>
+        <th scope="col"><i class="dot dot_green"></i>Recovered</th>
         <th scope="col" />
       </tr>
     </thead>

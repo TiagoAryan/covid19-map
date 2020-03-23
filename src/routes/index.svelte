@@ -270,17 +270,30 @@
     height: 100vh;
   }
 
-  .text {
+  .container-basic-info {
     position: absolute;
-    width: 80%;
+    width: 800px;
     bottom: 0px;
-    left: 10%;
+    left: calc(50% - 400px) ;
   }
+  
 
   .total {
-    width: 45vw;
+    width: 100%;
+    padding: 0px 32px;
     margin: 0 auto;
   }
+  .container-basic-info:after{
+    content:"";
+    width: 100%;
+    top:62px;
+    position: absolute;
+    left: 0;
+    height:1px;
+    background-color:#979797;
+    opacity: 0.3;
+  }
+
 </style>
 
 <svelte:head>
@@ -289,7 +302,7 @@
 
 <div id="map" />
 
-<div class="text">
+<div class="container-basic-info">
   <div class="total">
     <Total country={country_clicked} />
     <a href="/about" rel="prefecht">about</a>
