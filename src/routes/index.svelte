@@ -4,9 +4,6 @@
   import data from "jhucsse.covid";
   import getCountryISO2 from "country-iso-3-to-2";
 
-
-  //const getCountryISO2 = require("country-iso-3-to-2");
-
   var map;
   var selected_country;
   var colors = ["#FF4E34", "#FFC831", "#40C0A5"];
@@ -20,10 +17,15 @@
   data.all().then(function(result) {
     res = result;
     console.log(result);
-
-    placeCircles(res.confirmed, 1, "yellow");
-    placeCircles(res.deaths, 0, "red");
-    placeCircles(res.recovered, 2, "green");
+    if(res.confirmed.locations.length>0){
+      placeCircles(res.confirmed, 1, "yellow");
+    }
+    if(res.deaths.locations.length>0){
+      placeCircles(res.deaths, 0, "red");
+    }
+    if(res.recovered.locations.length>0){
+      placeCircles(res.recovered, 2, "green");
+    }
     console.log(circle);
   });
 
@@ -267,7 +269,7 @@
     height: 100vh;
   }
 
-  .container-basic-info {
+  .container-info {
     position: absolute;
     width: 800px;
     bottom: 0px;
@@ -281,6 +283,7 @@
     margin: 0 auto;
   }
  
+ 
   
 
 </style>
@@ -290,8 +293,18 @@
 </svelte:head>
 
 <div id="map" />
-
-<div class="container-basic-info">
+<div class="container-icons">
+  <div class="container-basic container-icon">
+    <i class="fas fa-procedures"></i>
+  </div>
+   <div class="container-basic container-icon">
+      <i class="fas fa-notes-medical"></i>
+  </div>
+   <div class="container-basic container-icon">
+    <i class="fas fa-user-times"></i>
+  </div>
+</div>
+<div class="container-basic container-info">
   <div class="total">
     <Total country={country_clicked} />
   </div>

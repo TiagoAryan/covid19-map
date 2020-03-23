@@ -113,8 +113,14 @@
       <div class="data">{recovered}</div>
     </div>
      <div class="col-block-btn">
-        <button class="secondary adj-left" on:click={() => change()}>change</button>
-        <button class="adj-right" on:click={() => change()}>change</button>
+        
+        <div class="button adj-right" on:click={() => change()}>
+          <i class="fas fa-user-friends"></i>
+          All
+        </div>
+        <div class="button secondary adj-left" on:click={() => change()}>    
+          <i class="fas fa-procedures"></i>
+        </div>
     </div>
   </div>
   <div class="progress">
