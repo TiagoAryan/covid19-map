@@ -2,6 +2,10 @@
   import { onMount } from "svelte";
   import Total from "../components/total.svelte";
   import data from "jhucsse.covid";
+  import getCountryISO2 from "country-iso-3-to-2";
+
+
+  //const getCountryISO2 = require("country-iso-3-to-2");
 
   var map;
   var selected_country;
@@ -36,7 +40,7 @@
       if (country_in_map === undefined) {
         for (var country of Object.entries(countries_bounds)) {
           var id_c = country[1].id;
-          if (id_c.substr(0, 2) == country_code) {
+          if (getCountryISO2(id_c) == country_code) {
             var country_in_map = country[1];
             //console.log("FOUND CODE"+res.confirmed.locations[k].country_code);
             break;
@@ -199,7 +203,7 @@
 
               map.addLayer(country_json);
               var country_id_3 = country[1].id;
-              country_clicked = country_id_3.substr(0, 2);
+              country_clicked = getCountryISO2(country_id_3);
 
               console.log(country_clicked);
               break;
@@ -223,7 +227,8 @@
 
             map.addLayer(country_json);
             var country_id_3 = country[1].id;
-            country_clicked = country_id_3.substr(0, 2);
+            country_clicked = getCountryISO2(country_id_3);
+
 
             console.log(country_clicked);
 
@@ -275,16 +280,8 @@
     padding: 0px 32px;
     margin: 0 auto;
   }
-  .container-basic-info:after{
-    content:"";
-    width: 100%;
-    top:62px;
-    position: absolute;
-    left: 0;
-    height:1px;
-    background-color:#979797;
-    opacity: 0.3;
-  }
+ 
+  
 
 </style>
 
@@ -297,6 +294,5 @@
 <div class="container-basic-info">
   <div class="total">
     <Total country={country_clicked} />
-    <a href="/about" rel="prefecht">about</a>
   </div>
 </div>
