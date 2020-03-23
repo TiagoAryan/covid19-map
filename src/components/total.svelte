@@ -5,35 +5,55 @@
   export let country;
 
   let res;
-  let pop_total, deaths, confirmed, recovered;
+  let ccode, pop_total, deaths, confirmed, recovered;
 
-  let setpop = false;
+  $: setpop = false;
 
-  if (country) {
-    data.getCountry({ cc: country }).then(function(result) {
-      res = result;
-      console.log(result);
+  $: country, getContent();
 
-      res.deaths = Object.values(res.deaths);
-      res.confirmed = Object.values(res.confirmed);
-      res.recovered = Object.values(res.recovered);
+  function getContent() {
+    if (country) {
+      ccode = findCode(population.default, "code3", country);
+      data.getCountry({ cc: ccode }).then(function(result) {
+        res = result;
+        console.log(res);
 
-      deaths = res.deaths[res.deaths.length - 1];
-      confirmed = res.confirmed[res.confirmed.length - 1];
-      recovered = res.recovered[res.recovered.length - 1];
-      pop_total = deaths + confirmed + recovered;
-      console.log(pop_total);
-    });
-  } else {
-    data.all().then(function(result) {
-      res = result;
-      console.log(result);
+        res.deaths = Object.values(res.deaths);
+        res.confirmed = Object.values(res.confirmed);
+        res.recovered = Object.values(res.recovered);
 
-      pop_total = 7772494610;
-      deaths = res.latest.deaths;
-      confirmed = res.latest.confirmed;
-      recovered = res.latest.recovered;
-    });
+        deaths = res.deaths[res.deaths.length - 1];
+        confirmed = res.confirmed[res.confirmed.length - 1];
+        recovered = res.recovered[res.recovered.length - 1];
+        if (setpop) {
+          pop_total = findPop(population.default, "code", ccode);
+        } else {
+          pop_total = deaths + confirmed + recovered;
+        }
+      });
+    } else {
+      data.all().then(function(result) {
+        res = result;
+
+        deaths = res.latest.deaths;
+        confirmed = res.latest.confirmed;
+        recovered = res.latest.recovered;
+        if (setpop) {
+          pop_total = 7772494610;
+        } else {
+          pop_total = deaths + confirmed + recovered;
+        }
+      });
+    }
+  }
+
+  function findCode(items, attribute, value) {
+    for (var i = 0; i < items.length; i++) {
+      if (items[i][attribute] === value) {
+        return items[i].code;
+      }
+    }
+    return null;
   }
 
   function findPop(items, attribute, value) {
@@ -51,9 +71,11 @@
       pop_total = deaths + confirmed + recovered;
     } else {
       setpop = true;
-      pop_total = findPop(population.default, "code", country);
+      if (country) pop_total = findPop(population.default, "code", ccode);
+      else pop_total = 7772494610;
     }
   }
+  getContent();
 </script>
 
 <style>
@@ -87,7 +109,9 @@
         <td>{deaths}</td>
         <td>{confirmed}</td>
         <td>{recovered}</td>
-        <td on:click={change()}>change</td>
+        <td>
+          <button on:click={() => change()}>change</button>
+        </td>
       </tr>
     </tbody>
   </table>

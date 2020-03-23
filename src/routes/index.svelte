@@ -1,15 +1,15 @@
 <script>
+  import { onMount } from "svelte";
+  import Total from "../components/total.svelte";
+  import data from "jhucsse.covid";
+
   var map;
   var selected_country;
   var colors = ["#FF4E34", "#FFC831", "#40C0A5"];
   var circle_size = 20000;
   var circle = [];
   var c = 0;
-
-  import { onMount } from "svelte";
-  import Total from "../components/total.svelte";
-  import data from "jhucsse.covid";
-
+  let country_clicked;
   let res;
   let pop_total = 7772494610;
 
@@ -17,145 +17,139 @@
     res = result;
     console.log(result);
 
-    placeCircles(res.confirmed, 1 , "yellow");
+    placeCircles(res.confirmed, 1, "yellow");
     placeCircles(res.deaths, 0, "red");
     placeCircles(res.recovered, 2, "green");
     console.log(circle);
-
   });
 
+  function placeCircles(data, color_rgy, type) {
+    console.log(color_rgy);
+    var i = 0;
+    var c = 0;
 
-  function placeCircles(data, color_rgy, type){
-      console.log(color_rgy);
-      var i = 0;
-      var c = 0;
+    for (var k = 0; k < data.locations.length; k++) {
+      var country_name = data.locations[k].country;
+      var country_code = data.locations[k].country_code;
+      var country_in_map = countries_bounds[country_name];
 
-      for (var k = 0; k < data.locations.length; k++) {
-        var country_name = data.locations[k].country;
-        var country_code = data.locations[k].country_code;
-        var country_in_map = countries_bounds[country_name];
-
-        if (country_in_map === undefined) {
-          for (var country of Object.entries(countries_bounds)) {
-            var id_c = country[1].id;
-            if (id_c.substr(0, 2) == country_code) {
-              var country_in_map = country[1];
-              //console.log("FOUND CODE"+res.confirmed.locations[k].country_code);
-              break;
-            }
+      if (country_in_map === undefined) {
+        for (var country of Object.entries(countries_bounds)) {
+          var id_c = country[1].id;
+          if (id_c.substr(0, 2) == country_code) {
+            var country_in_map = country[1];
+            //console.log("FOUND CODE"+res.confirmed.locations[k].country_code);
+            break;
           }
         }
-        if (country_in_map !== undefined) {
-          if(color_rgy!=1){
-            console.log("redd");
-          }
-          var random = parseInt(1 + Math.floor(Math.random() * 20));
-          var random = parseInt(data.locations[k].latest / 500);
-          i = 0;
+      }
+      if (country_in_map !== undefined) {
+        if (color_rgy != 1) {
+          console.log("redd");
+        }
+        var random = parseInt(1 + Math.floor(Math.random() * 20));
+        var random = parseInt(data.locations[k].latest / 500);
+        i = 0;
 
-          //console.log(random);
-          var bound = L.latLngBounds(L.geoJson(country_in_map).getBounds());
-          var center_country = bound.getCenter();
+        //console.log(random);
+        var bound = L.latLngBounds(L.geoJson(country_in_map).getBounds());
+        var center_country = bound.getCenter();
 
-          var x_max = bound.getEast();
-          var x_min = bound.getWest();
-          var y_max = bound.getSouth();
-          var y_min = bound.getNorth();
-          var j = 0;
-          if(color_rgy==1){
-              circle.push({ country: country_in_map.id, circles_green: [] ,circles_yellow: [] ,circles_red: [] , type : type});
-          }
-          //circle.push({ country: country_in_map.id, circles: [] , type : type});
-          while (j < random) {
-            var rand_color = parseInt(1 + Math.floor(Math.random() * 100));
-            var cor = colors[color_rgy];
-            
-            var circleOptions = {
-              color: cor,
-              fillColor: cor,
-              fillOpacity: 0.3,
-              weight: 1
-            };
+        var x_max = bound.getEast();
+        var x_min = bound.getWest();
+        var y_max = bound.getSouth();
+        var y_min = bound.getNorth();
+        var j = 0;
+        if (color_rgy == 1) {
+          circle.push({
+            country: country_in_map.id,
+            circles_green: [],
+            circles_yellow: [],
+            circles_red: [],
+            type: type
+          });
+        }
+        //circle.push({ country: country_in_map.id, circles: [] , type : type});
+        while (j < random) {
+          var rand_color = parseInt(1 + Math.floor(Math.random() * 100));
+          var cor = colors[color_rgy];
 
-            var lat = y_min + Math.random() * (y_max - y_min);
-            var lng = x_min + Math.random() * (x_max - x_min);
-            var point_pos = L.latLng(lat, lng);
+          var circleOptions = {
+            color: cor,
+            fillColor: cor,
+            fillOpacity: 0.3,
+            weight: 1
+          };
 
-            if (country_in_map.geometry.type == "MultiPolygon") {
-              for (
-                var m = 0;
-                m < country_in_map.geometry.coordinates.length;
-                m++
-              ) {
-                //console.log("IS INSIDEEEEE");
-                if (inside(lat, lng, country_in_map.geometry.coordinates[m][0])) {
-                  if(color_rgy==1){
-                    circle[c].circles_yellow.push(
-                      new L.Circle(point_pos, circle_size, circleOptions)
-                    );
-                    //map.addLayer(circle[c].circles_yellow[i]);
-                    circle[c].circles_yellow[i].addTo(map);
+          var lat = y_min + Math.random() * (y_max - y_min);
+          var lng = x_min + Math.random() * (x_max - x_min);
+          var point_pos = L.latLng(lat, lng);
 
-
-                  }else if(color_rgy==2){
-                    circle[c].circles_green.push(
-                      new L.Circle(point_pos, circle_size, circleOptions)
-                    );
-                    //map.addLayer(circle[c].circles_green[i]);
-                    circle[c].circles_green[i].addTo(map);
-
-
-                  }else{
-                    circle[c].circles_red.push(
-                      new L.Circle(point_pos, circle_size, circleOptions)
-                    );
-                    //map.addLayer(circle[c].circles_red[i]);
-                    circle[c].circles_red[i].addTo(map);
-
-                  }
-                
-                  i++;
-                  j++;
-                }
-              }
-            } else {
-              //console.log("--------one shape--------")
-              if (inside(lat, lng, country_in_map.geometry.coordinates[0])) {
-                //console.log("IS INSIDEEEEE");
-                if(color_rgy==1){
+          if (country_in_map.geometry.type == "MultiPolygon") {
+            for (
+              var m = 0;
+              m < country_in_map.geometry.coordinates.length;
+              m++
+            ) {
+              //console.log("IS INSIDEEEEE");
+              if (inside(lat, lng, country_in_map.geometry.coordinates[m][0])) {
+                if (color_rgy == 1) {
                   circle[c].circles_yellow.push(
                     new L.Circle(point_pos, circle_size, circleOptions)
                   );
                   //map.addLayer(circle[c].circles_yellow[i]);
                   circle[c].circles_yellow[i].addTo(map);
-
-                }else if(color_rgy==2){
+                } else if (color_rgy == 2) {
                   circle[c].circles_green.push(
                     new L.Circle(point_pos, circle_size, circleOptions)
                   );
                   //map.addLayer(circle[c].circles_green[i]);
                   circle[c].circles_green[i].addTo(map);
-
-
-                }else{
+                } else {
                   circle[c].circles_red.push(
                     new L.Circle(point_pos, circle_size, circleOptions)
                   );
                   //map.addLayer(circle[c].circles_red[i]);
                   circle[c].circles_red[i].addTo(map);
-
-
                 }
+
                 i++;
                 j++;
               }
             }
+          } else {
+            //console.log("--------one shape--------")
+            if (inside(lat, lng, country_in_map.geometry.coordinates[0])) {
+              //console.log("IS INSIDEEEEE");
+              if (color_rgy == 1) {
+                circle[c].circles_yellow.push(
+                  new L.Circle(point_pos, circle_size, circleOptions)
+                );
+                //map.addLayer(circle[c].circles_yellow[i]);
+                circle[c].circles_yellow[i].addTo(map);
+              } else if (color_rgy == 2) {
+                circle[c].circles_green.push(
+                  new L.Circle(point_pos, circle_size, circleOptions)
+                );
+                //map.addLayer(circle[c].circles_green[i]);
+                circle[c].circles_green[i].addTo(map);
+              } else {
+                circle[c].circles_red.push(
+                  new L.Circle(point_pos, circle_size, circleOptions)
+                );
+                //map.addLayer(circle[c].circles_red[i]);
+                circle[c].circles_red[i].addTo(map);
+              }
+              i++;
+              j++;
+            }
           }
-          c++;
         }
+        c++;
       }
-      return c;
     }
+    return c;
+  }
   function init() {
     map = L.map("map", {
       minZoom: 3,
@@ -259,8 +253,6 @@
   onMount(() => {
     setTimeout(() => init(), 50);
   });
-
-  let country_clicked = "IT";
 </script>
 
 <style>
