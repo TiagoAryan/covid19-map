@@ -20,9 +20,10 @@ h4{
 h5{
     font-weight: 500;
     font-size: 1.2rem;
-    padding: 5px 0px;
+    padding:0px;
     margin-top: 0px;
-    margin-bottom: 10px;
+    vertical-align: top;
+    line-height: 1.6rem;
 }
 div{
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
@@ -34,13 +35,14 @@ p{
     font-weight: 400;
 }
 label{
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    opacity: 0.7;
 }
 
 .container-basic-info {
     background-color:#1E1E21;
     box-shadow: 3px 3px 10px black;
-    padding: 18px 0px 32px 0px;
+    padding: 18px 0px 18px 0px;
     position: relative;
     display: block;
 }
@@ -80,7 +82,7 @@ label{
 }
 .dot_red{
     border: 2px solid #FF4E34;
-    background-color: rgba(255, 78, 52, .2);
+    background-color: rgba(255, 78, 52, .2)!important;
 }
 .dot_green{
     border: 2px solid #40C0A5;
@@ -90,3 +92,80 @@ label{
     border: 2px solid #FFC831;
     background-color: rgba(255, 200, 49, 0.2)!important;
 }
+button{
+    border: none;
+    background-color: #5172EE;
+    border-radius: 4px;
+    color:#D6D6D7;
+    font-weight: 400;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+button.secondary{
+    background-color: rgba(235, 238, 255, 0.2);
+}
+button.adj-left{
+    border-radius: 4px 0px 0px 4px;
+
+}
+
+button.adj-right{
+    border-radius: 0px 4px 4px 0px;
+
+}
+.flag{
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 8px;
+    
+}
+.flag img{
+    height: 18px;
+}
+.container-data-details{
+    display: block;
+    padding: 20px 0px 10px 0px;
+}
+.container-title{
+    display: inline-block;
+    
+}
+.col-block{
+    width: 20%;
+    display: inline-block;
+
+}
+.col-block-btn{
+    width: auto;
+    float: right;
+    display: inline-block;
+
+}
+.col-block .data{
+    margin-left: 20px;
+    font-weight: 700;
+    line-height: 0.85rem;
+    font-size: 1rem;
+
+}
+.col-block label{
+    vertical-align: top;
+    line-height: 1.2rem;
+}
+.container-basic-info:after{
+    content:"";
+    width: 100%;
+    top:62px;
+    position: absolute;
+    left: 0;
+    height:1px;
+    background-color:#979797;
+    opacity: 0.3;
+  }
+  .progress_label{
+    float:right;
+    display: inline-block;
+    margin-top: 10px;
+  }
