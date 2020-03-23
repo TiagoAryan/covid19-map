@@ -16,7 +16,6 @@
       ccode = findCode(population.default, "code3", country);
       data.getCountry({ cc: ccode }).then(function(result) {
         res = result;
-        console.log(res);
 
         res.deaths = Object.values(res.deaths);
         res.confirmed = Object.values(res.confirmed);
