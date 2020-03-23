@@ -7,9 +7,10 @@
 
 	%sapper.base%
 
-	<link rel='stylesheet' href='global.css'>
+
 	<link rel='manifest' href='manifest.json' crossorigin='use-credentials'>
 	<link rel='icon' type='image/png' href='favicon.png'>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 	<script src="js/bounds.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -22,7 +23,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
     <link rel="stylesheet" href="https://cdn.maptiler.com/mapbox-gl-js/v1.5.1/mapbox-gl.css" />
-
+	<link rel='stylesheet' href='global.css'>
 	<!-- Sapper generates a <style> tag containing critical CSS
 	     for the current page. CSS for the rest of the app is
 	     lazily loaded when it precaches secondary pages -->
@@ -31,6 +32,8 @@
 	<!-- This contains the contents of the <svelte:head> component, if
 	     the current page has one -->
 	%sapper.head%
+
+
 </head>
 <body>
 	<!-- The application will be rendered inside this element,

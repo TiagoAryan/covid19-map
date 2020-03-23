@@ -93,27 +93,29 @@
   Loading...
 {:else}
 
-  <h2>{country ? country : 'World'} - {pop_total}</h2>
-  <table>
-    <thead>
-      <tr>
-        <th scope="col">Deaths</th>
-        <th scope="col">Confirmed</th>
-        <th scope="col">Recovered</th>
-        <th scope="col" />
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{deaths}</td>
-        <td>{confirmed}</td>
-        <td>{recovered}</td>
-        <td>
-          <button on:click={() => change()}>change</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="flag"> <img src="flags/{country}.png" alt="flag"></div>
+  <h5 class="container-title">{country ? country : 'World'} </h5>
+  <div class="container-data-details">
+    <div class="col-block">
+      <i class="dot dot_red"></i>
+      <label>Deaths</label>
+      <div class="data">{deaths}</div>
+    </div>
+     <div class="col-block">
+      <i class="dot dot_yellow"></i>
+      <label>Confirmed</label>
+      <div class="data">{confirmed}</div>
+    </div>
+     <div class="col-block">
+      <i class="dot dot_green"></i>
+      <label>Recovered</label>
+      <div class="data">{recovered}</div>
+    </div>
+     <div class="col-block-btn">
+        <button class="secondary adj-left" on:click={() => change()}>change</button>
+        <button class="adj-right" on:click={() => change()}>change</button>
+    </div>
+  </div>
   <div class="progress">
     <div
       class="progress-bar bg-danger"
@@ -137,4 +139,5 @@
       aria-valuemin="0"
       aria-valuemax="100" />
   </div>
+  <label class="progress_label">{pop_total}</label>
 {/if}
