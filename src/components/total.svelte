@@ -28,7 +28,7 @@
         if (setpop) {
           pop_total = findPop(population.default, "code", country);
         } else {
-          pop_total = deaths + confirmed + recovered;
+          pop_total =  confirmed ;
         }
       });
     } else {
@@ -41,7 +41,7 @@
         if (setpop) {
           pop_total = 7772494610;
         } else {
-          pop_total = deaths + confirmed + recovered;
+          pop_total = confirmed ;
         }
       });
     }
@@ -68,7 +68,7 @@
   function change() {
     if (setpop) {
       setpop = false;
-      pop_total = deaths + confirmed + recovered;
+      pop_total = confirmed ;
     } else {
       setpop = true;
       if (country) pop_total = findPop(population.default, "code", country);
@@ -98,8 +98,8 @@
     </div>
     <div class="col-block">
       <i class="dot dot_yellow" />
-      <label>Confirmed</label>
-      <div class="data">{confirmed}</div>
+      <label>In Recovery</label>
+      <div class="data">{confirmed-deaths-recovered}</div>
     </div>
     <div class="col-block">
       <i class="dot dot_green" />
@@ -128,8 +128,8 @@
     <div
       class="progress-bar bg-warning"
       role="progressbar"
-      style="width: {confirmed ? (confirmed * 100) / pop_total : 0}%"
-      aria-valuenow={confirmed ? (confirmed * 100) / pop_total : 0}
+      style="width: {(confirmed-deaths-recovered) ? ((confirmed-deaths-recovered) * 100) / pop_total : 0}%"
+      aria-valuenow={(confirmed-deaths-recovered) ? ((confirmed-deaths-recovered) * 100) / pop_total : 0}
       aria-valuemin="0"
       aria-valuemax="100" />
     <div

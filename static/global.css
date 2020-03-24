@@ -42,12 +42,15 @@ label{
 .container-date{
     position: absolute;
     top: 12px;
+    text-align: right;
     right: 12px;
 
 }
 .container-date .date{
     background-color: rgba(0,0,0,0.3);
-    padding: 20px 12px;
+    padding: 12px 20px;
+    margin-bottom: 6px;
+    display: inline-block;
     
 }
 .container-basic {
@@ -68,6 +71,12 @@ label{
     padding: 18px;
     margin-bottom: 12px;
     text-align: center;
+
+
+    -webkit-transition-duration: .2s;
+	-moz-transition-duration: .2s;
+	-o-transition-duration: .2s;
+	transition-duration: .2s;
 }
 
 .container-icon i{
@@ -75,6 +84,8 @@ label{
 }
 .container-icon:hover{
     cursor: pointer;
+    background-color:#38383B;
+
 }
 .container-icon:hover i{
     opacity:1;
@@ -89,7 +100,7 @@ label{
     display: inline-block;
     border: 2px solid #40C0A5;
     background-color: rgba(64, 192, 165, .2);
-    height: 14px;
+    height: 16px;
     margin: 0;
     float: left;
     border-radius: 0px 20px 20px 0px;
@@ -137,10 +148,22 @@ button, .button{
     border-radius: 4px;
     height: 36px;
     padding: 8px 16px;
+
+    -webkit-transition-duration: .2s;
+	-moz-transition-duration: .2s;
+	-o-transition-duration: .2s;
+	transition-duration: .2s;
+}
+button:hover, .button:hover{
+    background-color: #708FFF;
+    cursor: pointer;
 }
 
 button.secondary , .button.secondary{
     background-color: rgba(235, 238, 255, 0.2);
+}
+button.secondary:hover , .button.secondary:hover{
+    background-color: rgba(235, 238, 255, 0.3);
 }
 button.adj-left, .button.adj-left{
     border-radius: 4px 0px 0px 4px;
@@ -209,7 +232,7 @@ button:hover, .button:hover{
     height: 0;
 }
   .progress_label{
-    float:right;
+    float: right;
     display: inline-block;
     margin-top: 10px;
   }
