@@ -10,7 +10,7 @@
   var circle_size = 8000;
   var circle = [];
   var c = 0;
-  let country_clicked;
+  let country_clicked, country_name_clicked;
   let res;
   let pop_total = 7772494610;
 
@@ -136,12 +136,8 @@
           }
         }
         c++;
-      } else
-        console.log(
-          country_name + " - " + country_code + " - " + country_clicked
-        );
+      }
     }
-    console.log(" ---------- ");
     return c;
   }
   function init() {
@@ -217,7 +213,9 @@
             map.addLayer(country_json);
             var country_id_3 = country[1].id;
             country_clicked = getCountryISO2(country_id_3);
-
+            country_name_clicked = country[1].properties.name;
+            console.log(country[1]);
+            console.log(country[1].properties.name);
             break;
           }
         }
@@ -285,7 +283,7 @@
 </div>
 <div class="container-basic container-info">
   <div class="total">
-    <Total country={country_clicked} />
+    <Total country={country_clicked} name={country_name_clicked} />
   </div>
 </div>
 <div class="container-date">
