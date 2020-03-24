@@ -1,8 +1,10 @@
 <script>
   import { onMount } from "svelte";
-  import Total from "../components/total.svelte";
   import data from "jhucsse.covid";
   import getCountryISO2 from "country-iso-3-to-2";
+  import Total from "../components/total.svelte";
+  import Bestof from "../components/bestof.svelte";
+  import Dateby from "../components/dateby.svelte";
 
   var map;
   var selected_country;
@@ -16,14 +18,14 @@
 
   data.all().then(function(result) {
     res = result;
-    console.log(result);
-    if(res.confirmed.locations.length>0){
+
+    if (res.confirmed.locations.length > 0) {
       placeCircles(res.confirmed, 1, "yellow");
     }
-    if(res.deaths.locations.length>0){
+    if (res.deaths.locations.length > 0) {
       placeCircles(res.deaths, 0, "red");
     }
-    if(res.recovered.locations.length>0){
+    if (res.recovered.locations.length > 0) {
       placeCircles(res.recovered, 2, "green");
     }
     console.log(circle);
@@ -272,13 +274,13 @@
 <div id="map" />
 <div class="container-icons">
   <div class="container-basic container-icon">
-    <i class="fas fa-procedures"></i>
+    <i class="fas fa-procedures" />
   </div>
-   <div class="container-basic container-icon">
-      <i class="fas fa-notes-medical"></i>
+  <div class="container-basic container-icon">
+    <i class="fas fa-notes-medical" />
   </div>
-   <div class="container-basic container-icon">
-    <i class="fas fa-user-times"></i>
+  <div class="container-basic container-icon">
+    <i class="fas fa-user-times" />
   </div>
 </div>
 <div class="container-basic container-info">
@@ -287,19 +289,19 @@
   </div>
 </div>
 <div class="container-date">
-  <div class="date">
-  20/07/2020
-  </div>
+  <div class="date">20/07/2020</div>
   <div class="navigate-time">
-        <div class="button secondary adj-left">    
-          <i class="fas fa-procedures"></i>
-        </div>
-        <div class="button secondary adj-right">    
-          <i class="fas fa-procedures"></i>
-        </div>
-         <div class="button">    
-          <i class="fas fa-procedures"></i>
-        </div>
+    <div class="button secondary adj-left">
+      <i class="fas fa-procedures" />
+    </div>
+    <div class="button secondary adj-right">
+      <i class="fas fa-procedures" />
+    </div>
+    <div class="button">
+      <i class="fas fa-procedures" />
+    </div>
   </div>
 </div>
 
+<Bestof type="deaths" />
+<Dateby date="3/22/20" />
