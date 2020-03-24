@@ -293,14 +293,14 @@
   20/07/2020
   </div>
   <div class="navigate-time">
-        <div class="button secondary adj-left">    
-          <i class="fas fa-procedures"></i>
+        <div class="button secondary adj-left">   
+          <i class="fas fa-chevron-left"></i>
         </div>
-        <div class="button secondary adj-right">    
-          <i class="fas fa-procedures"></i>
+        <div class="button secondary adj-right">  
+          <i class="fas fa-chevron-right"></i>
         </div>
          <div class="button">    
-          <i class="fas fa-procedures"></i>
+          <i class="fas fa-play"></i>
         </div>
   </div>
 </div>
