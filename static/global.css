@@ -22,6 +22,7 @@ h5{
     font-size: 1.2rem;
     padding:0px;
     margin-top: 0px;
+    margin-bottom: 0px;
     vertical-align: top;
     line-height: 1.6rem;
 }
@@ -38,15 +39,47 @@ label{
     font-size: 0.7rem;
     opacity: 0.7;
 }
+.container-date{
+    position: absolute;
+    top: 12px;
+    right: 12px;
 
-.container-basic-info {
+}
+.container-date .date{
+    background-color: rgba(0,0,0,0.3);
+    padding: 20px 12px;
+    
+}
+.container-basic {
     background-color:#1E1E21;
     box-shadow: 3px 3px 10px black;
     padding: 18px 0px 18px 0px;
     position: relative;
     display: block;
 }
+.container-icons{
+    position: absolute;
+    top: 100px;
+    left: 10px;
+}
+.container-icon{
+    width: 60px;
+    height: 60px;
+    padding: 18px;
+    margin-bottom: 12px;
+    text-align: center;
+}
 
+.container-icon i{
+    opacity: 0.6;
+}
+.container-icon:hover{
+    cursor: pointer;
+}
+.container-icon:hover i{
+    opacity:1;
+
+}
 .progress{
     background-color: rgba(235, 238, 255, 0.1);
     height: 16px;
@@ -63,7 +96,7 @@ label{
 }
 .bg-danger{
     border: 2px solid #FF4E34;
-    background-color: rgba(255, 78, 52, .2);
+    background-color: rgba(255, 78, 52, .2)!important;
     border-radius: 20px 0px 0px 20px;
 }
 .bg-warning{
@@ -74,11 +107,11 @@ label{
 }
 
 .dot{
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
     display: inline-block;
     margin-right: 4px;
-    border-radius: 14px;
+    border-radius: 18px;
 }
 .dot_red{
     border: 2px solid #FF4E34;
@@ -92,7 +125,7 @@ label{
     border: 2px solid #FFC831;
     background-color: rgba(255, 200, 49, 0.2)!important;
 }
-button{
+button, .button{
     border: none;
     background-color: #5172EE;
     border-radius: 4px;
@@ -100,20 +133,26 @@ button{
     font-weight: 400;
     font-size: 0.75rem;
     padding: 4px 12px;
+    display: inline-block;
     border-radius: 4px;
+    height: 36px;
+    padding: 8px 16px;
 }
 
-button.secondary{
+button.secondary , .button.secondary{
     background-color: rgba(235, 238, 255, 0.2);
 }
-button.adj-left{
+button.adj-left, .button.adj-left{
     border-radius: 4px 0px 0px 4px;
 
 }
 
-button.adj-right{
+button.adj-right, .button.adj-right{
     border-radius: 0px 4px 4px 0px;
 
+}
+button:hover, .button:hover{
+    cursor: pointer;
 }
 .flag{
     display: inline-block;
@@ -126,7 +165,7 @@ button.adj-right{
 }
 .container-data-details{
     display: block;
-    padding: 20px 0px 10px 0px;
+    padding: 30px 0px 10px 0px;
 }
 .container-title{
     display: inline-block;
@@ -144,17 +183,19 @@ button.adj-right{
 
 }
 .col-block .data{
-    margin-left: 20px;
-    font-weight: 700;
-    line-height: 0.85rem;
+    font-weight: 600;
+    line-height: 0.4rem;
     font-size: 1rem;
-
+    margin: 0;
+    letter-spacing: 1px;
+    margin-left: 24px;
 }
 .col-block label{
     vertical-align: top;
     line-height: 1.2rem;
+    margin:0;
 }
-.container-basic-info:after{
+.container-basic:after{
     content:"";
     width: 100%;
     top:62px;
@@ -164,8 +205,15 @@ button.adj-right{
     background-color:#979797;
     opacity: 0.3;
   }
+  .container-icon:after{
+    height: 0;
+}
   .progress_label{
     float:right;
     display: inline-block;
     margin-top: 10px;
+  }
+
+  .col-block-btn .button{
+    float:right;
   }
