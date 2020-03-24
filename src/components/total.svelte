@@ -3,6 +3,7 @@
   import * as population from "./country-by-population.json";
 
   export let country;
+  export let name;
 
   let res;
   let pop_total, deaths, confirmed, recovered;
@@ -86,9 +87,9 @@
 {:else}
 
   <div class="flag">
-    <img src="flags/{country}.png" alt="flag" />
+    <img src="flags/{country ? country : 'world'}.png" alt="flag" />
   </div>
-  <h5 class="container-title">{country ? country : 'World'}</h5>
+  <h5 class="container-title">{country ? name : 'World'}</h5>
   <div class="container-data-details">
     <div class="col-block">
       <i class="dot dot_red" />
