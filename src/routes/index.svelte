@@ -22,7 +22,7 @@
       placeCircles(res, 2, "green");
     
     //  placeCountry(res.recovered);
-   
+    
     console.log(circle);
   });
 
@@ -42,7 +42,7 @@
       var country_name = data.locations[k].country;
       var country_code = data.locations[k].country_code;
       var country_in_map = countries_bounds[country_name];
-
+      
       if (country_in_map === undefined) {
         for (var country of Object.entries(countries_bounds)) {
           var id_c = country[1].id;
@@ -53,13 +53,41 @@
         }
       }
       if (country_in_map !== undefined) {
+        /*
+        //IF COUNTRY IS CLEAN
+        if(type=="yellow"){
+          console.log(res.confirmed.locations[k].latest);
+          console.log(res.confirmed.locations[k].country);
+
+          if(res.confirmed.locations[k].latest==0 ){
+          var country_json = L.geoJson(country_in_map);
+
+          country_json.getLayers()[0].options.fillColor = "#242529";
+          country_json.getLayers()[0].options.color = "#171719";
+          country_json.getLayers()[0].options.fillOpacity = "1";
+          console.log(country_json.getLayers()[0].options);
+
+          map.addLayer(country_json);
+          }
+      
+        }
+        */
         var random = parseInt(1 + Math.floor(Math.random() * 20));
         if(type== "yellow"){
-          var in_recovery= data.locations[k].latest - res.deaths.locations[k].latest - res.recovered.locations[k].latest;
+          var number_people= parseInt(data.locations[k].latest) - parseInt(res.deaths.locations[k].latest) - parseInt(res.recovered.locations[k].latest);
+          //console.log("number_people"+number_people)
+          //console.log("all "+data.locations[k].latest)
+          //console.log("country:"+res.deaths.locations[k].country+" - latest:"+res.deaths.locations[k].latest);
+          //console.log("country:"+res.recovered.locations[k].country+" - latest:"+res.recovered.locations[k].latest);
+          //console.log("country:"+res.confirmed.locations[k].country+" - latest:"+res.confirmed.locations[k].latest);
+
         }else{
-          var in_recovery= data.locations[k].latest ;
+          var number_people= data.locations[k].latest ;
         }
-        var random = parseInt(in_recovery / 100);
+        
+
+        var random = parseInt(number_people / 100);
+
         i = 0;
 
         var bound = L.latLngBounds(L.geoJson(country_in_map).getBounds());
