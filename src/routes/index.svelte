@@ -286,3 +286,20 @@
     <Total country={country_clicked} />
   </div>
 </div>
+<div class="container-date">
+  <div class="date">
+  20/07/2020
+  </div>
+  <div class="navigate-time">
+        <div class="button secondary adj-left">    
+          <i class="fas fa-procedures"></i>
+        </div>
+        <div class="button secondary adj-right">    
+          <i class="fas fa-procedures"></i>
+        </div>
+         <div class="button">    
+          <i class="fas fa-procedures"></i>
+        </div>
+  </div>
+</div>
+
