@@ -100,7 +100,7 @@ label{
     display: inline-block;
     border: 2px solid #40C0A5;
     background-color: rgba(64, 192, 165, .2);
-    height: 14px;
+    height: 16px;
     margin: 0;
     float: left;
     border-radius: 0px 20px 20px 0px;
@@ -232,7 +232,7 @@ button:hover, .button:hover{
     height: 0;
 }
   .progress_label{
-    float:right;
+    float: right;
     display: inline-block;
     margin-top: 10px;
   }

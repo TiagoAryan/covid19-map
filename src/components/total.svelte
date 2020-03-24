@@ -98,7 +98,7 @@
     </div>
     <div class="col-block">
       <i class="dot dot_yellow" />
-      <label>Confirmed</label>
+      <label>In Recovery</label>
       <div class="data">{confirmed}</div>
     </div>
     <div class="col-block">

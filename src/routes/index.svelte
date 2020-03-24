@@ -5,7 +5,7 @@
   import getCountryISO2 from "country-iso-3-to-2";
 
   var map;
-  var selected_country;
+  var selected_country,selected_country_id;
   var colors = ["#FF4E34", "#FFC831", "#40C0A5"];
   var circle_size = 8000;
   var circle = [];
@@ -17,21 +17,26 @@
   data.all().then(function(result) {
     res = result;
     console.log(result);
-    if(res.confirmed.locations.length>0){
-      placeCircles(res.confirmed, 1, "yellow");
-    }
-    if(res.deaths.locations.length>0){
-      placeCircles(res.deaths, 0, "red");
-    }
-    if(res.recovered.locations.length>0){
-      placeCircles(res.recovered, 2, "green");
-    }
+      placeCircles(res, 1, "yellow");
+      placeCircles(res, 0, "red");
+      placeCircles(res, 2, "green");
+    
+    //  placeCountry(res.recovered);
+   
     console.log(circle);
   });
 
-  function placeCircles(data, color_rgy, type) {
+  function placeCircles(res, color_rgy, type) {
     var i = 0;
     var c = 0;
+    var data;
+    if(type== "yellow"){
+      data= res.confirmed;
+    }else if(type== "red"){
+      data= res.deaths;
+    }else{
+      data= res.recovered;
+    }
 
     for (var k = 0; k < data.locations.length; k++) {
       var country_name = data.locations[k].country;
@@ -49,7 +54,12 @@
       }
       if (country_in_map !== undefined) {
         var random = parseInt(1 + Math.floor(Math.random() * 20));
-        var random = parseInt(data.locations[k].latest / 100);
+        if(type== "yellow"){
+          var in_recovery= data.locations[k].latest - res.deaths.locations[k].latest - res.recovered.locations[k].latest;
+        }else{
+          var in_recovery= data.locations[k].latest ;
+        }
+        var random = parseInt(in_recovery / 100);
         i = 0;
 
         var bound = L.latLngBounds(L.geoJson(country_in_map).getBounds());
@@ -136,7 +146,12 @@
           }
         }
         c++;
+      }else{
+        console.log(data.locations[k]);
+        
+
       }
+      
     }
     return c;
   }
@@ -168,6 +183,7 @@
         fillOpacity: 0.3,
         weight: 1
       };
+      var clicked_in_country=0;
       for (var country of Object.entries(countries_bounds)) {
         var country_json = L.geoJson(country);
         if (country[1].geometry.type == "MultiPolygon") {
@@ -179,19 +195,31 @@
                 country[1].geometry.coordinates[m][0]
               )
             ) {
+              var add=true;
               if (selected_country != null) {
+                if(selected_country_id==country[1].id){
+                  add=false;
+                }
                 map.removeLayer(selected_country);
+
               }
-              selected_country = country_json;
-              country_json.getLayers()[0].options.fillColor = "#F7B500";
-              country_json.getLayers()[0].options.color = "#F7B500";
-              country_json.getLayers()[0].options.fillOpacity = "0.5";
+              if(add){
 
-              map.addLayer(country_json);
-              var country_id_3 = country[1].id;
-              country_clicked = getCountryISO2(country_id_3);
+                clicked_in_country++;
 
-              break;
+                selected_country = country_json;
+                selected_country_id=country[1].id;
+                country_json.getLayers()[0].options.fillColor = "#F7B500";
+                country_json.getLayers()[0].options.color = "#F7B500";
+                country_json.getLayers()[0].options.fillOpacity = "0.5";
+
+                map.addLayer(country_json);
+                var country_id_3 = country[1].id;
+                country_clicked = getCountryISO2(country_id_3);
+                country_name_clicked = country[1].properties.name;
+
+                break;
+              }
             }
           }
         } else {
@@ -202,23 +230,37 @@
               country[1].geometry.coordinates[0]
             )
           ) {
+            
+            var add=true;
             if (selected_country != null) {
+              if(selected_country_id==country[1].id){
+                add=false;
+                
+              }
               map.removeLayer(selected_country);
             }
-            selected_country = country_json;
-            country_json.getLayers()[0].options.fillColor = "#F7B500";
-            country_json.getLayers()[0].options.color = "#F7B500";
-            country_json.getLayers()[0].options.fillOpacity = "0.5";
+            if(add){
+              clicked_in_country++;
+              selected_country = country_json;
+              selected_country_id=country[1].id;
+              country_json.getLayers()[0].options.fillColor = "#F7B500";
+              country_json.getLayers()[0].options.color = "#F7B500";
+              country_json.getLayers()[0].options.fillOpacity = "0.5";
 
-            map.addLayer(country_json);
-            var country_id_3 = country[1].id;
-            country_clicked = getCountryISO2(country_id_3);
-            country_name_clicked = country[1].properties.name;
-            console.log(country[1]);
-            console.log(country[1].properties.name);
-            break;
+              map.addLayer(country_json);
+              var country_id_3 = country[1].id;
+              country_clicked = getCountryISO2(country_id_3);
+              country_name_clicked = country[1].properties.name;
+              break;
+            }
           }
         }
+      }
+      if(clicked_in_country==0) {
+          map.removeLayer(selected_country);
+          country_clicked = "world";
+          country_name_clicked = "World";
+          selected_country_id="world";
       }
     }
   }
