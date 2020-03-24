@@ -5,7 +5,7 @@
   export let country;
 
   let res;
-  let ccode, pop_total, deaths, confirmed, recovered;
+  let pop_total, deaths, confirmed, recovered;
 
   $: setpop = false;
 
@@ -13,8 +13,8 @@
 
   function getContent() {
     if (country) {
-      ccode = findCode(population.default, "code3", country);
-      data.getCountry({ cc: ccode }).then(function(result) {
+      console.log(country);
+      data.getCountry({ cc: country }).then(function(result) {
         res = result;
 
         res.deaths = Object.values(res.deaths);
@@ -25,7 +25,7 @@
         confirmed = res.confirmed[res.confirmed.length - 1];
         recovered = res.recovered[res.recovered.length - 1];
         if (setpop) {
-          pop_total = findPop(population.default, "code", ccode);
+          pop_total = findPop(population.default, "code", country);
         } else {
           pop_total = deaths + confirmed + recovered;
         }
@@ -70,7 +70,7 @@
       pop_total = deaths + confirmed + recovered;
     } else {
       setpop = true;
-      if (country) pop_total = findPop(population.default, "code", ccode);
+      if (country) pop_total = findPop(population.default, "code", country);
       else pop_total = 7772494610;
     }
   }
@@ -78,66 +78,65 @@
 </script>
 
 <style>
-  h2 {
-    color: white;
-  }
 
-  th,
-  td {
-    padding: 2px 10px;
-    color: white;
-  }
 </style>
 
 {#if !res}
   Loading...
 {:else}
 
-  <div class="flag"> <img src="flags/{country}.png" alt="flag"></div>
-  <h5 class="container-title">{country ? country : 'World'} </h5>
+  <div class="flag">
+    <img src="flags/{country}.png" alt="flag" />
+  </div>
+  <h5 class="container-title">{country ? country : 'World'}</h5>
   <div class="container-data-details">
     <div class="col-block">
-      <i class="dot dot_red"></i>
+      <i class="dot dot_red" />
       <label>Deaths</label>
       <div class="data">{deaths}</div>
     </div>
-     <div class="col-block">
-      <i class="dot dot_yellow"></i>
+    <div class="col-block">
+      <i class="dot dot_yellow" />
       <label>Confirmed</label>
       <div class="data">{confirmed}</div>
     </div>
-     <div class="col-block">
-      <i class="dot dot_green"></i>
+    <div class="col-block">
+      <i class="dot dot_green" />
       <label>Recovered</label>
       <div class="data">{recovered}</div>
     </div>
-     <div class="col-block-btn">
-        <button class="secondary adj-left" on:click={() => change()}>change</button>
-        <button class="adj-right" on:click={() => change()}>change</button>
+    <div class="col-block-btn">
+      <button class="secondary adj-left" on:click={() => change()}>
+        change
+      </button>
+      <button class="adj-right" on:click={() => change()}>change</button>
     </div>
   </div>
   <div class="progress">
     <div
       class="progress-bar bg-danger"
       role="progressbar"
-      style="width: {(deaths * 100) / pop_total}%"
-      aria-valuenow={(deaths * 100) / pop_total}
+      style="width: {deaths ? (deaths * 100) / pop_total : 0}%"
+      aria-valuenow={deaths ? (deaths * 100) / pop_total : 0}
       aria-valuemin="0"
       aria-valuemax="100" />
     <div
       class="progress-bar bg-warning"
       role="progressbar"
-      style="width: {(confirmed * 100) / pop_total}%"
-      aria-valuenow={(confirmed * 100) / pop_total}
+      style="width: {confirmed ? (confirmed * 100) / pop_total : 0}%"
+      aria-valuenow={confirmed ? (confirmed * 100) / pop_total : 0}
       aria-valuemin="0"
       aria-valuemax="100" />
     <div
       class="progress-bar"
       role="progressbar"
-      style="width: {(recovered * 100) / pop_total}%"
-      aria-valuenow={(recovered * 100) / pop_total}
+      style="width: {recovered ? (recovered * 100) / pop_total : 0}%"
+      aria-valuenow={recovered ? (recovered * 100) / pop_total : 0}
       aria-valuemin="0"
       aria-valuemax="100" />
   </div>
-  <label class="progress_label">{pop_total}</label>
+  <label class="progress_label">
+    {pop_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
+    {setpop ? 'Population' : 'Infected'}
+  </label>
 {/if}

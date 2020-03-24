@@ -18,7 +18,6 @@
 
   data.all().then(function(result) {
     res = result;
-    console.log(res);
 
     placeCircles(res.confirmed, 1, "yellow");
     placeCircles(res.deaths, 0, "red");
@@ -132,8 +131,12 @@
           }
         }
         c++;
-      } else console.log(country_name);
+      } else
+        console.log(
+          country_name + " - " + country_code + " - " + country_clicked
+        );
     }
+    console.log(" ---------- ");
     return c;
   }
   function init() {
@@ -209,8 +212,6 @@
             map.addLayer(country_json);
             var country_id_3 = country[1].id;
             country_clicked = getCountryISO2(country_id_3);
-
-            console.log(country_clicked);
 
             break;
           }
