@@ -48,7 +48,7 @@
       clearInterval(interval);
     };
   }
-
+ 
   function playhistory() {
     console.log("play");
     for(var i=0; i< circle.length;i++){
@@ -354,17 +354,7 @@
 </svelte:head>
 
 <div id="map" />
-<div class="container-icons">
-  <div class="container-basic container-icon">
-    <i class="fas fa-procedures" />
-  </div>
-  <div class="container-basic container-icon">
-    <i class="fas fa-notes-medical" />
-  </div>
-  <div class="container-basic container-icon">
-    <i class="fas fa-user-times" />
-  </div>
-</div>
+
 <Total country={country_clicked} name={country_name_clicked} />
 <div class="container-date">
   <div class="date">{showdate}</div>

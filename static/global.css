@@ -240,7 +240,20 @@ button:hover, .button:hover{
     padding: 0px 32px;
 
 }
+.container-footer{
+    display: block;
+    border-top:1px solid rgba(151, 151, 151, .3) ;
+    width: 100%;
+    margin-top: 18px;  
+    padding: 0px 32px;
+    padding-top: 14px;
 
+
+}
+.navigate-list{
+    display: inline-block;
+    float:right;
+}
 
   .progress_label{
     float: right;

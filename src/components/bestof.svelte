@@ -7,7 +7,7 @@
 
   let res;
   let all, all_sorted;
-
+  
   function getContent() {
     data.all().then(function(result) {
       res = result;
@@ -32,6 +32,10 @@
         return b.latest - a.latest;
       });
     });
+  }
+  function showList(scope){
+    var el = document.querySelector('#bestof_'+scope);
+    el.classList.toggle('hidden');
   }
 
   getContent();
@@ -202,6 +206,18 @@
     left: 84px;
     top: 100px;
     width: 380px;
+    height: 560px;
+
+    opacity: 1;
+    -webkit-transition-duration: .4s;
+    -moz-transition-duration: .4s;
+    -o-transition-duration: .4s;
+    transition-duration: .4s;
+  }
+  .container-bestof.hidden {
+    height: 0px;
+    opacity: 0;
+
   }
   .container-list {
     display: block;
@@ -230,8 +246,7 @@
 {#if !res}
   Loading...
 {:else}
-  <div class="container-basic container-bestof">
-
+  <div id="bestof_all" class="container-basic container-bestof hidden">
     <div class="container-header">
       <div class="container-header-contents">
 
@@ -254,6 +269,17 @@
         {/each}
       </div>
     </div>
+    <div class="container-footer">
+      210 countrys
+      <div class="navigate-list">
+        <div class="button secondary adj-left">
+          <i class="fas fa-chevron-left" />
+        </div>
+        <div class="button secondary adj-right">
+          <i class="fas fa-chevron-right" />
+        </div>
+      </div>
+    </div>
   </div>
 {/if}
 
@@ -267,5 +293,18 @@
   </div>
   <div class="container-body">
     <canvas id="myChart" />
+  </div>
+  
+</div>
+
+<div class="container-icons">
+  <div class="container-basic container-icon" on:click={() => showList("all")}>
+    <i class="fas fa-procedures" />
+  </div>
+  <div class="container-basic container-icon">
+    <i class="fas fa-notes-medical" />
+  </div>
+  <div class="container-basic container-icon">
+    <i class="fas fa-user-times" />
   </div>
 </div>

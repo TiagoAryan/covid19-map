@@ -54,7 +54,7 @@
 {#if !res}
   Loading...
 {:else}
-  <section>
+  <section style="right:0">
     <h1>Total ({c_infected.length + c_healthy.length})</h1>
     <h2>Infected ({c_infected.length})</h2>
     {#each c_infected as item, i}
