@@ -82,7 +82,6 @@
         }
       }
       if (country_in_map !== undefined) {
-        var random = parseInt(1 + Math.floor(Math.random() * 20));
         /*
         if (type == "yellow") {
           var number_people =
@@ -93,7 +92,7 @@
           var number_people = data.locations[k].latest;
         }
         */
-        var number_people = data.locations[k].latest;
+        var number_people = data.locations[k].history[date];
         var random = parseInt(number_people / 100);
 
         i = 0;
@@ -141,23 +140,23 @@
                 var last_c = circle.length - 1;
 
                 if (color_rgy == 1) {
-                  circle[last_c].circles_yellow.push(
+                  circle[c].circles_yellow.push(
                     new L.Circle(point_pos, circle_size, circleOptions)
                   );
-                  var last = circle[last_c].circles_yellow.length - 1;
-                  circle[last_c].circles_yellow[last].addTo(map);
+                  var last = circle[c].circles_yellow.length - 1;
+                  circle[c].circles_yellow[i].addTo(map);
                 } else if (color_rgy == 2) {
-                  circle[last_c].circles_green.push(
+                  circle[c].circles_green.push(
                     new L.Circle(point_pos, circle_size, circleOptions)
                   );
-                  var last = circle[last_c].circles_green.length - 1;
-                  circle[last_c].circles_green[last].addTo(map);
+                  var last = circle[c].circles_green.length - 1;
+                  circle[c].circles_green[i].addTo(map);
                 } else {
-                  circle[last_c].circles_red.push(
+                  circle[c].circles_red.push(
                     new L.Circle(point_pos, circle_size, circleOptions)
                   );
-                  var last = circle[last_c].circles_red.length - 1;
-                  circle[last_c].circles_red[last].addTo(map);
+                  var last = circle[c].circles_red.length - 1;
+                  circle[c].circles_red[i].addTo(map);
                 }
 
                 i++;
@@ -169,23 +168,23 @@
               var last_c = circle.length - 1;
 
               if (color_rgy == 1) {
-                circle[last_c].circles_yellow.push(
+                circle[c].circles_yellow.push(
                   new L.Circle(point_pos, circle_size, circleOptions)
                 );
-                var last = circle[last_c].circles_yellow.length - 1;
-                circle[last_c].circles_yellow[last].addTo(map);
+                var last = circle[c].circles_yellow.length - 1;
+                circle[c].circles_yellow[i].addTo(map);
               } else if (color_rgy == 2) {
-                circle[last_c].circles_green.push(
+                circle[c].circles_green.push(
                   new L.Circle(point_pos, circle_size, circleOptions)
                 );
-                var last = circle[last_c].circles_green.length - 1;
-                circle[last_c].circles_green[last].addTo(map);
+                var last = circle[c].circles_green.length - 1;
+                circle[c].circles_green[i].addTo(map);
               } else {
-                circle[last_c].circles_red.push(
+                circle[c].circles_red.push(
                   new L.Circle(point_pos, circle_size, circleOptions)
                 );
-                var last = circle[last_c].circles_red.length - 1;
-                circle[last_c].circles_red[last].addTo(map);
+                var last = circle[c].circles_red.length - 1;
+                circle[c].circles_red[i].addTo(map);
               }
               i++;
               j++;
@@ -331,13 +330,6 @@
     position: fixed !important;
     width: 100vw;
     height: 100vh;
-  }
-
-  .container-info {
-    position: absolute;
-    width: 800px;
-    bottom: 0px;
-    left: calc(50% - 400px);
   }
 </style>
 

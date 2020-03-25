@@ -182,9 +182,6 @@
     top: 100px;
     width: 380px;
   }
-  .container-bestof-fit {
-    margin: 0 auto;
-  }
   .container-list {
     display: block;
     position: relative;
