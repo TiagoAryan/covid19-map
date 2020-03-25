@@ -188,7 +188,7 @@ button:hover, .button:hover{
 }
 .container-data-details{
     display: block;
-    padding: 30px 0px 10px 0px;
+    padding: 0px 0px 10px 0px;
 }
 .container-title{
     display: inline-block;
@@ -218,19 +218,23 @@ button:hover, .button:hover{
     line-height: 1.2rem;
     margin:0;
 }
-.container-basic:after{
-    content:"";
-    width: 100%;
-    top:62px;
-    position: absolute;
-    left: 0;
-    height:1px;
-    background-color:#979797;
-    opacity: 0.3;
-  }
   .container-icon:after{
     height: 0;
 }
+.container-header{
+    display: block;
+    border-bottom:1px solid rgba(151, 151, 151, .3) ;
+    width: 100%;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+}
+.container-header-contents,.container-body{
+    display: block;
+    padding: 0px 32px;
+
+}
+
+
   .progress_label{
     float: right;
     display: inline-block;
@@ -239,4 +243,16 @@ button:hover, .button:hover{
 
   .col-block-btn .button{
     float:right;
+  }
+  .list-name{
+    font-weight: 300;
+    display: inline-block;
+    margin: 0;
+
+}
+  .list-count{
+      font-weight: 600;
+      display: inline-block;
+      float: right;
+      margin: 0;
   }

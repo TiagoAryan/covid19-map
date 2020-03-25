@@ -83,8 +83,17 @@
       }
       if (country_in_map !== undefined) {
         var random = parseInt(1 + Math.floor(Math.random() * 20));
-        var number_people = data.locations[k].history[date];
-
+        /*
+        if (type == "yellow") {
+          var number_people =
+            parseInt(data.locations[k].latest) -
+            parseInt(res.deaths.locations[k].latest) -
+            parseInt(res.recovered.locations[k].latest);
+        } else {
+          var number_people = data.locations[k].latest;
+        }
+        */
+        var number_people = data.locations[k].latest;
         var random = parseInt(number_people / 100);
 
         i = 0;
@@ -129,21 +138,26 @@
               m++
             ) {
               if (inside(lat, lng, country_in_map.geometry.coordinates[m][0])) {
+                var last_c = circle.length - 1;
+
                 if (color_rgy == 1) {
-                  circle[c].circles_yellow.push(
+                  circle[last_c].circles_yellow.push(
                     new L.Circle(point_pos, circle_size, circleOptions)
                   );
-                  circle[c].circles_yellow[i].addTo(map);
+                  var last = circle[last_c].circles_yellow.length - 1;
+                  circle[last_c].circles_yellow[last].addTo(map);
                 } else if (color_rgy == 2) {
-                  circle[c].circles_green.push(
+                  circle[last_c].circles_green.push(
                     new L.Circle(point_pos, circle_size, circleOptions)
                   );
-                  circle[c].circles_green[i].addTo(map);
+                  var last = circle[last_c].circles_green.length - 1;
+                  circle[last_c].circles_green[last].addTo(map);
                 } else {
-                  circle[c].circles_red.push(
+                  circle[last_c].circles_red.push(
                     new L.Circle(point_pos, circle_size, circleOptions)
                   );
-                  circle[c].circles_red[i].addTo(map);
+                  var last = circle[last_c].circles_red.length - 1;
+                  circle[last_c].circles_red[last].addTo(map);
                 }
 
                 i++;
@@ -152,21 +166,26 @@
             }
           } else {
             if (inside(lat, lng, country_in_map.geometry.coordinates[0])) {
+              var last_c = circle.length - 1;
+
               if (color_rgy == 1) {
-                circle[c].circles_yellow.push(
+                circle[last_c].circles_yellow.push(
                   new L.Circle(point_pos, circle_size, circleOptions)
                 );
-                circle[c].circles_yellow[i].addTo(map);
+                var last = circle[last_c].circles_yellow.length - 1;
+                circle[last_c].circles_yellow[last].addTo(map);
               } else if (color_rgy == 2) {
-                circle[c].circles_green.push(
+                circle[last_c].circles_green.push(
                   new L.Circle(point_pos, circle_size, circleOptions)
                 );
-                circle[c].circles_green[i].addTo(map);
+                var last = circle[last_c].circles_green.length - 1;
+                circle[last_c].circles_green[last].addTo(map);
               } else {
-                circle[c].circles_red.push(
+                circle[last_c].circles_red.push(
                   new L.Circle(point_pos, circle_size, circleOptions)
                 );
-                circle[c].circles_red[i].addTo(map);
+                var last = circle[last_c].circles_red.length - 1;
+                circle[last_c].circles_red[last].addTo(map);
               }
               i++;
               j++;
@@ -188,7 +207,8 @@
     var gl = L.mapboxGL({
       attribution:
         '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>',
-      accessToken: "not-needed",
+      accessToken:
+        "pk.eyJ1IjoiYmpkaW9nbyIsImEiOiJjazg3bW40dnkwbjYwM2htbWc1NnBidzQ2In0.lh4trQ8-6vDRegpJWs6mBw",
       maxZoom: 8,
       style:
         "https://api.maptiler.com/maps/5ce0b2a2-d5dc-44ae-84f3-7211439b9474/style.json?key=TLbKST4hnYUY3nc3yvDh"
@@ -311,6 +331,13 @@
     position: fixed !important;
     width: 100vw;
     height: 100vh;
+  }
+
+  .container-info {
+    position: absolute;
+    width: 800px;
+    bottom: 0px;
+    left: calc(50% - 400px);
   }
 </style>
 
