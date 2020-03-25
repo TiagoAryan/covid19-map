@@ -92,6 +92,10 @@
         <img src="flags/{country ? country : 'world'}.png" alt="flag" />
       </div>
       <h5 class="container-title">{country ? name : 'World'}</h5>
+       <div style="float:right" class="button">
+          <i class="fas fa-user-friends" />
+          Details
+        </div>
     </div>
   </div>
   <div class="container-body">
