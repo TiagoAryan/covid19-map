@@ -14,7 +14,6 @@
 
   function getContent() {
     if (country) {
-      console.log(country);
       data.getCountry({ cc: country }).then(function(result) {
         res = result;
 
@@ -28,7 +27,7 @@
         if (setpop) {
           pop_total = findPop(population.default, "code", country);
         } else {
-          pop_total =  confirmed ;
+          pop_total = confirmed;
         }
       });
     } else {
@@ -41,7 +40,7 @@
         if (setpop) {
           pop_total = 7772494610;
         } else {
-          pop_total = confirmed ;
+          pop_total = confirmed;
         }
       });
     }
@@ -68,7 +67,7 @@
   function change() {
     if (setpop) {
       setpop = false;
-      pop_total = confirmed ;
+      pop_total = confirmed;
     } else {
       setpop = true;
       if (country) pop_total = findPop(population.default, "code", country);
@@ -98,23 +97,23 @@
     </div>
     <div class="col-block">
       <i class="dot dot_yellow" />
-      <label>In Recovery</label>
-      <div class="data">{confirmed-deaths-recovered}</div>
+      <label>Active</label>
+      <div class="data">{confirmed - deaths - recovered}</div>
     </div>
     <div class="col-block">
       <i class="dot dot_green" />
       <label>Recovered</label>
       <div class="data">{recovered}</div>
     </div>
-     <div class="col-block-btn">
-        
-        <div class="button adj-right" on:click={() => change()}>
-          <i class="fas fa-user-friends"></i>
-          All
-        </div>
-        <div class="button secondary adj-left" on:click={() => change()}>    
-          <i class="fas fa-procedures"></i>
-        </div>
+    <div class="col-block-btn">
+
+      <div class="button adj-right" on:click={() => change()}>
+        <i class="fas fa-user-friends" />
+        All
+      </div>
+      <div class="button secondary adj-left" on:click={() => change()}>
+        <i class="fas fa-procedures" />
+      </div>
     </div>
   </div>
   <div class="progress">
@@ -128,8 +127,8 @@
     <div
       class="progress-bar bg-warning"
       role="progressbar"
-      style="width: {(confirmed-deaths-recovered) ? ((confirmed-deaths-recovered) * 100) / pop_total : 0}%"
-      aria-valuenow={(confirmed-deaths-recovered) ? ((confirmed-deaths-recovered) * 100) / pop_total : 0}
+      style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}%"
+      aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}
       aria-valuemin="0"
       aria-valuemax="100" />
     <div
@@ -142,6 +141,6 @@
   </div>
   <label class="progress_label">
     {pop_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
-    {setpop ? 'Population' : 'Infected'}
+    {setpop ? 'Population' : 'Cases'}
   </label>
 {/if}
