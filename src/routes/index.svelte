@@ -75,6 +75,7 @@
         }
         */
         var random = parseInt(1 + Math.floor(Math.random() * 20));
+        /*
         if (type == "yellow") {
           var number_people =
             parseInt(data.locations[k].latest) -
@@ -82,13 +83,14 @@
             parseInt(res.recovered.locations[k].latest);
           //console.log("number_people"+number_people)
           //console.log("all "+data.locations[k].latest)
-          //console.log("country:"+res.deaths.locations[k].country+" - latest:"+res.deaths.locations[k].latest);
-          //console.log("country:"+res.recovered.locations[k].country+" - latest:"+res.recovered.locations[k].latest);
-          //console.log("country:"+res.confirmed.locations[k].country+" - latest:"+res.confirmed.locations[k].latest);
+          console.log("country:"+res.deaths.locations[k].country+" - latest:"+res.deaths.locations[k].latest);
+          console.log("country:"+res.recovered.locations[k].country+" - latest:"+res.recovered.locations[k].latest);
+          console.log("country:"+res.confirmed.locations[k].country+" - latest:"+res.confirmed.locations[k].latest);
         } else {
           var number_people = data.locations[k].latest;
         }
-
+        */
+        var number_people = data.locations[k].latest;
         var random = parseInt(number_people / 100);
 
         i = 0;
