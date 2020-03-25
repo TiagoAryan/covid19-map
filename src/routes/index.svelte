@@ -51,8 +51,21 @@
 
   function playhistory() {
     console.log("play");
+    for(var i=0; i< circle.length;i++){
+      for(var j=0; j< circle[i].circles_yellow.length;j++){
+        circle[i].circles_yellow[j].remove();
+      }
+      for(var j=0; j< circle[i].circles_green.length;j++){
+        circle[i].circles_green[j].remove();
 
-    //play();
+      }
+      for(var j=0; j< circle[i].circles_red.length;j++){
+        circle[i].circles_red[j].remove();
+
+      }
+      
+    }
+    play();
   }
 
   function placeCircles(res, color_rgy, type, date) {

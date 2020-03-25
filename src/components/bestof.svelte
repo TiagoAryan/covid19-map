@@ -42,6 +42,27 @@
   //---------------
   // CHART
   //---------------
+  function updateConfigAsNewObject(chart) {
+    chart.data = {
+        labels: ['19 Mar', '20 Mar', '21 Mar', '22 Mar', '23 Mar', '24 Mar', '25 Mar','19 Mar', '20 Mar', '21 Mar', '22 Mar', '23 Mar', '24 Mar', '25 Mar'],
+        datasets: [{
+          label: 'Deaths',
+          defaultFontFamily	:"Open Sans",
+          borderColor:  "#FF4E34",
+          backgroundColor: "#FF4E3426",
+          fill: false,
+          data: [0,1,5,7,12,18,20,31,38,39,59,60,90,102],
+          yAxisID: 'y-axis-1',
+          pointBorderWidth:3,
+          pointHitRadius:8,
+          pointRadius:6,
+          pointBackgroundColor: "#1E1E21",
+          pointHoverRadius:12,
+          pointHoverBorderWidth:3
+        }]
+      };
+    chart.update();
+}
   function initChart() {
     console.log("LOADED");
     var ctx = document.getElementById("myChart").getContext("2d");
@@ -197,6 +218,12 @@
     height: 500px;
     margin-right: 0;
     position: absolute;
+    transform: translateX(1000px);
+    opacity: 0;
+  }
+  .container-chart.show {
+    transform: translateX(0px);
+    opacity: 1;
   }
 </style>
 
