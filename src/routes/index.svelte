@@ -4,7 +4,7 @@
   import getCountryISO2 from "country-iso-3-to-2";
   import Total from "../components/total.svelte";
   import Bestof from "../components/bestof.svelte";
-  import Dateby from "../components/dateby.svelte";
+  import Countries from "../components/countries.svelte";
 
   var map;
   var selected_country, selected_country_id;
@@ -16,18 +16,43 @@
   let res;
   let pop_total = 7772494610;
 
-  data.all().then(function(result) {
-    res = result;
+  let showdate = "00/00/00";
 
-    placeCircles(res, 1, "yellow");
-    placeCircles(res, 0, "red");
-    placeCircles(res, 2, "green");
-  });
+  function play() {
+    let length = Object.keys(res.confirmed.locations[0].history).length;
+    let dates = Object.keys(
+      res.confirmed.locations.filter(e => "Hubei" === e.province)[0].history
+    ).sort(function(a, b) {
+      return new Date(a) - new Date(b);
+    });
 
-  function getbydate(date) {
-    for (let i = 0; i < Object.values(res.deaths.locations).length; i++) {
-      res.deaths.locations[i].date = res.deaths.locations[i].history[date];
-    }
+    let i = 0;
+    const interval = setInterval(() => {
+      let date = new Date(dates[i]);
+      showdate =
+        ("0" + date.getDate()).slice(-2) +
+        "/" +
+        ("0" + (date.getMonth() + 1)).slice(-2) +
+        "/" +
+        date.getFullYear();
+      placeCircles(res, 1, "yellow", dates[i]);
+      placeCircles(res, 0, "red", dates[i]);
+      placeCircles(res, 2, "green", dates[i]);
+
+      i++;
+
+      if (i >= length) clearInterval(interval);
+    }, 10);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }
+
+  function playhistory() {
+    console.log("play");
+
+    //play();
   }
 
   function placeCircles(res, color_rgy, type, date) {
@@ -58,14 +83,7 @@
       }
       if (country_in_map !== undefined) {
         var random = parseInt(1 + Math.floor(Math.random() * 20));
-        if (type == "yellow") {
-          var number_people =
-            parseInt(data.locations[k].latest) -
-            parseInt(res.deaths.locations[k].latest) -
-            parseInt(res.recovered.locations[k].latest);
-        } else {
-          var number_people = data.locations[k].latest;
-        }
+        var number_people = data.locations[k].history[date];
 
         var random = parseInt(number_people / 100);
 
@@ -96,7 +114,8 @@
             color: cor,
             fillColor: cor,
             fillOpacity: 0.3,
-            weight: 1
+            weight: 1,
+            interactive: false
           };
 
           var lat = y_min + Math.random() * (y_max - y_min);
@@ -263,6 +282,11 @@
         selected_country_id = "";
       }
     }
+
+    data.all().then(function(result) {
+      res = result;
+      play();
+    });
   }
 
   function inside(y, x, vs) {
@@ -280,10 +304,6 @@
     }
     return inside;
   }
-
-  onMount(() => {
-    setTimeout(() => init(), 50);
-  });
 </script>
 
 <style>
@@ -292,22 +312,12 @@
     width: 100vw;
     height: 100vh;
   }
-
-  .container-info {
-    position: absolute;
-    width: 800px;
-    bottom: 0px;
-    left: calc(50% - 400px);
-  }
-
-  .total {
-    width: 100%;
-    padding: 0px 32px;
-    margin: 0 auto;
-  }
 </style>
 
 <svelte:head>
+  <script src="./js/bounds.js" on:load={init()}>
+
+  </script>
   <title>Sapper project template</title>
 </svelte:head>
 
@@ -323,13 +333,9 @@
     <i class="fas fa-user-times" />
   </div>
 </div>
-<div class="container-basic container-info">
-  <div class="total">
-    <Total country={country_clicked} name={country_name_clicked} />
-  </div>
-</div>
+<Total country={country_clicked} name={country_name_clicked} />
 <div class="container-date">
-  <div class="date">20/07/2020</div>
+  <div class="date">{showdate}</div>
   <div class="navigate-time">
     <div class="button secondary adj-left">
       <i class="fas fa-chevron-left" />
@@ -337,11 +343,11 @@
     <div class="button secondary adj-right">
       <i class="fas fa-chevron-right" />
     </div>
-    <div class="button">
+    <div class="button" on:click={() => playhistory()}>
       <i class="fas fa-play" />
     </div>
   </div>
 </div>
 
 <Bestof type="deaths" />
-<Dateby date="3/22/20" />
+<Countries />
