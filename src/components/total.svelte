@@ -78,17 +78,27 @@
 </script>
 
 <style>
-
+.total {
+    width: 100%;
+    margin: 0 auto;
+  }
 </style>
 
 {#if !res}
   Loading...
 {:else}
 
-  <div class="flag">
-    <img src="flags/{country ? country : 'world'}.png" alt="flag" />
+  
+  <div class="container-header">
+    <div class="container-header-contents">
+      <div class="flag">
+        <img src="flags/{country ? country : 'world'}.png" alt="flag" />
+      </div>
+      <h5 class="container-title">{country ? name : 'World'}</h5>
+    </div>
   </div>
-  <h5 class="container-title">{country ? name : 'World'}</h5>
+  <div class="container-body">
+
   <div class="container-data-details">
     <div class="col-block">
       <i class="dot dot_red" />
@@ -143,4 +153,6 @@
     {pop_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
     {setpop ? 'Population' : 'Cases'}
   </label>
+  </div>
+
 {/if}
