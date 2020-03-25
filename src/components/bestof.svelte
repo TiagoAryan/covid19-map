@@ -46,43 +46,102 @@
 function initChart(){
   console.log("LOADED")
   var ctx = document.getElementById('myChart').getContext('2d');
-
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  var myLineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['19 Mar', '20 Mar', '21 Mar', '22 Mar', '23 Mar', '24 Mar', '25 Mar','19 Mar', '20 Mar', '21 Mar', '22 Mar', '23 Mar', '24 Mar', '25 Mar'],
         datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
+          label: 'Deaths',
+          defaultFontFamily	:"Open Sans",
+          borderColor:  "#FF4E34",
+          backgroundColor: "#FF4E3426",
+          fill: false,
+          data: [0,1,5,7,12,18,20,31,38,39,59,60,90,102],
+          yAxisID: 'y-axis-1',
+          pointBorderWidth:3,
+          pointHitRadius:8,
+          pointRadius:6,
+          pointBackgroundColor: "#1E1E21",
+          pointHoverRadius:12,
+          pointHoverBorderWidth:3
+        },
+        {
+          label: 'Infected',
+          defaultFontFamily	:"Open Sans",
+          borderColor: "#FFC831",
+          backgroundColor: "#FFC83126",
+          fill: false,
+          data: [0,2,15,27,62,98,120,290,394,481,518,839,910,1220],
+          yAxisID: 'y-axis-1',
+          pointBorderWidth:3,
+          pointHitRadius:8,
+          pointRadius:6,
+          pointBackgroundColor: "#1E1E21",
+          pointHoverRadius:12,
+          pointHoverBorderWidth:3
+        },
+        {
+          label: 'Recovered',
+          defaultFontFamily	:"Open Sans",
+          borderColor: "#40C0A5",
+          backgroundColor: "#40C0A526",
+          fill: false,
+          data: [0,1,1,2,2,2,4,7,7,12,20,22,28,41],
+          yAxisID: 'y-axis-1',
+          pointBorderWidth:3,
+          pointHitRadius:8,
+          pointRadius:6,
+          pointBackgroundColor: "#1E1E21",
+          pointHoverRadius:12,
+          pointHoverBorderWidth:3
         }
-    }
-});
+        ]
+      },
+      options: {
+        responsive: true,
+        hoverMode: 'index',
+        stacked: false,
+        spanGaps:true,
+        showLines:true,
+        title: {
+						display: false,
+						text: 'Chart.js Line Chart - Multi Axis'
+        },
+        scales: {
+						yAxes: [{
+							type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+							display: true,
+							position: 'left',
+              id: 'y-axis-1',
+              gridLines: {
+								drawOnChartArea: false, // only want the grid lines for one axis to show up
+              },
+               layout: {
+                  padding: {
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 20
+                  }
+              },
+              legend: {
+                  display: true,
+                  labels: {
+                    boxWidth:20
+                  }
+              },
+              tooltips: {
+                titleFontFamily: "Open Sans",
+                titleFontSize:15,
+                bodyFontFamily: "Open Sans",
+                bodyFontSize:13
+              }
+
+						}]
+					}
+
+      }
+  });
 }
 </script>
 
@@ -106,7 +165,11 @@ function initChart(){
   }
   .container-chart{
     width: 800px;
-    height: 300px;
+    top: 120px;
+    right: 12px;
+    height: 500px;
+    margin-right: 0;
+    position: absolute;
   }
 
 </style>
