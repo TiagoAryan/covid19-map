@@ -18,17 +18,19 @@
 
   data.all().then(function(result) {
     res = result;
-    console.log(result);
+
     placeCircles(res, 1, "yellow");
     placeCircles(res, 0, "red");
     placeCircles(res, 2, "green");
-
-    //  placeCountry(res.recovered);
-
-    console.log(circle);
   });
 
-  function placeCircles(res, color_rgy, type) {
+  function getbydate(date) {
+    for (let i = 0; i < Object.values(res.deaths.locations).length; i++) {
+      res.deaths.locations[i].date = res.deaths.locations[i].history[date];
+    }
+  }
+
+  function placeCircles(res, color_rgy, type, date) {
     var i = 0;
     var c = 0;
     var data;
@@ -55,36 +57,12 @@
         }
       }
       if (country_in_map !== undefined) {
-        /*
-        //IF COUNTRY IS CLEAN
-        if(type=="yellow"){
-          console.log(res.confirmed.locations[k].latest);
-          console.log(res.confirmed.locations[k].country);
-
-          if(res.confirmed.locations[k].latest==0 ){
-          var country_json = L.geoJson(country_in_map);
-
-          country_json.getLayers()[0].options.fillColor = "#242529";
-          country_json.getLayers()[0].options.color = "#171719";
-          country_json.getLayers()[0].options.fillOpacity = "1";
-          console.log(country_json.getLayers()[0].options);
-
-          map.addLayer(country_json);
-          }
-      
-        }
-        */
         var random = parseInt(1 + Math.floor(Math.random() * 20));
         if (type == "yellow") {
           var number_people =
             parseInt(data.locations[k].latest) -
             parseInt(res.deaths.locations[k].latest) -
             parseInt(res.recovered.locations[k].latest);
-          //console.log("number_people"+number_people)
-          //console.log("all "+data.locations[k].latest)
-          //console.log("country:"+res.deaths.locations[k].country+" - latest:"+res.deaths.locations[k].latest);
-          //console.log("country:"+res.recovered.locations[k].country+" - latest:"+res.recovered.locations[k].latest);
-          //console.log("country:"+res.confirmed.locations[k].country+" - latest:"+res.confirmed.locations[k].latest);
         } else {
           var number_people = data.locations[k].latest;
         }
@@ -177,8 +155,6 @@
           }
         }
         c++;
-      } else {
-        console.log(data.locations[k]);
       }
     }
     return c;
@@ -282,9 +258,9 @@
       }
       if (clicked_in_country == 0) {
         map.removeLayer(selected_country);
-        country_clicked = "world";
-        country_name_clicked = "World";
-        selected_country_id = "world";
+        country_clicked = "";
+        country_name_clicked = "";
+        selected_country_id = "";
       }
     }
   }
