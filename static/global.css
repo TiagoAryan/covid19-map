@@ -91,6 +91,13 @@ label{
     opacity:1;
 
 }
+.container-bottom{
+    display: block;
+    position: fixed;
+    left: calc(50% - 400px);
+    width: 800px;
+    bottom: 0px;
+}
 .progress{
     background-color: rgba(235, 238, 255, 0.1);
     height: 16px;

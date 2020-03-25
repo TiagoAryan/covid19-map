@@ -84,6 +84,7 @@
 {#if !res}
   Loading...
 {:else}
+<div class="container-basic container-bottom">
 
   <div class="container-header">
     <div class="container-header-contents">
@@ -112,40 +113,13 @@
         <div class="data">{recovered}</div>
       </div>
       <div class="col-block-btn">
-
-        <div class="button adj-right" on:click={() => change()}>
+        <div class="button" on:click={() => change()}>
           <i class="fas fa-user-friends" />
           All
         </div>
-        <h5 class="container-title">{country ? name : 'World'}</h5>
-        <div class="container-data-details">
-          <div class="col-block">
-            <i class="dot dot_red" />
-            <label>Deaths</label>
-            <div class="data">{deaths}</div>
-          </div>
-          <div class="col-block">
-            <i class="dot dot_yellow" />
-            <label>Active</label>
-            <div class="data">{confirmed - deaths - recovered}</div>
-          </div>
-          <div class="col-block">
-            <i class="dot dot_green" />
-            <label>Recovered</label>
-            <div class="data">{recovered}</div>
-          </div>
-          <div class="col-block-btn">
-
-            <div class="button adj-right" on:click={() => change()}>
-              <i class="fas fa-user-friends" />
-              All
-            </div>
-            <div class="button secondary adj-left" on:click={() => change()}>
-              <i class="fas fa-procedures" />
-            </div>
-          </div>
-        </div>
-        <div class="progress">
+      </div>
+    </div>
+      <div class="progress">
           <div
             class="progress-bar bg-danger"
             role="progressbar"
@@ -172,7 +146,6 @@
           {pop_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
           {setpop ? 'Population' : 'Cases'}
         </label>
-      </div>
-    </div>
   </div>
+</div>
 {/if}
