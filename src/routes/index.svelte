@@ -26,22 +26,33 @@
       return new Date(a) - new Date(b);
     });
 
-    let i = 0;
+    let ii = 0;
     const interval = setInterval(() => {
-      let date = new Date(dates[i]);
+      for (var i = 0; i < circle.length; i++) {
+        for (var j = 0; j < circle[i].circles_yellow.length; j++) {
+          circle[i].circles_yellow[j].remove();
+        }
+        for (var j = 0; j < circle[i].circles_green.length; j++) {
+          circle[i].circles_green[j].remove();
+        }
+        for (var j = 0; j < circle[i].circles_red.length; j++) {
+          circle[i].circles_red[j].remove();
+        }
+      }
+      let date = new Date(dates[ii]);
       showdate =
         ("0" + date.getDate()).slice(-2) +
         "/" +
         ("0" + (date.getMonth() + 1)).slice(-2) +
         "/" +
         date.getFullYear();
-      placeCircles(res, 1, "yellow", dates[i]);
-      placeCircles(res, 0, "red", dates[i]);
-      placeCircles(res, 2, "green", dates[i]);
+      placeCircles(res, 1, "yellow", dates[ii]);
+      placeCircles(res, 0, "red", dates[ii]);
+      placeCircles(res, 2, "green", dates[ii]);
 
-      i++;
+      ii++;
 
-      if (i >= length) clearInterval(interval);
+      if (ii >= length) clearInterval(interval);
     }, 10);
 
     return () => {
@@ -50,21 +61,6 @@
   }
 
   function playhistory() {
-    console.log("play");
-    for(var i=0; i< circle.length;i++){
-      for(var j=0; j< circle[i].circles_yellow.length;j++){
-        circle[i].circles_yellow[j].remove();
-      }
-      for(var j=0; j< circle[i].circles_green.length;j++){
-        circle[i].circles_green[j].remove();
-
-      }
-      for(var j=0; j< circle[i].circles_red.length;j++){
-        circle[i].circles_red[j].remove();
-
-      }
-      
-    }
     play();
   }
 
@@ -106,7 +102,7 @@
         }
         */
         var number_people = data.locations[k].history[date];
-        var random = parseInt(number_people / 100);
+        var random = parseInt(number_people / 300);
 
         i = 0;
 

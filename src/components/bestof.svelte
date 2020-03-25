@@ -11,7 +11,6 @@
   function getContent() {
     data.all().then(function(result) {
       res = result;
-      console.log(res);
 
       if (type == "deaths") all = res.deaths.locations;
       else if (type == "confirmed") all = res.confirmed.locations;
@@ -44,27 +43,43 @@
   //---------------
   function updateConfigAsNewObject(chart) {
     chart.data = {
-        labels: ['19 Mar', '20 Mar', '21 Mar', '22 Mar', '23 Mar', '24 Mar', '25 Mar','19 Mar', '20 Mar', '21 Mar', '22 Mar', '23 Mar', '24 Mar', '25 Mar'],
-        datasets: [{
-          label: 'Deaths',
-          defaultFontFamily	:"Open Sans",
-          borderColor:  "#FF4E34",
+      labels: [
+        "19 Mar",
+        "20 Mar",
+        "21 Mar",
+        "22 Mar",
+        "23 Mar",
+        "24 Mar",
+        "25 Mar",
+        "19 Mar",
+        "20 Mar",
+        "21 Mar",
+        "22 Mar",
+        "23 Mar",
+        "24 Mar",
+        "25 Mar"
+      ],
+      datasets: [
+        {
+          label: "Deaths",
+          defaultFontFamily: "Open Sans",
+          borderColor: "#FF4E34",
           backgroundColor: "#FF4E3426",
           fill: false,
-          data: [0,1,5,7,12,18,20,31,38,39,59,60,90,102],
-          yAxisID: 'y-axis-1',
-          pointBorderWidth:3,
-          pointHitRadius:8,
-          pointRadius:6,
+          data: [0, 1, 5, 7, 12, 18, 20, 31, 38, 39, 59, 60, 90, 102],
+          yAxisID: "y-axis-1",
+          pointBorderWidth: 3,
+          pointHitRadius: 8,
+          pointRadius: 6,
           pointBackgroundColor: "#1E1E21",
-          pointHoverRadius:12,
-          pointHoverBorderWidth:3
-        }]
-      };
+          pointHoverRadius: 12,
+          pointHoverBorderWidth: 3
+        }
+      ]
+    };
     chart.update();
-}
+  }
   function initChart() {
-    console.log("LOADED");
     var ctx = document.getElementById("myChart").getContext("2d");
     var myLineChart = new Chart(ctx, {
       type: "line",
