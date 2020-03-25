@@ -202,7 +202,7 @@
 
 <style>
   .container-bestof {
-    position: absolute;
+    position: fixed;
     left: 84px;
     top: 100px;
     width: 380px;

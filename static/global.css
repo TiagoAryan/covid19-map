@@ -40,7 +40,7 @@ label{
     opacity: 0.7;
 }
 .container-date{
-    position: absolute;
+    position: fixed;
     top: 12px;
     text-align: right;
     right: 12px;
@@ -61,7 +61,7 @@ label{
     display: block;
 }
 .container-icons{
-    position: absolute;
+    position: fixed;
     top: 100px;
     left: 10px;
 }
