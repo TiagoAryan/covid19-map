@@ -17,6 +17,7 @@
   let pop_total = 7772494610;
 
   let showdate = "00/00/00";
+  let inPlay = true;
 
   function play() {
     let length = Object.keys(res.confirmed.locations[0].history).length;
@@ -52,29 +53,32 @@
 
       ii++;
 
-      if (ii >= length) clearInterval(interval);
+      if (ii >= length) {
+        clearInterval(interval);
+        inPlay = false;
+      }
     }, 10);
 
     return () => {
       clearInterval(interval);
     };
   }
- 
+
   function playhistory() {
-    play();
+    if (!inPlay) {
+      inPlay = true;
+      play();
+    }
   }
 
   function placeCircles(res, color_rgy, type, date) {
     var i = 0;
     var c = 0;
     var data;
-    if (type == "yellow") {
-      data = res.confirmed;
-    } else if (type == "red") {
-      data = res.deaths;
-    } else {
-      data = res.recovered;
-    }
+
+    if (type == "yellow") data = res.confirmed;
+    else if (type == "red") data = res.deaths;
+    else data = res.recovered;
 
     for (var k = 0; k < data.locations.length; k++) {
       var country_name = data.locations[k].country;
@@ -313,6 +317,30 @@
 
     data.all().then(function(result) {
       res = result;
+
+      let all = res.confirmed.locations,
+        all_order = [];
+
+      all.reduce(function(res, value) {
+        if (!res[value.country]) {
+          res[value.country] = {
+            country: value.country,
+            country_code: value.country_code,
+            latest: 0,
+            history: {}
+          };
+          all_order.push(res[value.country]);
+        }
+        res[value.country].latest += value.latest;
+        let H_total = res[value.country].history;
+
+        for (var [key, h] of Object.entries(value.history))
+          H_total[key] = (H_total[key] || 0) + value.history[key];
+
+        res[value.country].history = H_total;
+        return res;
+      }, {});
+
       play();
     });
   }
@@ -361,9 +389,9 @@
     <div class="button secondary adj-right">
       <i class="fas fa-chevron-right" />
     </div>
-    <div class="button" on:click={() => playhistory()}>
+    <button class="button" on:click={() => playhistory()} disabled={inPlay}>
       <i class="fas fa-play" />
-    </div>
+    </button>
   </div>
 </div>
 
