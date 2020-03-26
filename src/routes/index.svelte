@@ -22,7 +22,7 @@
   function play() {
     let length = Object.keys(res.confirmed.locations[0].history).length;
     let dates = Object.keys(
-      res.confirmed.locations.filter(e => "Hubei" === e.province)[0].history
+      res.confirmed.locations.filter(e => "China" === e.country)[0].history
     ).sort(function(a, b) {
       return new Date(a) - new Date(b);
     });
@@ -318,31 +318,40 @@
     data.all().then(function(result) {
       res = result;
 
-      let all = res.confirmed.locations,
-        all_order = [];
+      res.confirmed.locations = sort(res.confirmed.locations);
+      res.deaths.locations = sort(res.deaths.locations);
+      res.recovered.locations = sort(res.recovered.locations);
 
-      all.reduce(function(res, value) {
-        if (!res[value.country]) {
-          res[value.country] = {
-            country: value.country,
-            country_code: value.country_code,
-            latest: 0,
-            history: {}
-          };
-          all_order.push(res[value.country]);
-        }
-        res[value.country].latest += value.latest;
-        let H_total = res[value.country].history;
-
-        for (var [key, h] of Object.entries(value.history))
-          H_total[key] = (H_total[key] || 0) + value.history[key];
-
-        res[value.country].history = H_total;
-        return res;
-      }, {});
+      console.log(res);
 
       play();
     });
+  }
+
+  function sort(all) {
+    let all_order = [];
+
+    all.reduce(function(res, value) {
+      if (!res[value.country]) {
+        res[value.country] = {
+          country: value.country,
+          country_code: value.country_code,
+          latest: 0,
+          history: {}
+        };
+        all_order.push(res[value.country]);
+      }
+      res[value.country].latest += value.latest;
+      let H_total = res[value.country].history;
+
+      for (var [key, h] of Object.entries(value.history))
+        H_total[key] = (H_total[key] || 0) + value.history[key];
+
+      res[value.country].history = H_total;
+      return res;
+    }, {});
+
+    return all_order;
   }
 
   function inside(y, x, vs) {
