@@ -20,6 +20,7 @@
   let inPlay = true;
 
   function play() {
+    console.log(res);
     let length = Object.keys(res.confirmed.locations[0].history).length;
     let dates = Object.keys(
       res.confirmed.locations.filter(e => "Hubei" === e.province)[0].history
@@ -29,17 +30,15 @@
 
     let ii = 0;
     const interval = setInterval(() => {
-      for (var i = 0; i < circle.length; i++) {
-        for (var j = 0; j < circle[i].circles_yellow.length; j++) {
-          circle[i].circles_yellow[j].remove();
-        }
-        for (var j = 0; j < circle[i].circles_green.length; j++) {
-          circle[i].circles_green[j].remove();
-        }
-        for (var j = 0; j < circle[i].circles_red.length; j++) {
-          circle[i].circles_red[j].remove();
-        }
-      }
+      var layers = [];
+      //clean layers
+      map.eachLayer(function(layer) {
+        if( layer instanceof L.Circle  )
+          layer.remove();
+        if( layer instanceof L.Polygon  )
+          layer.remove();
+
+      });
       let date = new Date(dates[ii]);
       showdate =
         ("0" + date.getDate()).slice(-2) +
@@ -47,12 +46,12 @@
         ("0" + (date.getMonth() + 1)).slice(-2) +
         "/" +
         date.getFullYear();
+        if(ii==0){
+          InfectedCountries(res, dates[ii]);
 
+        }
+        //InfectedCountries(res, dates[ii]);
         placeAllCircles(res, dates[ii]);
-
-        //placeCircles(res, 1, "yellow", dates[ii]);
-        //placeCircles(res, 0, "red", dates[ii]);
-        //placeCircles(res, 2, "green", dates[ii]);
 
       ii++;
 
@@ -73,6 +72,52 @@
       play();
     }
   }
+
+function InfectedCountries(res, date) {
+    var i = 0;
+    var c = 0;
+    var data=res.confirmed;
+   
+    
+     for (var k = 0; k < data.locations.length; k++) {
+        var country_name = data.locations[k].country;
+        var country_code = data.locations[k].country_code;
+        var country_in_map = countries_bounds[country_name];
+
+        //if map is not found in bounds.js by name find it by country code
+        if (country_in_map === undefined) {
+          for (var country of Object.entries(countries_bounds)) {
+            var id_c = country[1].id;
+            if (getCountryISO2(id_c) == country_code) {
+              var country_in_map = country[1];
+              break;
+            }
+          }
+        }
+        //if country found
+        if (country_in_map !== undefined) {
+          var number_people = data.locations[k].history[date];
+          var country_json = L.geoJson(country_in_map);
+
+          if(number_people>0){
+            var country_json = L.geoJson(country_in_map);
+
+            country_json.getLayers()[0].options.fillColor = "#F7B500";
+            country_json.getLayers()[0].options.color = "#F7B500";
+            country_json.getLayers()[0].options.fillOpacity = "0.1";
+            country_json.getLayers()[0].options.weight = "1";
+            country_json.getLayers()[0].options.opacity = "0.4";
+
+            
+            map.addLayer(country_json);
+
+          }
+        }
+     }
+     
+
+}
+
 function placeAllCircles(res, date) {
     var i = 0;
     var c = 0;
