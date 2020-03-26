@@ -228,9 +228,13 @@
     -moz-transition-duration: .4s;
     -o-transition-duration: .4s;
     transition-duration: .4s;
+
+    pointer-events: all;
+
   }
   .container-bestof.hidden {
     height: 0px;
+    pointer-events: none;
     opacity: 0;
 
   }
