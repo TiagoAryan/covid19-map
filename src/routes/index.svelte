@@ -8,7 +8,7 @@
 
   var map;
   var selected_country, selected_country_id;
-  var colors = ["#FF4E34", "#FFC831", "#40C0A5"];
+  var colors = ["#FFC831", "#FF4E34", "#40C0A5"];
   var circle_size = 8000;
   var circle = [];
   var c = 0;
@@ -20,6 +20,7 @@
   let inPlay = true;
 
   function play() {
+    console.log(res);
     let length = Object.keys(res.confirmed.locations[0].history).length;
     let dates = Object.keys(
       res.confirmed.locations.filter(e => "China" === e.country)[0].history
@@ -29,17 +30,15 @@
 
     let ii = 0;
     const interval = setInterval(() => {
-      for (var i = 0; i < circle.length; i++) {
-        for (var j = 0; j < circle[i].circles_yellow.length; j++) {
-          circle[i].circles_yellow[j].remove();
-        }
-        for (var j = 0; j < circle[i].circles_green.length; j++) {
-          circle[i].circles_green[j].remove();
-        }
-        for (var j = 0; j < circle[i].circles_red.length; j++) {
-          circle[i].circles_red[j].remove();
-        }
-      }
+      var layers = [];
+      //clean layers
+      map.eachLayer(function(layer) {
+        if( layer instanceof L.Circle  )
+          layer.remove();
+        if( layer instanceof L.Polygon  )
+          layer.remove();
+
+      });
       let date = new Date(dates[ii]);
       showdate =
         ("0" + date.getDate()).slice(-2) +
@@ -47,9 +46,12 @@
         ("0" + (date.getMonth() + 1)).slice(-2) +
         "/" +
         date.getFullYear();
-      placeCircles(res, 1, "yellow", dates[ii]);
-      placeCircles(res, 0, "red", dates[ii]);
-      placeCircles(res, 2, "green", dates[ii]);
+        if(ii==0){
+          InfectedCountries(res, dates[ii]);
+
+        }
+        //InfectedCountries(res, dates[ii]);
+        placeAllCircles(res, dates[ii]);
 
       ii++;
 
@@ -71,144 +73,165 @@
     }
   }
 
-  function placeCircles(res, color_rgy, type, date) {
+function InfectedCountries(res, date) {
+    var i = 0;
+    var c = 0;
+    var data=res.confirmed;
+   
+    
+     for (var k = 0; k < data.locations.length; k++) {
+        var country_name = data.locations[k].country;
+        var country_code = data.locations[k].country_code;
+        var country_in_map = countries_bounds[country_name];
+
+        //if map is not found in bounds.js by name find it by country code
+        if (country_in_map === undefined) {
+          for (var country of Object.entries(countries_bounds)) {
+            var id_c = country[1].id;
+            if (getCountryISO2(id_c) == country_code) {
+              var country_in_map = country[1];
+              break;
+            }
+          }
+        }
+        //if country found
+        if (country_in_map !== undefined) {
+          var number_people = data.locations[k].history[date];
+          var country_json = L.geoJson(country_in_map);
+
+          if(number_people>0){
+            var country_json = L.geoJson(country_in_map);
+
+            country_json.getLayers()[0].options.fillColor = "#F7B500";
+            country_json.getLayers()[0].options.color = "#F7B500";
+            country_json.getLayers()[0].options.fillOpacity = "0.1";
+            country_json.getLayers()[0].options.weight = "1";
+            country_json.getLayers()[0].options.opacity = "0.4";
+
+            
+            map.addLayer(country_json);
+
+          }
+        }
+     }
+     
+
+}
+
+function placeAllCircles(res, date) {
     var i = 0;
     var c = 0;
     var data;
+    for (var r = 0; r < 3; r++) {
+      if (r == 0) data = res.confirmed;
+      else if (r == 1) data = res.deaths;
+      else data = res.recovered;
 
-    if (type == "yellow") data = res.confirmed;
-    else if (type == "red") data = res.deaths;
-    else data = res.recovered;
+      for (var k = 0; k < data.locations.length; k++) {
+        var country_name = data.locations[k].country;
+        var country_code = data.locations[k].country_code;
+        var country_in_map = countries_bounds[country_name];
 
-    for (var k = 0; k < data.locations.length; k++) {
-      var country_name = data.locations[k].country;
-      var country_code = data.locations[k].country_code;
-      var country_in_map = countries_bounds[country_name];
-
-      if (country_in_map === undefined) {
-        for (var country of Object.entries(countries_bounds)) {
-          var id_c = country[1].id;
-          if (getCountryISO2(id_c) == country_code) {
-            var country_in_map = country[1];
-            break;
+        //if map is not found in bounds.js by name find it by country code
+        if (country_in_map === undefined) {
+          for (var country of Object.entries(countries_bounds)) {
+            var id_c = country[1].id;
+            if (getCountryISO2(id_c) == country_code) {
+              var country_in_map = country[1];
+              break;
+            }
           }
         }
-      }
-      if (country_in_map !== undefined) {
-        /*
-        if (type == "yellow") {
-          var number_people =
-            parseInt(data.locations[k].latest) -
-            parseInt(res.deaths.locations[k].latest) -
-            parseInt(res.recovered.locations[k].latest);
-        } else {
-          var number_people = data.locations[k].latest;
-        }
-        */
-        var number_people = data.locations[k].history[date];
-        var random = parseInt(number_people / 300);
+        //if country found
+        if (country_in_map !== undefined) {
+          var number_people_prev=0;
+          var number_people = data.locations[k].history[date]-number_people_prev;
+          var num_circles = parseInt(number_people / 300);
+          i = 0;
 
-        i = 0;
-
-        var bound = L.latLngBounds(L.geoJson(country_in_map).getBounds());
-        var center_country = bound.getCenter();
-
-        var x_max = bound.getEast();
-        var x_min = bound.getWest();
-        var y_max = bound.getSouth();
-        var y_min = bound.getNorth();
-        var j = 0;
-        if (color_rgy == 1) {
+          //initialize circle for each location
           circle.push({
             country: country_in_map.id,
             circles_green: [],
             circles_yellow: [],
-            circles_red: [],
-            type: type
+            circles_red: []
           });
-        }
-        while (j < random) {
-          var rand_color = parseInt(1 + Math.floor(Math.random() * 100));
-          var cor = colors[color_rgy];
 
-          var circleOptions = {
-            color: cor,
-            fillColor: cor,
-            fillOpacity: 0.3,
-            weight: 1,
-            interactive: false
-          };
+          var bound = L.latLngBounds(L.geoJson(country_in_map).getBounds());
+          var center_country = bound.getCenter();
+          var x_max = bound.getEast();
+          var x_min = bound.getWest();
+          var y_max = bound.getSouth();
+          var y_min = bound.getNorth();
+          var j = 0;
+          while (j < num_circles) {
+            var cor = colors[r];
+            //random positions
+            var lat = y_min + Math.random() * (y_max - y_min);
+            var lng = x_min + Math.random() * (x_max - x_min);
+            var point_pos = L.latLng(lat, lng);
 
-          var lat = y_min + Math.random() * (y_max - y_min);
-          var lng = x_min + Math.random() * (x_max - x_min);
-          var point_pos = L.latLng(lat, lng);
+            //circle visuals
+            var circleOptions = {
+              color: cor,
+              fillColor: cor,
+              fillOpacity: 0.3,
+              weight: 1,
+              interactive: false
+            };
 
-          if (country_in_map.geometry.type == "MultiPolygon") {
-            for (
-              var m = 0;
-              m < country_in_map.geometry.coordinates.length;
-              m++
-            ) {
-              if (inside(lat, lng, country_in_map.geometry.coordinates[m][0])) {
-                var last_c = circle.length - 1;
-
-                if (color_rgy == 1) {
-                  circle[c].circles_yellow.push(
-                    new L.Circle(point_pos, circle_size, circleOptions)
-                  );
-                  var last = circle[c].circles_yellow.length - 1;
-                  circle[c].circles_yellow[i].addTo(map);
-                } else if (color_rgy == 2) {
-                  circle[c].circles_green.push(
-                    new L.Circle(point_pos, circle_size, circleOptions)
-                  );
-                  var last = circle[c].circles_green.length - 1;
-                  circle[c].circles_green[i].addTo(map);
-                } else {
-                  circle[c].circles_red.push(
-                    new L.Circle(point_pos, circle_size, circleOptions)
-                  );
-                  var last = circle[c].circles_red.length - 1;
-                  circle[c].circles_red[i].addTo(map);
+            if (country_in_map.geometry.type == "MultiPolygon") {
+              for ( var m = 0; m < country_in_map.geometry.coordinates.length; m++ ) {
+                if (inside(lat, lng, country_in_map.geometry.coordinates[m][0])) {
+                  if (r == 0) {
+                    circle[k].circles_yellow.push(
+                      new L.Circle(point_pos, circle_size, circleOptions)
+                    );
+                    circle[k].circles_yellow[i].addTo(map);
+                  } else if (r == 1) {
+                    circle[k].circles_green.push(
+                      new L.Circle(point_pos, circle_size, circleOptions)
+                    );
+                    circle[k].circles_green[i].addTo(map);
+                  } else {
+                    circle[k].circles_red.push(
+                      new L.Circle(point_pos, circle_size, circleOptions)
+                    );
+                    circle[k].circles_red[i].addTo(map);
+                  }
+                  i++;
+                  j++;
                 }
-
+              }
+            } else {
+              if (inside(lat, lng, country_in_map.geometry.coordinates[0])) {
+                if (r == 0) {
+                  circle[k].circles_yellow.push(
+                    new L.Circle(point_pos, circle_size, circleOptions)
+                  );
+                  circle[k].circles_yellow[i].addTo(map);
+                } else if (r == 1) {
+                  circle[k].circles_green.push(
+                    new L.Circle(point_pos, circle_size, circleOptions)
+                  );
+                  circle[k].circles_green[i].addTo(map);
+                } else {
+                  circle[k].circles_red.push(
+                    new L.Circle(point_pos, circle_size, circleOptions)
+                  );
+                  circle[k].circles_red[i].addTo(map);
+                }
                 i++;
                 j++;
-              }
-            }
-          } else {
-            if (inside(lat, lng, country_in_map.geometry.coordinates[0])) {
-              var last_c = circle.length - 1;
 
-              if (color_rgy == 1) {
-                circle[c].circles_yellow.push(
-                  new L.Circle(point_pos, circle_size, circleOptions)
-                );
-                var last = circle[c].circles_yellow.length - 1;
-                circle[c].circles_yellow[i].addTo(map);
-              } else if (color_rgy == 2) {
-                circle[c].circles_green.push(
-                  new L.Circle(point_pos, circle_size, circleOptions)
-                );
-                var last = circle[c].circles_green.length - 1;
-                circle[c].circles_green[i].addTo(map);
-              } else {
-                circle[c].circles_red.push(
-                  new L.Circle(point_pos, circle_size, circleOptions)
-                );
-                var last = circle[c].circles_red.length - 1;
-                circle[c].circles_red[i].addTo(map);
               }
-              i++;
-              j++;
             }
-          }
+         
         }
-        c++;
       }
     }
-    return c;
   }
+}
   function init() {
     map = L.map("map", {
       minZoom: 3,
