@@ -10,8 +10,8 @@
   {
     "code": "ES",
     "transit": {
-      "air": 3,
-      "land": 3,
+      "air": 2,
+      "land": 2,
       "sea": 2
     }
   },
@@ -501,6 +501,190 @@
       "air": 3,
       "land": 2,
       "sea": 0
+    }
+  },
+  {
+    "code": "PK",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 0
+    }
+  },
+  {
+    "code": "PH",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "QA",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "SG",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "LK",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "LK",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "TW",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "TJ",
+    "transit": {
+      "air": 3,
+      "land": 3,
+      "sea": 0
+    }
+  },
+  {
+    "code": "TH",
+    "transit": {
+      "air": 3,
+      "land": 3,
+      "sea": 0
+    }
+  },
+  {
+    "code": "UZ",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "UZ",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "VN",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "AR",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "AW",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "AG",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "BS",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "BM",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "BO",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 0
+    }
+  },
+  {
+    "code": "BR",
+    "transit": {
+      "air": 3,
+      "land": 3,
+      "sea": 3
+    }
+  },
+  {
+    "code": "CA",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "CL",
+    "transit": {
+      "air": 3,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "CO",
+    "transit": {
+      "air": 3,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "ME",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
     }
   }
 ]

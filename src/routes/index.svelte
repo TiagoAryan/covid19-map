@@ -385,9 +385,9 @@
       return res;
     }, {});
 
-    return all_order.sort(function(a, b) {
-      return b.country - a.country;
-    });
+    return all_order.sort((a, b) =>
+      a.country > b.country ? 1 : b.country > a.country ? -1 : 0
+    );
   }
 
   function inside(y, x, vs) {
