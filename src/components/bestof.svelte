@@ -221,7 +221,7 @@
     left: 84px;
     top: 100px;
     width: 380px;
-    height: 560px;
+    height: 590px;
 
     opacity: 1;
     -webkit-transition-duration: .4s;
@@ -238,13 +238,17 @@
     opacity: 0;
 
   }
+  .container-bestof .container-body{
+    height: 420px;
+    overflow: scroll;
+  }
   .container-list {
     display: block;
     position: relative;
   }
   .container-list li {
     display: block;
-    padding: 6px 0px;
+    padding: 2px 0px;
   }
   .container-chart {
     width: 800px;

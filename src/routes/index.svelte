@@ -46,11 +46,7 @@
         ("0" + (date.getMonth() + 1)).slice(-2) +
         "/" +
         date.getFullYear();
-        if(ii==0){
-          InfectedCountries(res, dates[ii]);
-
-        }
-        //InfectedCountries(res, dates[ii]);
+        InfectedCountries(res, dates[ii]);
         placeAllCircles(res, dates[ii]);
 
       ii++;
@@ -76,8 +72,10 @@
 function InfectedCountries(res, date) {
     var i = 0;
     var c = 0;
+    console.log(res);
     var data=res.confirmed;
-   
+    var data_rec=res.recovered;
+    var missing_countrys_r=[];
     
      for (var k = 0; k < data.locations.length; k++) {
         var country_name = data.locations[k].country;
@@ -100,21 +98,36 @@ function InfectedCountries(res, date) {
           var country_json = L.geoJson(country_in_map);
 
           if(number_people>0){
+            var number_people_rec = data_rec.locations[k].history[date];
+            var people_rec = data_rec.locations[k].country;
+             
             var country_json = L.geoJson(country_in_map);
-
-            country_json.getLayers()[0].options.fillColor = "#F7B500";
-            country_json.getLayers()[0].options.color = "#F7B500";
-            country_json.getLayers()[0].options.fillOpacity = "0.1";
+            //console.log("confirmed "+k+" "+data.locations[k].country+" - "+number_people);
+            //console.log("recovered "+k+" "+people_rec+" - "+number_people_rec);
+            //console.log("--------");
+            if(number_people_rec<(number_people-number_people_rec)){
+              //yellow
+              country_json.getLayers()[0].options.fillColor = "#FFC831";
+              country_json.getLayers()[0].options.color = "#FFC831";
+            }else{
+              //green
+              country_json.getLayers()[0].options.fillColor = "#40C0A5";
+              country_json.getLayers()[0].options.color = "#40C0A5";
+            }
+           
+            country_json.getLayers()[0].options.fillOpacity = "0.05";
             country_json.getLayers()[0].options.weight = "1";
-            country_json.getLayers()[0].options.opacity = "0.4";
+            country_json.getLayers()[0].options.opacity = "0";
 
             
             map.addLayer(country_json);
 
           }
+        }else{
+          missing_countrys_r.push(country_name);
         }
      }
-     
+
 
 }
 
