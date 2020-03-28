@@ -20,7 +20,6 @@
   let inPlay = true;
 
   function play() {
-    console.log(res);
     let length = Object.keys(res.confirmed.locations[0].history).length;
     let dates = Object.keys(
       res.confirmed.locations.filter(e => "China" === e.country)[0].history
@@ -69,7 +68,6 @@
   function InfectedCountries(res, date) {
     var i = 0;
     var c = 0;
-    console.log(res);
     var data = res.confirmed;
     var data_rec = res.recovered;
     var missing_countrys_r = [];
@@ -355,8 +353,6 @@
       res.confirmed.locations = sort(res.confirmed.locations);
       res.deaths.locations = sort(res.deaths.locations);
       res.recovered.locations = sort(res.recovered.locations);
-
-      console.log(res);
 
       play();
     });
