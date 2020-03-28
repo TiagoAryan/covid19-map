@@ -74,6 +74,13 @@
       else pop_total = 7772494610;
     }
   }
+  function showContainers(){
+    console.log("dddd")
+    var el = document.querySelector('.container-chart');
+    el.classList.toggle('hidden');
+    var el2 = document.querySelector('.container-countries');
+    el2.classList.toggle('hidden');
+  }
 </script>
 
 <style>
@@ -91,7 +98,7 @@
           <img src="flags/{country ? country : 'world'}.png" alt="flag" />
         </div>
         <h5 class="container-title">{country ? name : 'World'}</h5>
-        <div style="float:right" class="button">
+        <div style="float:right" class="button" on:click={() => showContainers()}>
           <i class="fas fa-user-friends" />
           Details
         </div>
