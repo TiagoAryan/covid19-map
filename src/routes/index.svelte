@@ -6,7 +6,7 @@
   import Bestof from "../components/bestof.svelte";
   import Countries from "../components/countries.svelte";
   import Chart from "../components/chart.svelte";
-  
+
   var map;
   var selected_country, selected_country_id;
   var colors = ["#FFC831", "#FF4E34", "#40C0A5"];
@@ -98,9 +98,6 @@
           var people_rec = data_rec.locations[k].country;
 
           var country_json = L.geoJson(country_in_map);
-          //console.log("confirmed "+k+" "+data.locations[k].country+" - "+number_people);
-          //console.log("recovered "+k+" "+people_rec+" - "+number_people_rec);
-          //console.log("--------");
           if (number_people_rec < number_people - number_people_rec) {
             //yellow
             country_json.getLayers()[0].options.fillColor = "#FFC831";
@@ -259,27 +256,18 @@
         "https://api.maptiler.com/maps/5ce0b2a2-d5dc-44ae-84f3-7211439b9474/style.json?key=TLbKST4hnYUY3nc3yvDh"
     }).addTo(map);
 
-
-
-    var latlngs_pt = [
-            
-            -8.860741408529293,
-            39.37847862713318];
-    var latlngs_ita = [
-            
-            13.52702270571615,
-            42.01022099769696];
-
+    var latlngs_pt = [-8.860741408529293, 39.37847862713318];
+    var latlngs_ita = [13.52702270571615, 42.01022099769696];
 
     // Create a GeoJSON source with an empty lineString.
     var geojson = {
-      'type': 'FeatureCollection',
-      'features': [
-      {
-        'type': 'Feature',
-        'geometry': {
-          'type': 'LineString',
-          'coordinates': [latlngs_ita, latlngs_pt]
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [latlngs_ita, latlngs_pt]
           }
         }
       ]
@@ -290,150 +278,133 @@
     var progress = 0; // progress = timestamp - startTime
     var resetTime = false; // indicator of whether time reset is needed for the
 
-
-    
-
-
-
-    var line_options={
-      color: '#FFC831',
-      smoothFactor:10 ,
-      dashArray:"4 4",
-      weight:1
-    }
-
-      var route = {
-        'type': 'FeatureCollection',
-          'features': [
-            {
-            'type': 'Feature',
-            'geometry': {
-            'type': 'LineString',
-            'coordinates': [latlngs_ita, latlngs_pt]
-            }
-          }
-        ]
-      };
-      
-      // Coordinates are initially set to origin.
-      var point = {
-        'type': 'FeatureCollection',
-        'features': [
-          {
-            'type': 'Feature',
-            'properties': {},
-            'geometry': {
-            'type': 'Point',
-            'coordinates': latlngs_ita
-            }
-          }
-        ]
+    var line_options = {
+      color: "#FFC831",
+      smoothFactor: 10,
+      dashArray: "4 4",
+      weight: 1
     };
-    var lineDistance = turf.lineDistance(route.features[0], 'kilometers');
+
+    var route = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [latlngs_ita, latlngs_pt]
+          }
+        }
+      ]
+    };
+
+    // Coordinates are initially set to origin.
+    var point = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Point",
+            coordinates: latlngs_ita
+          }
+        }
+      ]
+    };
+    var lineDistance = turf.lineDistance(route.features[0], "kilometers");
     var arc = [];
     var steps = 50;
 
     // Draw an arc between the `origin` & `destination` of the two points
     for (var i = 0; i < lineDistance; i += lineDistance / steps) {
-      var segment = turf.along(route.features[0], i, 'kilometers');
+      var segment = turf.along(route.features[0], i, "kilometers");
       arc.push(segment.geometry.coordinates);
     }
     // Update the route with calculated arc coordinates
     route.features[0].geometry.coordinates = arc;
 
     var route_draw = {
-        'type': 'FeatureCollection',
-          'features': [
-            {
-            'type': 'Feature',
-            'geometry': {
-            'type': 'LineString',
-            'coordinates': [latlngs_ita]
-            }
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [latlngs_ita]
           }
-        ]
+        }
+      ]
     };
-    
-    
+
     var counter = 0;
-    gl._glMap.on('load', function() {
+    gl._glMap.on("load", function() {
+      gl._glMap.loadImage("img/plane.png", function(error, image) {
+        if (error) throw error;
+        gl._glMap.addImage("cat", image);
+      });
+      gl._glMap.addSource("route", {
+        type: "geojson",
+        data: route
+      });
+      gl._glMap.addSource("route_draw", {
+        type: "geojson",
+        data: route_draw
+      });
 
-      gl._glMap.loadImage(
-        'img/plane.png',
-        function(error, image) {
-          if (error) throw error;
-          gl._glMap.addImage('cat', image);
-          }
-      );
-      gl._glMap.addSource('route', {
-        'type': 'geojson',
-        'data': route
+      gl._glMap.addSource("point", {
+        type: "geojson",
+        data: point
       });
-      gl._glMap.addSource('route_draw', {
-        'type': 'geojson',
-        'data': route_draw
-      });
-      
-      gl._glMap.addSource('point', {
-        'type': 'geojson',
-        'data': point
-      });
-      
-      
+
       gl._glMap.addLayer({
-      'id': 'route_draw',
-      'source': 'route_draw',
-      'type': 'line',
-      'paint': {
-        'line-width': 2,
-        'line-color': '#FFC831',
-        'line-dasharray': [3,4]
-
-
+        id: "route_draw",
+        source: "route_draw",
+        type: "line",
+        paint: {
+          "line-width": 2,
+          "line-color": "#FFC831",
+          "line-dasharray": [3, 4]
         }
       });
-      
-      
+
       gl._glMap.addLayer({
-        'id': 'point',
-        'source': 'point',
-        'type': 'symbol',
-        'layout': {
-          'icon-image': 'cat',
-          'icon-rotate': -50,
-          'icon-rotation-alignment': 'map',
-          'icon-allow-overlap': true,
-          'icon-ignore-placement': true
+        id: "point",
+        source: "point",
+        type: "symbol",
+        layout: {
+          "icon-image": "cat",
+          "icon-rotate": -50,
+          "icon-rotation-alignment": "map",
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": true
         }
       });
       // Start the animation.
       animate(counter);
-      
-      
-      document.getElementById('replay').addEventListener('click', function() {
-          // Set the coordinates of the original point back to origin
-          point.features[0].geometry.coordinates = latlngs_ita;
-          route_draw.features[0].geometry.coordinates=[latlngs_ita];
 
+      document.getElementById("replay").addEventListener("click", function() {
+        // Set the coordinates of the original point back to origin
+        point.features[0].geometry.coordinates = latlngs_ita;
+        route_draw.features[0].geometry.coordinates = [latlngs_ita];
 
-          // Update the source layer
-          gl._glMap.getSource('point').setData(point);
-          gl._glMap.getSource('route_draw').setData(route_draw);
-          
-          // Reset the counter
-          counter = 0;
-          
-          // Restart the animation.
-          animate(counter);
-        });
-        
+        // Update the source layer
+        gl._glMap.getSource("point").setData(point);
+        gl._glMap.getSource("route_draw").setData(route_draw);
+
+        // Reset the counter
+        counter = 0;
+
+        // Restart the animation.
+        animate(counter);
+      });
 
       function animate() {
         // Update point geometry to a new position based on counter denoting
         // the index to access the arc.
         point.features[0].geometry.coordinates =
-        route.features[0].geometry.coordinates[counter];
-        
+          route.features[0].geometry.coordinates[counter];
+
         // Calculate the bearing to ensure the icon is rotated to match the route arc
         // The bearing is calculate between the current point and the next point, except
         // at the end of the arc use the previous point and the current point
@@ -441,20 +412,22 @@
           turf.point(
             route.features[0].geometry.coordinates[
               counter >= steps ? counter - 1 : counter
-              ]
-            ),
-            turf.point(
-              route.features[0].geometry.coordinates[
+            ]
+          ),
+          turf.point(
+            route.features[0].geometry.coordinates[
               counter >= steps ? counter : counter + 1
             ]
           )
         );
-        route_draw.features[0].geometry.coordinates.push(route.features[0].geometry.coordinates[counter]);
-        gl._glMap.getSource('route_draw').setData(route_draw);
+        route_draw.features[0].geometry.coordinates.push(
+          route.features[0].geometry.coordinates[counter]
+        );
+        gl._glMap.getSource("route_draw").setData(route_draw);
 
         // Update the source with this new data.
-        gl._glMap.getSource('point').setData(point);
-        
+        gl._glMap.getSource("point").setData(point);
+
         // Request the next frame of animation so long the end has not been reached.
         if (counter < steps) {
           requestAnimationFrame(animate);
@@ -464,8 +437,6 @@
     });
 
     map.on("click", onMapClick);
-
-
 
     //Listener function taking an event object
     function onMapClick(e) {
@@ -509,7 +480,7 @@
                 var country_id_3 = country[1].id;
                 country_clicked = getCountryISO2(country_id_3);
                 country_name_clicked = country[1].properties.name;
-                
+
                 //map.fitBounds(country_json.getBounds());
                 break;
               }
@@ -611,9 +582,9 @@
     }
     return inside;
   }
-  function showList(scope){
-    var el = document.querySelector('#bestof_'+scope);
-    el.classList.toggle('hidden');
+  function showList(scope) {
+    var el = document.querySelector("#bestof_" + scope);
+    el.classList.toggle("hidden");
   }
 </script>
 
@@ -650,13 +621,19 @@
   </div>
 </div>
 <div class="container-icons">
-  <div class="container-basic container-icon" on:click={() => showList("confirmed")}>
+  <div
+    class="container-basic container-icon"
+    on:click={() => showList('confirmed')}>
     <i class="fas fa-procedures" />
   </div>
-  <div class="container-basic container-icon" on:click={() => showList("recovered")}>
+  <div
+    class="container-basic container-icon"
+    on:click={() => showList('recovered')}>
     <i class="fas fa-notes-medical" />
   </div>
-  <div class="container-basic container-icon" on:click={() => showList("deaths")}>
+  <div
+    class="container-basic container-icon"
+    on:click={() => showList('deaths')}>
     <i class="fas fa-user-times" />
   </div>
 </div>
@@ -665,5 +642,7 @@
 <Bestof type="deaths" />
 <Bestof type="recovered" />
 <Countries />
-<button id="replay" style="position:fixed; top 12px; right:200px; z-index:1000">Replay</button>
+<button id="replay" style="position:fixed; top 12px; right:200px; z-index:1000">
+  Replay
+</button>
 <Chart type="confirmed" />

@@ -4,16 +4,20 @@
   import { onMount } from "svelte";
   import getCountryISO2 from "country-iso-3-to-2";
 
-  export let type;
-
-  let res;
-  var chart;  
+  let res, dates;
+  var chart;
   var c_infected = [];
   var c_healthy = [];
 
-  function init() {
-     data.all().then(function(result) {
+  onMount(() => {
+    data.all().then(function(result) {
       res = result;
+
+      dates = Object.keys(
+        res.confirmed.locations.filter(e => "China" === e.country)[0].history
+      ).sort(function(a, b) {
+        return new Date(a) - new Date(b);
+      });
 
       res.confirmed.locations = sort(res.confirmed.locations);
       res.deaths.locations = sort(res.deaths.locations);
@@ -21,7 +25,7 @@
 
       initChart(res, 34);
     });
-  }
+  });
 
   function sort(all) {
     let all_order = [];
@@ -41,30 +45,30 @@
       let H_total = res[value.country].history;
 
       for (var [key, h] of Object.entries(value.history))
-        H_total[FormataStringData(key)] = (H_total[FormataStringData(key)] || 0) + value.history[key];
+        H_total[FormataStringData(key)] =
+          (H_total[FormataStringData(key)] || 0) + value.history[key];
 
       res[value.country].history = H_total;
       return res;
     }, {});
 
+    Object.keys(all_order)
+      .sort(function(a, b) {
+        var parts_a = a.split("/");
+        var parts_b = b.split("/");
 
-    Object.keys(all_order).sort(function(a, b) {
-        var parts_a =a.split('/');
-        var parts_b =b.split('/');
-
-       var a_date= new Date(parts_a[2], parts_a[1] - 1, parts_a[0]); 
-       var b_date= new Date(parts_b[2], parts_b[1] - 1, parts_b[0]); 
+        var a_date = new Date(parts_a[2], parts_a[1] - 1, parts_a[0]);
+        var b_date = new Date(parts_b[2], parts_b[1] - 1, parts_b[0]);
         return new Date(parts_b) - new Date(a_date);
-    }).forEach(function(key) {
+      })
+      .forEach(function(key) {
         all_order2[key] = all_order[key];
-    })
+      });
 
     return all_order2.sort((a, b) =>
       a.country > b.country ? 1 : b.country > a.country ? -1 : 0
     );
   }
-  init();
-  
 
   //---------------
   // CHART
@@ -108,38 +112,37 @@
     chart.update();
   }
 
-
   function initChart(country_data, country) {
+    var confirmed = country_data.confirmed.locations[country];
+    var recovered = country_data.recovered.locations[country];
+    var deaths = country_data.deaths.locations[country];
 
-    var confirmed =country_data.confirmed.locations[country];
-    var recovered =country_data.recovered.locations[country];
-    var deaths =country_data.deaths.locations[country];
-
-    console.log(country_data);
-    var dates =[];
-    var active_data =[];
-    var recovered_data =[];
-    var deaths_data =[];
-    
-    for (var [key, h] of Object.entries(deaths.history)){
-      deaths_data.push(h);
-    }
-    for (var [key, h] of Object.entries(recovered.history)){
-      recovered_data.push(h);
-    }
-    var i=0;
-    for (var [key, h] of Object.entries(confirmed.history)){
-      dates.push(key);
-      var active= h-(recovered_data[i]);
-      active_data.push(active);
-      i++;
+    var active_data = [];
+    var recovered_data = [];
+    var deaths_data = [];
+    let k = 0;
+    for (var d of dates) {
+      let dt =
+        ("0" + new Date(d).getDate()).slice(-2) +
+        "/" +
+        ("0" + (new Date(d).getMonth() + 1)).slice(-2) +
+        "/" +
+        new Date(d)
+          .getFullYear()
+          .toString()
+          .substr(-2);
+      deaths_data.push(deaths.history[dt]);
+      recovered_data.push(recovered.history[dt]);
+      active_data.push(
+        confirmed.history[dt] - deaths.history[dt] - recovered.history[dt]
+      );
     }
 
     var ctx = document.getElementById("myChart").getContext("2d");
     var myLineChart = new Chart(ctx, {
       type: "line",
       data: {
-        labels: dates ,
+        labels: dates,
         datasets: [
           {
             label: "Deaths",
@@ -236,14 +239,13 @@
   }
 
   function FormataStringData(data) {
-    var dia  = data.split("/")[1];
-    var mes  = data.split("/")[0];
-    var ano  = data.split("/")[2];
+    var dia = data.split("/")[1];
+    var mes = data.split("/")[0];
+    var ano = data.split("/")[2];
 
-    return ("0"+dia).slice(-2)  + '/' + ("0"+mes).slice(-2) + '/' + ano;
+    return ("0" + dia).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + ano;
     // Utilizo o .slice(-2) para garantir o formato com 2 digitos.
   }
-
 </script>
 
 <style>
@@ -257,27 +259,26 @@
     position: absolute;
     transform: translateX(0px);
     opacity: 1;
-        -webkit-transition-duration: .4s;
-    -moz-transition-duration: .4s;
-    -o-transition-duration: .4s;
-    transition-duration: .4s;
-
+    -webkit-transition-duration: 0.4s;
+    -moz-transition-duration: 0.4s;
+    -o-transition-duration: 0.4s;
+    transition-duration: 0.4s;
   }
   .container-chart.hidden {
-   transform: translateX(1000px);
+    transform: translateX(1000px);
     opacity: 0;
   }
 </style>
 
-  <div class="container-basic container-chart hidden">
+<div class="container-basic container-chart hidden">
 
-    <div class="container-header">
-      <div class="container-header-contents">
+  <div class="container-header">
+    <div class="container-header-contents">
 
-        <h5 class="container-title">Infected Evolution</h5>
-      </div>
-    </div>
-    <div class="container-body">
-      <canvas id="myChart" />
+      <h5 class="container-title">Infected Evolution</h5>
     </div>
   </div>
+  <div class="container-body">
+    <canvas id="myChart" />
+  </div>
+</div>
