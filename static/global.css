@@ -4,6 +4,7 @@ html,body{
     color:#D6D6D7;
     font-weight: 300;
     font-size: 15pt;
+    background-color: #18181a;
 }
 h1{
     font-size: 2.3rem;
@@ -60,6 +61,15 @@ label{
     position: relative;
     display: block;
 }
+
+.container-list {
+    display: block;
+    position: relative;
+  }
+  .container-list li {
+    display: block;
+    padding: 2px 0px;
+  }
 .container-icons{
     position: fixed;
     top: 100px;
@@ -276,3 +286,4 @@ button:hover, .button:hover{
       float: right;
       margin: 0;
   }
+
