@@ -686,7 +686,445 @@
       "land": 2,
       "sea": 2
     }
+  },
+  {
+    "code": "CU",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "DO",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "EC",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "GT",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "GD",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 3
+    }
+  },
+  {
+    "code": "GY",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "MX",
+    "transit": {
+      "air": 3,
+      "land": 2,
+      "sea": 0
+    }
+  },
+  {
+    "code": "PA",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "PY",
+    "transit": {
+      "air": 3,
+      "land": 3,
+      "sea": 0
+    }
+  },
+  {
+    "code": "PE",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "PE",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "VC",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "UY",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "US",
+    "transit": {
+      "air": 3,
+      "land": 3,
+      "sea": 0
+    }
+  },
+  {
+    "code": "AU",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "FJ",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "KI",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "FM",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "NR",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "PW",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "WS",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "NZ",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "TO",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "VU",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "DZ",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "CM",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "CG",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "GH",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "GW",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "UG",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 0
+    }
+  },
+  {
+    "code": "AO",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 2
+    }
+  },
+  {
+    "code": "BJ",
+    "transit": {
+      "air": 3,
+      "land": 3,
+      "sea": 0
+    }
+  },
+  {
+    "code": "BW",
+    "transit": {
+      "air": 3,
+      "land": 3,
+      "sea": 0
+    }
+  },
+  {
+    "code": "CV",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 2
+    }
+  },
+  {
+    "code": "KM",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "KM",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "CD",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "GM",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "MW",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "MZ",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "EG",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "ER",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "ET",
+    "transit": {
+      "air": 3,
+      "land": 2,
+      "sea": 0
+    }
+  },
+  {
+    "code": "GN",
+    "transit": {
+      "air": 3,
+      "land": 3,
+      "sea": 0
+    }
+  },
+  {
+    "code": "KE",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "NA",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "MU",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "SC",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "LR",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "MG",
+    "transit": {
+      "air": 3,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "MA",
+    "transit": {
+      "air": 3,
+      "land": 2,
+      "sea": 0
+    }
+  },
+  {
+    "code": "RW",
+    "transit": {
+      "air": 2,
+      "land": 2,
+      "sea": 0
+    }
+  },
+  {
+    "code": "SN",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "ZA",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
+    "code": "TN",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 2
+    }
   }
 ]
-
-// https://twitter.com/Frontex/status/1243117786047619073
