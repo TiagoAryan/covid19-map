@@ -4,26 +4,30 @@
   import { onMount } from "svelte";
   import getCountryISO2 from "country-iso-3-to-2";
 
+  export let type;
+  export let country;
+
   let res, dates;
   var chart;
   var c_infected = [];
   var c_healthy = [];
 
+  $: country && initChart(res);
+
   onMount(() => {
     data.all().then(function(result) {
       res = result;
 
-      dates = Object.keys(
-        res.confirmed.locations.filter(e => "China" === e.country)[0].history
-      ).sort(function(a, b) {
+      dates = Object.keys(res.confirmed.locations[0].history).sort(function(
+        a,
+        b
+      ) {
         return new Date(a) - new Date(b);
       });
 
       res.confirmed.locations = sort(res.confirmed.locations);
       res.deaths.locations = sort(res.deaths.locations);
       res.recovered.locations = sort(res.recovered.locations);
-
-      initChart(res, 34);
     });
   });
 
@@ -112,10 +116,18 @@
     chart.update();
   }
 
-  function initChart(country_data, country) {
-    var confirmed = country_data.confirmed.locations[country];
-    var recovered = country_data.recovered.locations[country];
-    var deaths = country_data.deaths.locations[country];
+  function initChart(country_data) {
+    console.log(country_data);
+    console.log(country);
+    var confirmed = country_data.confirmed.locations.filter(
+      e => country === e.country_code
+    )[0];
+    var recovered = country_data.recovered.locations.filter(
+      e => country === e.country_code
+    )[0];
+    var deaths = country_data.deaths.locations.filter(
+      e => country === e.country_code
+    )[0];
 
     var active_data = [];
     var recovered_data = [];
@@ -273,6 +285,7 @@
 <div class="container-basic container-chart hidden">
 
   <div class="container-header">
+
     <div class="container-header-contents">
 
       <h5 class="container-title">Infected Evolution</h5>

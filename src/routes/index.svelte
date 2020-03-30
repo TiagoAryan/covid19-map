@@ -7,7 +7,7 @@
   import Countries from "../components/countries.svelte";
   import Chart from "../components/chart.svelte";
 
-  var map;
+  var map, gl;
   var selected_country, selected_country_id;
   var colors = ["#FFC831", "#FF4E34", "#40C0A5"];
   var circle_size = 8000;
@@ -16,15 +16,18 @@
   let country_clicked, country_name_clicked;
   let res;
   let pop_total = 7772494610;
-
+  var missing_country = [];
+  let c_infec_lines = [];
+  let geo_infec_lines = [];
   let showdate = "00/00/00";
   let inPlay = true;
 
   function play() {
     let length = Object.keys(res.confirmed.locations[0].history).length;
-    let dates = Object.keys(
-      res.confirmed.locations.filter(e => "China" === e.country)[0].history
-    ).sort(function(a, b) {
+    let dates = Object.keys(res.confirmed.locations[0].history).sort(function(
+      a,
+      b
+    ) {
       return new Date(a) - new Date(b);
     });
 
@@ -52,7 +55,7 @@
         clearInterval(interval);
         inPlay = false;
       }
-    }, 10);
+    }, 500);
 
     return () => {
       clearInterval(interval);
@@ -71,7 +74,6 @@
     var c = 0;
     var data = res.confirmed;
     var data_rec = res.recovered;
-    var missing_countrys_r = [];
 
     for (var k = 0; k < data.locations.length; k++) {
       var country_name = data.locations[k].country;
@@ -113,9 +115,25 @@
           country_json.getLayers()[0].options.opacity = "0";
 
           map.addLayer(country_json);
+
+          if (c_infec_lines.indexOf(country_name) != "-1") {
+            if (missing_country.indexOf(country_name) == -1) {
+              missing_country.push(country_name);
+
+              if (
+                geo_infec_lines[c_infec_lines.indexOf(country_name)] !== null
+              ) {
+                console.log("drawww");
+
+                var from =
+                  geo_infec_lines[c_infec_lines.indexOf(country_name)][0];
+                var to =
+                  geo_infec_lines[c_infec_lines.indexOf(country_name)][1];
+                drawline(c_infec_lines.indexOf(country_name), from, to);
+              }
+            }
+          }
         }
-      } else {
-        missing_countrys_r.push(country_name);
       }
     }
   }
@@ -246,7 +264,7 @@
     }).setView([20, 0], 2.5);
     var popup = new L.Popup();
 
-    var gl = L.mapboxGL({
+    gl = L.mapboxGL({
       attribution:
         '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>',
       accessToken:
@@ -255,186 +273,6 @@
       style:
         "https://api.maptiler.com/maps/5ce0b2a2-d5dc-44ae-84f3-7211439b9474/style.json?key=TLbKST4hnYUY3nc3yvDh"
     }).addTo(map);
-
-    var latlngs_pt = [-8.860741408529293, 39.37847862713318];
-    var latlngs_ita = [13.52702270571615, 42.01022099769696];
-
-    // Create a GeoJSON source with an empty lineString.
-    var geojson = {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "LineString",
-            coordinates: [latlngs_ita, latlngs_pt]
-          }
-        }
-      ]
-    };
-    var speedFactor = 30; // number of frames per longitude degree
-    var animation; // to store and cancel the animation
-    var startTime = 0;
-    var progress = 0; // progress = timestamp - startTime
-    var resetTime = false; // indicator of whether time reset is needed for the
-
-    var line_options = {
-      color: "#FFC831",
-      smoothFactor: 10,
-      dashArray: "4 4",
-      weight: 1
-    };
-
-    var route = {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "LineString",
-            coordinates: [latlngs_ita, latlngs_pt]
-          }
-        }
-      ]
-    };
-
-    // Coordinates are initially set to origin.
-    var point = {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "Point",
-            coordinates: latlngs_ita
-          }
-        }
-      ]
-    };
-    var lineDistance = turf.lineDistance(route.features[0], "kilometers");
-    var arc = [];
-    var steps = 50;
-
-    // Draw an arc between the `origin` & `destination` of the two points
-    for (var i = 0; i < lineDistance; i += lineDistance / steps) {
-      var segment = turf.along(route.features[0], i, "kilometers");
-      arc.push(segment.geometry.coordinates);
-    }
-    // Update the route with calculated arc coordinates
-    route.features[0].geometry.coordinates = arc;
-
-    var route_draw = {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "LineString",
-            coordinates: [latlngs_ita]
-          }
-        }
-      ]
-    };
-
-    var counter = 0;
-    gl._glMap.on("load", function() {
-      gl._glMap.loadImage("img/plane.png", function(error, image) {
-        if (error) throw error;
-        gl._glMap.addImage("cat", image);
-      });
-      gl._glMap.addSource("route", {
-        type: "geojson",
-        data: route
-      });
-      gl._glMap.addSource("route_draw", {
-        type: "geojson",
-        data: route_draw
-      });
-
-      gl._glMap.addSource("point", {
-        type: "geojson",
-        data: point
-      });
-
-      gl._glMap.addLayer({
-        id: "route_draw",
-        source: "route_draw",
-        type: "line",
-        paint: {
-          "line-width": 2,
-          "line-color": "#FFC831",
-          "line-dasharray": [3, 4]
-        }
-      });
-
-      gl._glMap.addLayer({
-        id: "point",
-        source: "point",
-        type: "symbol",
-        layout: {
-          "icon-image": "cat",
-          "icon-rotate": -50,
-          "icon-rotation-alignment": "map",
-          "icon-allow-overlap": true,
-          "icon-ignore-placement": true
-        }
-      });
-      // Start the animation.
-      animate(counter);
-
-      document.getElementById("replay").addEventListener("click", function() {
-        // Set the coordinates of the original point back to origin
-        point.features[0].geometry.coordinates = latlngs_ita;
-        route_draw.features[0].geometry.coordinates = [latlngs_ita];
-
-        // Update the source layer
-        gl._glMap.getSource("point").setData(point);
-        gl._glMap.getSource("route_draw").setData(route_draw);
-
-        // Reset the counter
-        counter = 0;
-
-        // Restart the animation.
-        animate(counter);
-      });
-
-      function animate() {
-        // Update point geometry to a new position based on counter denoting
-        // the index to access the arc.
-        point.features[0].geometry.coordinates =
-          route.features[0].geometry.coordinates[counter];
-
-        // Calculate the bearing to ensure the icon is rotated to match the route arc
-        // The bearing is calculate between the current point and the next point, except
-        // at the end of the arc use the previous point and the current point
-        point.features[0].properties.bearing = turf.bearing(
-          turf.point(
-            route.features[0].geometry.coordinates[
-              counter >= steps ? counter - 1 : counter
-            ]
-          ),
-          turf.point(
-            route.features[0].geometry.coordinates[
-              counter >= steps ? counter : counter + 1
-            ]
-          )
-        );
-        route_draw.features[0].geometry.coordinates.push(
-          route.features[0].geometry.coordinates[counter]
-        );
-        gl._glMap.getSource("route_draw").setData(route_draw);
-
-        // Update the source with this new data.
-        gl._glMap.getSource("point").setData(point);
-
-        // Request the next frame of animation so long the end has not been reached.
-        if (counter < steps) {
-          requestAnimationFrame(animate);
-        }
-        counter = counter + 1;
-      }
-    });
 
     map.on("click", onMapClick);
 
@@ -528,6 +366,8 @@
       }
     }
 
+    getSpread();
+
     data.all().then(function(result) {
       res = result;
 
@@ -585,6 +425,268 @@
   function showList(scope) {
     var el = document.querySelector("#bestof_" + scope);
     el.classList.toggle("hidden");
+  }
+
+  async function getSpread() {
+    const response = await fetch("./ncov.json");
+    let data = await response.json();
+
+    let tree = data.tree;
+    let geo = data.meta.geo_resolutions[1].demes;
+
+    eachSpread(tree, geo);
+  }
+
+  let n = 0;
+  function eachSpread(o, p) {
+    for (var k in o.children) {
+      if (Object.keys(o.children[k]).length > 0) {
+        let c = true;
+        if (o.node_attrs.division != null)
+          if (o.children[k].node_attrs.division != null)
+            if (
+              o.node_attrs.division.value ===
+              o.children[k].node_attrs.division.value
+            )
+              c = false;
+        if (c)
+          if (
+            o.node_attrs.division &&
+            o.children[k].node_attrs.division &&
+            o.children[k].node_attrs.country
+          ) {
+            if (
+              c_infec_lines.indexOf(o.children[k].node_attrs.country.value) ==
+              "-1"
+            ) {
+              var from = [
+                p[o.node_attrs.division.value].longitude,
+                p[o.node_attrs.division.value].latitude
+              ];
+              var to = [
+                p[o.children[k].node_attrs.division.value].longitude,
+                p[o.children[k].node_attrs.division.value].latitude
+              ];
+
+              /*
+              console.log(
+                "From " +
+                  (o.node_attrs.division
+                    ? o.node_attrs.division.value
+                    : "XXXX") +
+                  " to " +
+                  (o.children[k].node_attrs.division
+                    ? o.children[k].node_attrs.division.value
+                    : "YYYY") +
+                  "/" +
+                  (o.children[k].node_attrs.country
+                    ? o.children[k].node_attrs.country.value
+                    : "")
+              );
+              console.log(
+                "From " +
+                  p[o.node_attrs.division.value].latitude +
+                  "/" +
+                  p[o.node_attrs.division.value].longitude +
+                  " to " +
+                  p[o.children[k].node_attrs.division.value].latitude +
+                  "/" +
+                  p[o.children[k].node_attrs.division.value].longitude
+              );
+
+              /*var route = {
+                type: "FeatureCollection",
+                features: [
+                  {
+                    type: "Feature",
+                    geometry: {
+                      type: "LineString",
+                      coordinates: [from, to]
+                    }
+                  }
+                ]
+              };
+
+              console.log(turf.lineDistance(route.features[0], "kilometers"));*/
+              //if (  n < 1 && turf.lineDistance(route.features[0], "kilometers") > 1500 )
+              //drawline(n++, from, to);
+
+              c_infec_lines.push(o.children[k].node_attrs.country.value);
+              geo_infec_lines.push([from, to]);
+            }
+          }
+        eachSpread(o.children[k], p);
+      }
+    }
+  }
+
+  /*
+
+    var from = [-8.860741408529293, 39.37847862713318];
+    var to = [13.52702270571615, 42.01022099769696];
+
+            drawline(from, to);
+  */
+
+  function drawline(k, from, to) {
+    console.log(k + " " + from + " " + to);
+    var speedFactor = 30; // number of frames per longitude degree
+    var animation; // to store and cancel the animation
+    var startTime = 0;
+    var progress = 0; // progress = timestamp - startTime
+    var resetTime = false; // indicator of whether time reset is needed for the
+
+    var line_options = {
+      color: "#FFC831",
+      smoothFactor: 10,
+      dashArray: "4 4",
+      weight: 1
+    };
+
+    var route = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [from, to]
+          }
+        }
+      ]
+    };
+
+    // Coordinates are initially set to origin.
+    var point = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Point",
+            coordinates: from
+          }
+        }
+      ]
+    };
+    var lineDistance = turf.lineDistance(route.features[0], "kilometers");
+    var arc = [];
+    var steps = 8;
+
+    // Draw an arc between the `origin` & `destination` of the two points
+    for (var i = 0; i < lineDistance; i += lineDistance / steps - 1) {
+      var segment = turf.along(route.features[0], i, "kilometers");
+      arc.push(segment.geometry.coordinates);
+    }
+    // Update the route with calculated arc coordinates
+    route.features[0].geometry.coordinates = arc;
+
+    var route_draw = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [from]
+          }
+        }
+      ]
+    };
+
+    var counter = 0;
+    gl._glMap.on("load", function() {
+      gl._glMap.addSource("route_" + k, {
+        type: "geojson",
+        data: route
+      });
+      gl._glMap.addSource("route_draw_" + k, {
+        type: "geojson",
+        data: route_draw
+      });
+
+      gl._glMap.addSource("point_" + k, {
+        type: "geojson",
+        data: point
+      });
+
+      gl._glMap.addLayer({
+        id: "route_draw_" + k,
+        source: "route_draw_" + k,
+        type: "line",
+        paint: {
+          "line-width": 2,
+          "line-color": "#bb00ff"
+        }
+      });
+
+      gl._glMap.addLayer({
+        id: "point_" + k,
+        source: "point_" + k,
+        type: "symbol",
+        layout: {
+          "icon-rotate": -50,
+          "icon-rotation-alignment": "map",
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": true
+        }
+      });
+      // Start the animation.
+      animate(counter);
+
+      document.getElementById("replay").addEventListener("click", function() {
+        // Set the coordinates of the original point back to origin
+        point.features[0].geometry.coordinates = from;
+        route_draw.features[0].geometry.coordinates = [from];
+
+        // Update the source layer
+        gl._glMap.getSource("point_" + k).setData(point);
+        gl._glMap.getSource("route_draw_" + k).setData(route_draw);
+
+        // Reset the counter
+        counter = 0;
+
+        // Restart the animation.
+        animate(counter);
+      });
+
+      function animate() {
+        // Update point geometry to a new position based on counter denoting
+        // the index to access the arc.
+        point.features[0].geometry.coordinates =
+          route.features[0].geometry.coordinates[counter];
+
+        // Calculate the bearing to ensure the icon is rotated to match the route arc
+        // The bearing is calculate between the current point and the next point, except
+        // at the end of the arc use the previous point and the current point
+        point.features[0].properties.bearing = turf.bearing(
+          turf.point(
+            route.features[0].geometry.coordinates[
+              counter >= steps ? counter - 1 : counter
+            ]
+          ),
+          turf.point(
+            route.features[0].geometry.coordinates[
+              counter >= steps ? counter : counter + 1
+            ]
+          )
+        );
+        route_draw.features[0].geometry.coordinates.push(
+          route.features[0].geometry.coordinates[counter]
+        );
+        gl._glMap.getSource("route_draw_" + k).setData(route_draw);
+
+        // Update the source with this new data.
+        gl._glMap.getSource("point_" + k).setData(point);
+
+        // Request the next frame of animation so long the end has not been reached.
+        if (counter < steps) {
+          requestAnimationFrame(animate);
+        }
+        counter = counter + 1;
+      }
+    });
   }
 </script>
 
@@ -645,4 +747,4 @@
 <button id="replay" style="position:fixed; top 12px; right:200px; z-index:1000">
   Replay
 </button>
-<Chart type="confirmed" />
+<Chart type="confirmed" country={country_clicked} />
