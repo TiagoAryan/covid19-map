@@ -85,7 +85,16 @@
 </script>
 
 <style>
-
+  .container-total {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    margin-bottom: 12px;
+    height: 190px;
+    width: 100%;
+    left: 0;
+    vertical-align: top;
+  }
 </style>
 
 {#if !res}

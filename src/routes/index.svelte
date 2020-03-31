@@ -6,6 +6,7 @@
   import Bestof from "../components/bestof.svelte";
   import Countries from "../components/countries.svelte";
   import Chart from "../components/chart.svelte";
+  import Details from "../components/details.svelte";
 
   var map, gl;
   var selected_country, selected_country_id;
@@ -65,7 +66,7 @@
   function playhistory() {
     if (!inPlay) {
       inPlay = true;
-      play();
+      // play();
     }
   }
 
@@ -375,7 +376,7 @@
       res.deaths.locations = sort(res.deaths.locations);
       res.recovered.locations = sort(res.recovered.locations);
 
-      play();
+      // play();
     });
   }
 
@@ -741,8 +742,7 @@
 <Bestof type="confirmed" />
 <Bestof type="deaths" />
 <Bestof type="recovered" />
-<Countries />
 <button id="replay" style="position:fixed; top 12px; right:200px; z-index:1000">
   Replay
 </button>
-<Chart type="confirmed" country={country_clicked} />
+<Details country={country_clicked} />

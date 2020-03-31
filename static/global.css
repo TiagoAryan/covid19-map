@@ -56,7 +56,7 @@ label {
 .container-basic {
   background-color: #1e1e21;
   box-shadow: 3px 3px 10px black;
-  padding: 18px 0px 18px 0px;
+  padding: 16px 0px 16px 0px;
   position: relative;
   display: block;
 }
@@ -71,7 +71,7 @@ label {
 }
 .container-icons {
   position: fixed;
-  top: 156px;
+  top: 100px;
   left: 10px;
 }
 .container-icon {
@@ -200,7 +200,9 @@ button:hover,
   margin-right: 8px;
 }
 .flag img {
+  object-fit: contain;
   height: 18px;
+  width: 28px;
 }
 .container-data-details {
   display: block;
@@ -239,19 +241,19 @@ button:hover,
   border-bottom: 1px solid rgba(151, 151, 151, 0.3);
   width: 100%;
   padding-bottom: 14px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .container-header-contents,
 .container-body {
   display: block;
-  padding: 0px 32px;
+  padding: 0px 24px;
 }
 .container-footer {
   display: block;
   border-top: 1px solid rgba(151, 151, 151, 0.3);
   width: 100%;
-  margin-top: 18px;
-  padding: 0px 32px;
+  margin-top: 16px;
+  padding: 0px 24px;
   padding-top: 14px;
 }
 .navigate-list {
@@ -281,13 +283,13 @@ button:hover,
 }
 
 .leaflet-control-zoom a {
-  width: 50px !important;
-  height: 50px !important;
+  width: 36px !important;
+  height: 36px !important;
   background-color: #1e1e21 !important;
   box-shadow: 3px 3px 10px black !important;
-  padding: 14px;
+  padding: 2px;
   color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 12px;
+  margin-bottom: 2px;
   text-align: center;
   border-bottom: 0;
   border-top-left-radius: 0;

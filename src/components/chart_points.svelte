@@ -281,10 +281,10 @@
 
     <div class="container-header-contents">
 
-      <h5 class="container-title">Infected Evolution</h5>
+      <h5 class="container-title">Fatality Rate</h5>
     </div>
   </div>
   <div class="container-body">
-    <canvas id="myChart" />
+    <canvas id="myChartPoint" />
   </div>
 </div>

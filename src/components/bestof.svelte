@@ -7,7 +7,7 @@
 
   let res;
   let all, all_sorted;
-  
+
   function getContent() {
     data.all().then(function(result) {
       res = result;
@@ -32,7 +32,6 @@
       });
     });
   }
-  
 
   getContent();
 </script>
@@ -43,37 +42,35 @@
     left: 84px;
 
     width: 380px;
-    height: 590px;
+    height: 460px;
 
     opacity: 1;
-    -webkit-transition-duration: .4s;
-    -moz-transition-duration: .4s;
-    -o-transition-duration: .4s;
-    transition-duration: .4s;
+    -webkit-transition-duration: 0.4s;
+    -moz-transition-duration: 0.4s;
+    -o-transition-duration: 0.4s;
+    transition-duration: 0.4s;
 
     pointer-events: all;
-
   }
   .container-bestof.hidden {
     height: 0px;
     pointer-events: none;
     opacity: 0;
-
   }
-  .container-bestof .container-body{
-    height: 420px;
+  .container-bestof .container-body {
+    max-height: 420px;
     overflow: scroll;
   }
 
-  #bestof_confirmed{
-    top: 100px; 
-}
-  
-  #bestof_recovered{
-    top: 172px; 
+  #bestof_confirmed {
+    top: 100px;
   }
-  #bestof_deaths{
-      top: 244px; 
+
+  #bestof_recovered {
+    top: 172px;
+  }
+  #bestof_deaths {
+    top: 244px;
   }
 </style>
 
@@ -103,19 +100,5 @@
         {/each}
       </div>
     </div>
-    <div class="container-footer">
-      210 countrys
-      <div class="navigate-list">
-        <div class="button secondary adj-left">
-          <i class="fas fa-chevron-left" />
-        </div>
-        <div class="button secondary adj-right">
-          <i class="fas fa-chevron-right" />
-        </div>
-      </div>
-    </div>
   </div>
 {/if}
-
-
-

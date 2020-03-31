@@ -38,17 +38,11 @@
 
 <style>
   .container-countries {
-    position: absolute;
-    transform: translateY(0px);
     opacity: 1;
     -webkit-transition-duration: 0.4s;
     -moz-transition-duration: 0.4s;
     -o-transition-duration: 0.4s;
     transition-duration: 0.4s;
-  }
-  .container-countries.hidden {
-    transform: translateY(600px);
-    opacity: 0;
   }
   .container-list label {
     width: 40px;
@@ -57,18 +51,20 @@
     width: 35px;
   }
   .container-basic {
-    width: calc(50vw - 18px);
-    bottom: 12px;
-    position: absolute;
-    left: 12px;
+    width: 100%;
+    height: calc(100% - 202px);
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
   }
   .container-list-group {
     display: inline-block;
     width: 49%;
     vertical-align: top;
+    height: 100%;
   }
   .container-body {
-    height: 400px;
+    height: calc(100% - 40px);
     overflow: scroll;
   }
 </style>
@@ -82,7 +78,7 @@
 {#if !res}
   Loading...
 {:else}
-  <div class="container-basic container-countries hidden">
+  <div class="container-basic container-countries ">
     <div class="container-list-group">
       <div class="container-header">
         <div class="container-header-contents">
