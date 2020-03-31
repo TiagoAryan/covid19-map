@@ -4,7 +4,7 @@ body {
   font-family: "Open Sans", sans-serif;
   color: #d6d6d7;
   font-weight: 300;
-  font-size: 15pt;
+  font-size: 12pt;
   background-color: #18181a;
 }
 h1 {
@@ -75,9 +75,9 @@ label {
   left: 10px;
 }
 .container-icon {
-  width: 60px;
-  height: 60px;
-  padding: 18px;
+  width: 50px;
+  height: 50px;
+  padding: 14px;
   margin-bottom: 12px;
   text-align: center;
 
@@ -100,8 +100,8 @@ label {
 .container-bottom {
   display: block;
   position: fixed;
-  left: calc(50% - 400px);
-  width: 800px;
+  left: calc(50% - 350px);
+  width: 700px;
   bottom: 0px;
 }
 .progress {
@@ -159,7 +159,7 @@ button,
   padding: 4px 12px;
   display: inline-block;
   border-radius: 4px;
-  height: 36px;
+  height: 32px;
   padding: 8px 16px;
 
   -webkit-transition-duration: 0.2s;
@@ -281,11 +281,11 @@ button:hover,
 }
 
 .leaflet-control-zoom a {
-  width: 60px !important;
-  height: 60px !important;
+  width: 50px !important;
+  height: 50px !important;
   background-color: #1e1e21 !important;
   box-shadow: 3px 3px 10px black !important;
-  padding: 18px;
+  padding: 14px;
   color: rgba(255, 255, 255, 0.6);
   margin-bottom: 12px;
   text-align: center;

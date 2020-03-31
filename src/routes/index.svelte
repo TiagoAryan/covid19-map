@@ -55,7 +55,7 @@
         clearInterval(interval);
         inPlay = false;
       }
-    }, 500);
+    }, 300);
 
     return () => {
       clearInterval(interval);
@@ -596,97 +596,95 @@
     };
 
     var counter = 0;
-    gl._glMap.on("load", function() {
-      gl._glMap.addSource("route_" + k, {
-        type: "geojson",
-        data: route
-      });
-      gl._glMap.addSource("route_draw_" + k, {
-        type: "geojson",
-        data: route_draw
-      });
+    gl._glMap.addSource("route_" + k, {
+      type: "geojson",
+      data: route
+    });
+    gl._glMap.addSource("route_draw_" + k, {
+      type: "geojson",
+      data: route_draw
+    });
 
-      gl._glMap.addSource("point_" + k, {
-        type: "geojson",
-        data: point
-      });
+    gl._glMap.addSource("point_" + k, {
+      type: "geojson",
+      data: point
+    });
 
-      gl._glMap.addLayer({
-        id: "route_draw_" + k,
-        source: "route_draw_" + k,
-        type: "line",
-        paint: {
-          "line-width": 2,
-          "line-color": "#bb00ff"
-        }
-      });
-
-      gl._glMap.addLayer({
-        id: "point_" + k,
-        source: "point_" + k,
-        type: "symbol",
-        layout: {
-          "icon-rotate": -50,
-          "icon-rotation-alignment": "map",
-          "icon-allow-overlap": true,
-          "icon-ignore-placement": true
-        }
-      });
-      // Start the animation.
-      animate(counter);
-
-      document.getElementById("replay").addEventListener("click", function() {
-        // Set the coordinates of the original point back to origin
-        point.features[0].geometry.coordinates = from;
-        route_draw.features[0].geometry.coordinates = [from];
-
-        // Update the source layer
-        gl._glMap.getSource("point_" + k).setData(point);
-        gl._glMap.getSource("route_draw_" + k).setData(route_draw);
-
-        // Reset the counter
-        counter = 0;
-
-        // Restart the animation.
-        animate(counter);
-      });
-
-      function animate() {
-        // Update point geometry to a new position based on counter denoting
-        // the index to access the arc.
-        point.features[0].geometry.coordinates =
-          route.features[0].geometry.coordinates[counter];
-
-        // Calculate the bearing to ensure the icon is rotated to match the route arc
-        // The bearing is calculate between the current point and the next point, except
-        // at the end of the arc use the previous point and the current point
-        point.features[0].properties.bearing = turf.bearing(
-          turf.point(
-            route.features[0].geometry.coordinates[
-              counter >= steps ? counter - 1 : counter
-            ]
-          ),
-          turf.point(
-            route.features[0].geometry.coordinates[
-              counter >= steps ? counter : counter + 1
-            ]
-          )
-        );
-        route_draw.features[0].geometry.coordinates.push(
-          route.features[0].geometry.coordinates[counter]
-        );
-        gl._glMap.getSource("route_draw_" + k).setData(route_draw);
-
-        // Update the source with this new data.
-        gl._glMap.getSource("point_" + k).setData(point);
-
-        // Request the next frame of animation so long the end has not been reached.
-        if (counter < steps) {
-          requestAnimationFrame(animate);
-        }
-        counter = counter + 1;
+    gl._glMap.addLayer({
+      id: "route_draw_" + k,
+      source: "route_draw_" + k,
+      type: "line",
+      paint: {
+        "line-width": 2,
+        "line-color": "#FFC831"
       }
     });
+
+    gl._glMap.addLayer({
+      id: "point_" + k,
+      source: "point_" + k,
+      type: "symbol",
+      layout: {
+        "icon-rotate": -50,
+        "icon-rotation-alignment": "map",
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true
+      }
+    });
+    // Start the animation.
+    animate(counter);
+
+    document.getElementById("replay").addEventListener("click", function() {
+      // Set the coordinates of the original point back to origin
+      point.features[0].geometry.coordinates = from;
+      route_draw.features[0].geometry.coordinates = [from];
+
+      // Update the source layer
+      gl._glMap.getSource("point_" + k).setData(point);
+      gl._glMap.getSource("route_draw_" + k).setData(route_draw);
+
+      // Reset the counter
+      counter = 0;
+
+      // Restart the animation.
+      animate(counter);
+    });
+
+    function animate() {
+      // Update point geometry to a new position based on counter denoting
+      // the index to access the arc.
+      point.features[0].geometry.coordinates =
+        route.features[0].geometry.coordinates[counter];
+
+      // Calculate the bearing to ensure the icon is rotated to match the route arc
+      // The bearing is calculate between the current point and the next point, except
+      // at the end of the arc use the previous point and the current point
+      point.features[0].properties.bearing = turf.bearing(
+        turf.point(
+          route.features[0].geometry.coordinates[
+            counter >= steps ? counter - 1 : counter
+          ]
+        ),
+        turf.point(
+          route.features[0].geometry.coordinates[
+            counter >= steps ? counter : counter + 1
+          ]
+        )
+      );
+      route_draw.features[0].geometry.coordinates.push(
+        route.features[0].geometry.coordinates[counter]
+      );
+      gl._glMap.getSource("route_draw_" + k).setData(route_draw);
+
+      // Update the source with this new data.
+      gl._glMap.getSource("point_" + k).setData(point);
+
+      // Request the next frame of animation so long the end has not been reached.
+      if (counter < steps) {
+        requestAnimationFrame(animate);
+      }
+      counter = counter + 1;
+    }
   }
 </script>
 
