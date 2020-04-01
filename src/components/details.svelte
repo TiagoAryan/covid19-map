@@ -1,21 +1,13 @@
 <script>
-  import data from "jhucsse.covid";
-  import * as population from "./country-by-population.json";
-  import { onMount } from "svelte";
-  import getCountryISO2 from "country-iso-3-to-2";
   import Preview from "../components/preview.svelte";
   import Countries from "../components/countries.svelte";
   import Chart from "../components/chart.svelte";
   import ChartPoints from "../components/chart_points.svelte";
 
-  export let type;
+  export let data;
+  export let bounds;
   export let country;
-  let country_clicked, country_name_clicked;
-
-  let res, dates;
-  var chart;
-  var c_infected = [];
-  var c_healthy = [];
+  export let name;
 </script>
 
 <style>
@@ -62,13 +54,15 @@
 <div class="container_details_box hidden">
   <div class="container_details">
     <div class="box-half">
-      <Preview country={country_clicked} name={country_name_clicked} />
-      <Countries />
+      <Preview {data} {country} {name} />
+      {#if !country}
+        <Countries {data} {bounds} />
+      {/if}
 
     </div>
     <div class="box-half box-half-right">
-      <Chart type="confirmed" country={country_clicked} />
-      <ChartPoints country={country_clicked} />
+      <Chart {data} {country} />
+      <ChartPoints {data} {country} />
 
     </div>
   </div>

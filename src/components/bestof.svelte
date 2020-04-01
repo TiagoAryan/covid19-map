@@ -1,39 +1,38 @@
 <script>
-  import data from "jhucsse.covid";
-  import * as population from "./country-by-population.json";
   import { onMount } from "svelte";
+  import * as population from "./country-by-population.json";
+  import * as country_by_flag from "./country-by-flag.json";
 
-  export let type;
+  export let data;
+  export let show;
 
-  let res;
-  let all, all_sorted;
+  let all;
+  let all_sorted = [],
+    all_order = [];
 
-  function getContent() {
-    data.all().then(function(result) {
-      res = result;
+  $: show && run();
 
-      if (type == "deaths") all = res.deaths.locations;
-      else if (type == "confirmed") all = res.confirmed.locations;
-      else if (type == "recovered") all = res.recovered.locations;
+  function run() {
+    all_sorted = [];
+    all_order = [];
+    if (show == "deaths") all = data.deaths.locations;
+    else if (show == "confirmed") all = data.confirmed.locations;
+    else if (show == "recovered") all = data.recovered.locations;
 
-      var all_order = [];
-      all.reduce(function(res, value) {
-        if (!res[value.country]) {
-          res[value.country] = { country: value.country, latest: 0 };
-          all_order.push(res[value.country]);
-        }
-        res[value.country].latest += value.latest;
-        res[value.country].country_code = value.country_code;
-        return res;
-      }, {});
+    all.reduce(function(data, value) {
+      if (!data[value.country]) {
+        data[value.country] = { country: value.country, latest: 0 };
+        all_order.push(data[value.country]);
+      }
+      data[value.country].latest += value.latest;
+      data[value.country].country_code = value.country_code;
+      return data;
+    }, {});
 
-      all_sorted = all_order.sort(function(a, b) {
-        return b.latest - a.latest;
-      });
+    all_sorted = all_order.sort(function(a, b) {
+      return b.latest - a.latest;
     });
   }
-
-  getContent();
 </script>
 
 <style>
@@ -74,31 +73,29 @@
   }
 </style>
 
-{#if !res}
-  Loading...
-{:else}
-  <div id="bestof_{type}" class="container-basic container-bestof hidden">
-    <div class="container-header">
-      <div class="container-header-contents">
+<div
+  id="bestof_{show}"
+  class="container-basic container-bestof {show ? '' : 'hidden'}">
+  <div class="container-header">
+    <div class="container-header-contents">
 
-        <h5 class="container-title">Most {type}</h5>
-      </div>
-    </div>
-    <div class="container-body">
-      <div class="container-list">
-        {#each all_sorted.slice(0, 10) as item, i}
-          <li>
-            <label># {i + 1}</label>
-            <div class="flag">
-              <img
-                src="flags/{item.country_code ? item.country_code : 'world'}.png"
-                alt="flag" />
-            </div>
-            <p class="list-name">{item.country}</p>
-            <p class="list-count">{item.latest}</p>
-          </li>
-        {/each}
-      </div>
+      <h5 class="container-title">Most {show}</h5>
     </div>
   </div>
-{/if}
+  <div class="container-body">
+    <div class="container-list">
+      {#each all_sorted.slice(0, 10) as item, i}
+        <li>
+          <label># {i + 1}</label>
+          <div class="flag">
+            <img
+              src={country_by_flag.default.filter(e => item.country === e.country)[0].flag_base64}
+              alt="flag" />
+          </div>
+          <p class="list-name">{item.country}</p>
+          <p class="list-count">{item.latest}</p>
+        </li>
+      {/each}
+    </div>
+  </div>
+</div>

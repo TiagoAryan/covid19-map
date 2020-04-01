@@ -22,6 +22,8 @@
   let c_infec_lines = [];
   let geo_infec_lines = [];
   let showdate = "00/00/00";
+let bounds;
+  let show = "";
   let inPlay = true;
 
   function play() {
@@ -57,11 +59,7 @@
         clearInterval(interval);
         inPlay = false;
       }
-<<<<<<< HEAD
     }, 10);
-=======
-    }, 300);
->>>>>>> 9ca03a323d2fd36e554cad32c50e3a3ce6bb0f7a
 
     return () => {
       clearInterval(interval);
@@ -263,7 +261,8 @@
       }
     }
   }
-  function init() {
+  async function init() {
+    bounds = countries_bounds;
     map = L.map("map", {
       minZoom: 3,
       maxZoom: 8
@@ -374,7 +373,7 @@
 
     getSpread();
 
-    data.all().then(function(result) {
+    await data.all().then(function(result) {
       res = result;
 
       res.confirmed.locations = sort(res.confirmed.locations);
@@ -429,8 +428,9 @@
     return inside;
   }
   function showList(scope) {
-    var el = document.querySelector("#bestof_" + scope);
-    el.classList.toggle("hidden");
+    if (!show) show = scope;
+    else if (show != scope) show = scope;
+    else show = "";
   }
 
   async function getSpread() {
@@ -711,7 +711,6 @@
 
 <div id="map" />
 
-<Info country={country_clicked} name={country_name_clicked} />
 <div class="container-date">
   <div class="date">{showdate}</div>
   <div class="navigate-time">
@@ -744,10 +743,11 @@
   </div>
 </div>
 
-<Bestof type="confirmed" />
-<Bestof type="deaths" />
-<Bestof type="recovered" />
+{#if res !== undefined}
+  <Info data={res} country={country_clicked} name={country_name_clicked} />
+  <Bestof data={res} {show} />
+  <Details data={res} bounds={bounds} country={country_clicked} name={country_name_clicked} />
+{/if}
 <button id="replay" style="position:fixed; top 12px; right:200px; z-index:1000">
   Replay
 </button>
-<Details country={country_clicked} />

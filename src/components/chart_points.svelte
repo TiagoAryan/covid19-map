@@ -1,10 +1,5 @@
 <script>
-  import data from "jhucsse.covid";
-  import * as population from "./country-by-population.json";
-  import { onMount } from "svelte";
-  import getCountryISO2 from "country-iso-3-to-2";
-
-  export let type;
+  export let data;
   export let country;
 
   let res, dates;
@@ -12,24 +7,17 @@
   var c_infected = [];
   var c_healthy = [];
 
-  $: country && initChart(res);
+  $: country && initChart(data);
 
-  onMount(() => {
-    data.all().then(function(result) {
-      res = result;
+  res = data;
 
-      dates = Object.keys(res.confirmed.locations[0].history).sort(function(
-        a,
-        b
-      ) {
-        return new Date(a) - new Date(b);
-      });
-
-      res.confirmed.locations = sort(res.confirmed.locations);
-      res.deaths.locations = sort(res.deaths.locations);
-      res.recovered.locations = sort(res.recovered.locations);
-    });
+  dates = Object.keys(res.confirmed.locations[0].history).sort(function(a, b) {
+    return new Date(a) - new Date(b);
   });
+
+  res.confirmed.locations = sort(res.confirmed.locations);
+  res.deaths.locations = sort(res.deaths.locations);
+  res.recovered.locations = sort(res.recovered.locations);
 
   function sort(all) {
     let all_order = [];

@@ -1,12 +1,11 @@
 <script>
-  import data from "jhucsse.covid";
   import * as population from "./country-by-population.json";
   import * as country_by_flag from "./country-by-flag.json";
 
+  export let data;
   export let country;
   export let name;
 
-  let res;
   let pop_total, deaths, confirmed, recovered;
 
   $: setpop = false;
@@ -15,37 +14,29 @@
 
   function getContent() {
     if (country) {
-      data.getCountry({ cc: country }).then(function(result) {
-        res = result;
+      deaths = data.deaths.locations.filter(e => country === e.country_code)[0]
+        .latest;
+      confirmed = data.confirmed.locations.filter(
+        e => country === e.country_code
+      )[0].latest;
+      recovered = data.recovered.locations.filter(
+        e => country === e.country_code
+      )[0].latest;
 
-        console.log(country_borders);
-
-        res.deaths = Object.values(res.deaths);
-        res.confirmed = Object.values(res.confirmed);
-        res.recovered = Object.values(res.recovered);
-
-        deaths = res.deaths[res.deaths.length - 1];
-        confirmed = res.confirmed[res.confirmed.length - 1];
-        recovered = res.recovered[res.recovered.length - 1];
-        if (setpop) {
-          pop_total = findPop(population.default, "code", country);
-        } else {
-          pop_total = confirmed;
-        }
-      });
+      if (setpop) {
+        pop_total = findPop(population.default, "code", country);
+      } else {
+        pop_total = confirmed;
+      }
     } else {
-      data.all().then(function(result) {
-        res = result;
-
-        deaths = res.latest.deaths;
-        confirmed = res.latest.confirmed;
-        recovered = res.latest.recovered;
-        if (setpop) {
-          pop_total = 7772494610;
-        } else {
-          pop_total = confirmed;
-        }
-      });
+      deaths = data.latest.deaths;
+      confirmed = data.latest.confirmed;
+      recovered = data.latest.recovered;
+      if (setpop) {
+        pop_total = 7772494610;
+      } else {
+        pop_total = confirmed;
+      }
     }
   }
 
@@ -91,80 +82,73 @@
 
 </style>
 
-{#if !res}
-  Loading...
-{:else}
-  <div class="container-basic container-bottom container-total">
+<div class="container-basic container-bottom container-total">
 
-    <div class="container-header">
-      <div class="container-header-contents">
-        <div class="flag">
-          <img
-            src={country_by_flag.default.filter(e => name === e.country)[0].flag_base64}
-            alt="flag" />
-        </div>
-        <h5 class="container-title">{country ? name : 'World'}</h5>
-        <div
-          style="float:right"
-          class="button"
-          on:click={() => showContainers()}>
-          <i class="fas fa-user-friends" />
-          Details
-        </div>
+  <div class="container-header">
+    <div class="container-header-contents">
+      <div class="flag">
+        <img
+          src={country_by_flag.default.filter(e => name === e.country)[0].flag_base64}
+          alt="flag" />
       </div>
-    </div>
-    <div class="container-body">
-
-      <div class="container-data-details">
-        <div class="col-block">
-          <i class="dot dot_red" />
-          <label>Deaths</label>
-          <div class="data">{deaths}</div>
-        </div>
-        <div class="col-block">
-          <i class="dot dot_yellow" />
-          <label>Active</label>
-          <div class="data">{confirmed - deaths - recovered}</div>
-        </div>
-        <div class="col-block">
-          <i class="dot dot_green" />
-          <label>Recovered</label>
-          <div class="data">{recovered}</div>
-        </div>
-        <div class="col-block-btn">
-          <div class="button" on:click={() => change()}>
-            <i class="fas fa-user-friends" />
-            All
-          </div>
-        </div>
+      <h5 class="container-title">{name}</h5>
+      <div style="float:right" class="button" on:click={() => showContainers()}>
+        <i class="fas fa-user-friends" />
+        Details
       </div>
-      <div class="progress">
-        <div
-          class="progress-bar bg-danger"
-          role="progressbar"
-          style="width: {deaths ? (deaths * 100) / pop_total : 0}%"
-          aria-valuenow={deaths ? (deaths * 100) / pop_total : 0}
-          aria-valuemin="0"
-          aria-valuemax="100" />
-        <div
-          class="progress-bar bg-warning"
-          role="progressbar"
-          style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}%"
-          aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}
-          aria-valuemin="0"
-          aria-valuemax="100" />
-        <div
-          class="progress-bar"
-          role="progressbar"
-          style="width: {recovered ? (recovered * 100) / pop_total : 0}%"
-          aria-valuenow={recovered ? (recovered * 100) / pop_total : 0}
-          aria-valuemin="0"
-          aria-valuemax="100" />
-      </div>
-      <label class="progress_label">
-        {pop_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
-        {setpop ? 'Population' : 'Cases'}
-      </label>
     </div>
   </div>
-{/if}
+  <div class="container-body">
+
+    <div class="container-data-details">
+      <div class="col-block">
+        <i class="dot dot_red" />
+        <label>Deaths</label>
+        <div class="data">{deaths}</div>
+      </div>
+      <div class="col-block">
+        <i class="dot dot_yellow" />
+        <label>Active</label>
+        <div class="data">{confirmed - deaths - recovered}</div>
+      </div>
+      <div class="col-block">
+        <i class="dot dot_green" />
+        <label>Recovered</label>
+        <div class="data">{recovered}</div>
+      </div>
+      <div class="col-block-btn">
+        <div class="button" on:click={() => change()}>
+          <i class="fas fa-user-friends" />
+          All
+        </div>
+      </div>
+    </div>
+    <div class="progress">
+      <div
+        class="progress-bar bg-danger"
+        role="progressbar"
+        style="width: {deaths ? (deaths * 100) / pop_total : 0}%"
+        aria-valuenow={deaths ? (deaths * 100) / pop_total : 0}
+        aria-valuemin="0"
+        aria-valuemax="100" />
+      <div
+        class="progress-bar bg-warning"
+        role="progressbar"
+        style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}%"
+        aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}
+        aria-valuemin="0"
+        aria-valuemax="100" />
+      <div
+        class="progress-bar"
+        role="progressbar"
+        style="width: {recovered ? (recovered * 100) / pop_total : 0}%"
+        aria-valuenow={recovered ? (recovered * 100) / pop_total : 0}
+        aria-valuemin="0"
+        aria-valuemax="100" />
+    </div>
+    <label class="progress_label">
+      {pop_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
+      {setpop ? 'Population' : 'Cases'}
+    </label>
+  </div>
+</div>

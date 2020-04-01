@@ -7768,7 +7768,7 @@ var countries_bounds = {
       ]
     }
   },
-  Macedonia: {
+  "North Macedonia": {
     type: "Feature",
     id: "MKD",
     properties: { name: "North Macedonia" },
@@ -11878,7 +11878,7 @@ var countries_bounds = {
   US: {
     type: "Feature",
     id: "USA",
-    properties: { name: "United States of America" },
+    properties: { name: "United States" },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -13105,15 +13105,6 @@ var countries_bounds = {
     type: "Feature",
     id: "NRU",
     properties: { name: "Nauru" },
-    geometry: {
-      type: "Polygon",
-      coordinates: []
-    }
-  },
-  "Palestine": {
-    type: "Feature",
-    id: "PSE",
-    properties: { name: "" },
     geometry: {
       type: "Polygon",
       coordinates: []
