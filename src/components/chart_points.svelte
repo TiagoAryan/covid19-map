@@ -117,6 +117,8 @@
   }
 
   function initChart(country_data) {
+    console.log(country_data);
+    console.log(country);
     var confirmed = country_data.confirmed.locations.filter(
       e => country === e.country_code
     )[0];
@@ -141,16 +143,10 @@
           .getFullYear()
           .toString()
           .substr(-2);
-      deaths_data.push(deaths ? deaths.history[dt] : 0);
-      recovered_data.push(recovered ? recovered.history[dt] : 0);
+      deaths_data.push(deaths.history[dt]);
+      recovered_data.push(recovered.history[dt]);
       active_data.push(
-        confirmed
-          ? confirmed.history[dt]
-          : 0 - deaths
-          ? deaths.history[dt]
-          : 0 - recovered
-          ? recovered.history[dt]
-          : 0
+        confirmed.history[dt] - deaths.history[dt] - recovered.history[dt]
       );
     }
 
@@ -285,10 +281,10 @@
 
     <div class="container-header-contents">
 
-      <h5 class="container-title">Infected Evolution</h5>
+      <h5 class="container-title">Fatality Rate</h5>
     </div>
   </div>
   <div class="container-body">
-    <canvas id="myChart" />
+    <canvas id="myChartPoint" />
   </div>
 </div>

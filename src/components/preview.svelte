@@ -1,7 +1,6 @@
 <script>
   import data from "jhucsse.covid";
   import * as population from "./country-by-population.json";
-  import * as country_by_flag from "./country-by-flag.json";
 
   export let country;
   export let name;
@@ -17,8 +16,6 @@
     if (country) {
       data.getCountry({ cc: country }).then(function(result) {
         res = result;
-
-        console.log(country_borders);
 
         res.deaths = Object.values(res.deaths);
         res.confirmed = Object.values(res.confirmed);
@@ -88,7 +85,16 @@
 </script>
 
 <style>
-
+  .container-total {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    margin-bottom: 12px;
+    height: 190px;
+    width: 100%;
+    left: 0;
+    vertical-align: top;
+  }
 </style>
 
 {#if !res}
@@ -99,9 +105,7 @@
     <div class="container-header">
       <div class="container-header-contents">
         <div class="flag">
-          <img
-            src={country_by_flag.default.filter(e => name === e.country)[0].flag_base64}
-            alt="flag" />
+          <img src="flags/{country ? country : 'world'}.png" alt="flag" />
         </div>
         <h5 class="container-title">{country ? name : 'World'}</h5>
         <div
