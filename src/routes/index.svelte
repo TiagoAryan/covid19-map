@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import data from "jhucsse.covid";
   import getCountryISO2 from "country-iso-3-to-2";
-  import Total from "../components/total.svelte";
+  import Info from "../components/info.svelte";
   import Bestof from "../components/bestof.svelte";
   import Countries from "../components/countries.svelte";
   import Chart from "../components/chart.svelte";
@@ -13,7 +13,8 @@
   var circle_size = 8000;
   var circle = [];
   var c = 0;
-  let country_clicked, country_name_clicked;
+  let country_clicked,
+    country_name_clicked = "World";
   let res;
   let pop_total = 7772494610;
   var missing_country = [];
@@ -55,7 +56,7 @@
         clearInterval(interval);
         inPlay = false;
       }
-    }, 500);
+    }, 10);
 
     return () => {
       clearInterval(interval);
@@ -361,7 +362,7 @@
       if (clicked_in_country == 0) {
         map.removeLayer(selected_country);
         country_clicked = "";
-        country_name_clicked = "";
+        country_name_clicked = "World";
         selected_country_id = "";
       }
     }
@@ -707,7 +708,7 @@
 
 <div id="map" />
 
-<Total country={country_clicked} name={country_name_clicked} />
+<Info country={country_clicked} name={country_name_clicked} />
 <div class="container-date">
   <div class="date">{showdate}</div>
   <div class="navigate-time">

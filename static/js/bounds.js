@@ -13110,7 +13110,7 @@ var countries_bounds = {
       coordinates: []
     }
   },
-  "": {
+  "Palestine": {
     type: "Feature",
     id: "PSE",
     properties: { name: "" },

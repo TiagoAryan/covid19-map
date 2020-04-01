@@ -117,8 +117,6 @@
   }
 
   function initChart(country_data) {
-    console.log(country_data);
-    console.log(country);
     var confirmed = country_data.confirmed.locations.filter(
       e => country === e.country_code
     )[0];
@@ -143,10 +141,16 @@
           .getFullYear()
           .toString()
           .substr(-2);
-      deaths_data.push(deaths.history[dt]);
-      recovered_data.push(recovered.history[dt]);
+      deaths_data.push(deaths ? deaths.history[dt] : 0);
+      recovered_data.push(recovered ? recovered.history[dt] : 0);
       active_data.push(
-        confirmed.history[dt] - deaths.history[dt] - recovered.history[dt]
+        confirmed
+          ? confirmed.history[dt]
+          : 0 - deaths
+          ? deaths.history[dt]
+          : 0 - recovered
+          ? recovered.history[dt]
+          : 0
       );
     }
 
