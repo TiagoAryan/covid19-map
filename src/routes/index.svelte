@@ -22,7 +22,7 @@
   let c_infec_lines = [];
   let geo_infec_lines = [];
   let showdate = "00/00/00";
-let bounds;
+  let bounds;
   let show = "";
   let inPlay = true;
 
@@ -416,14 +416,16 @@ let bounds;
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
     var inside = false;
-    for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
-      var xi = vs[i][0],
-        yi = vs[i][1];
-      var xj = vs[j][0],
-        yj = vs[j][1];
-      var intersect =
-        yi > y != yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
-      if (intersect) inside = !inside;
+    if (vs.length > 0) {
+      for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+        var xi = vs[i][0],
+          yi = vs[i][1];
+        var xj = vs[j][0],
+          yj = vs[j][1];
+        var intersect =
+          yi > y != yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+        if (intersect) inside = !inside;
+      }
     }
     return inside;
   }
@@ -746,7 +748,11 @@ let bounds;
 {#if res !== undefined}
   <Info data={res} country={country_clicked} name={country_name_clicked} />
   <Bestof data={res} {show} />
-  <Details data={res} bounds={bounds} country={country_clicked} name={country_name_clicked} />
+  <Details
+    data={res}
+    {bounds}
+    country={country_clicked}
+    name={country_name_clicked} />
 {/if}
 <button id="replay" style="position:fixed; top 12px; right:200px; z-index:1000">
   Replay
