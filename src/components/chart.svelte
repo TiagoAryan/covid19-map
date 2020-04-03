@@ -1,23 +1,36 @@
 <script>
-  export let data;
+  import data from "jhucsse.covid";
+  import * as population from "./country-by-population.json";
+  import { onMount } from "svelte";
+  import getCountryISO2 from "country-iso-3-to-2";
+
+  export let type;
   export let country;
 
   let res, dates;
   var chart;
   var c_infected = [];
   var c_healthy = [];
+  var myLineChart;
+  $: country && fillChart(myLineChart, res);
 
-  $: country && initChart(data);
+  onMount(() => {
+    initChart();
+    data.all().then(function(result) {
+      res = result;
 
-  res = data;
+      dates = Object.keys(res.confirmed.locations[0].history).sort(function(
+        a,
+        b
+      ) {
+        return new Date(a) - new Date(b);
+      });
 
-  dates = Object.keys(res.confirmed.locations[0].history).sort(function(a, b) {
-    return new Date(a) - new Date(b);
+      res.confirmed.locations = sort(res.confirmed.locations);
+      res.deaths.locations = sort(res.deaths.locations);
+      res.recovered.locations = sort(res.recovered.locations);
+    });
   });
-
-  res.confirmed.locations = sort(res.confirmed.locations);
-  res.deaths.locations = sort(res.deaths.locations);
-  res.recovered.locations = sort(res.recovered.locations);
 
   function sort(all) {
     let all_order = [];
@@ -65,46 +78,7 @@
   //---------------
   // CHART
   //---------------
-  function updateConfigAsNewObject(chart) {
-    chart.data = {
-      labels: [
-        "19 Mar",
-        "20 Mar",
-        "21 Mar",
-        "22 Mar",
-        "23 Mar",
-        "24 Mar",
-        "25 Mar",
-        "19 Mar",
-        "20 Mar",
-        "21 Mar",
-        "22 Mar",
-        "23 Mar",
-        "24 Mar",
-        "25 Mar"
-      ],
-      datasets: [
-        {
-          label: "Deaths",
-          defaultFontFamily: "Open Sans",
-          borderColor: "#FF4E34",
-          backgroundColor: "#FF4E3426",
-          fill: false,
-          data: [0, 1, 5, 7, 12, 18, 20, 31, 38, 39, 59, 60, 90, 102],
-          yAxisID: "y-axis-1",
-          pointBorderWidth: 3,
-          pointHitRadius: 8,
-          pointRadius: 6,
-          pointBackgroundColor: "#1E1E21",
-          pointHoverRadius: 12,
-          pointHoverBorderWidth: 3
-        }
-      ]
-    };
-    chart.update();
-  }
-
-  function initChart(country_data) {
+  function fillChart(chart, country_data) {
     var confirmed = country_data.confirmed.locations.filter(
       e => country === e.country_code
     )[0];
@@ -118,6 +92,7 @@
     var active_data = [];
     var recovered_data = [];
     var deaths_data = [];
+    var range_dates = [];
     let k = 0;
     for (var d of dates) {
       let dt =
@@ -129,73 +104,87 @@
           .getFullYear()
           .toString()
           .substr(-2);
-      deaths_data.push(deaths ? deaths.history[dt] : 0);
-      recovered_data.push(recovered ? recovered.history[dt] : 0);
-      active_data.push(
-        confirmed
-          ? confirmed.history[dt]
-          : 0 - deaths
-          ? deaths.history[dt]
-          : 0 - recovered
-          ? recovered.history[dt]
-          : 0
-      );
+      if (confirmed.history[dt] != 0) {
+        range_dates.push(dt);
+        deaths_data.push(deaths.history[dt]);
+        recovered_data.push(recovered.history[dt]);
+        active_data.push(
+          confirmed.history[dt] - deaths.history[dt] - recovered.history[dt]
+        );
+      }
     }
 
+    chart.data = {
+      labels: range_dates,
+      datasets: [
+        {
+          label: "Deaths",
+          defaultFontFamily: "Open Sans",
+          borderColor: "#FF4E34",
+          backgroundColor: "#FF4E3426",
+          fill: false,
+          data: deaths_data,
+          yAxisID: "y-axis-1",
+          pointBackgroundColor: "#1E1E21",
+          pointBorderWidth: 2,
+          borderWidth: 2,
+          pointHitRadius: 5,
+          pointRadius: 3,
+          pointHoverRadius: 12,
+          pointHoverBorderWidth: 3
+        },
+        {
+          label: "Active",
+          defaultFontFamily: "Open Sans",
+          borderColor: "#FFC831",
+          backgroundColor: "#FFC83126",
+          fill: false,
+          data: active_data,
+          yAxisID: "y-axis-1",
+          pointBackgroundColor: "#1E1E21",
+          pointBorderWidth: 2,
+          borderWidth: 2,
+          pointHitRadius: 5,
+          pointRadius: 3,
+          pointHoverRadius: 12,
+          pointHoverBorderWidth: 3
+        },
+        {
+          label: "Recovered",
+          defaultFontFamily: "Open Sans",
+          borderColor: "#40C0A5",
+          backgroundColor: "#40C0A526",
+          fill: false,
+          data: recovered_data,
+          yAxisID: "y-axis-1",
+          pointBackgroundColor: "#1E1E21",
+          pointBorderWidth: 2,
+          borderWidth: 2,
+          pointHitRadius: 5,
+          pointRadius: 3,
+          pointHoverRadius: 12,
+          pointHoverBorderWidth: 3
+        }
+      ]
+    };
+    chart.update();
+  }
+
+  function initChart(country_data) {
     var ctx = document.getElementById("myChart").getContext("2d");
-    var myLineChart = new Chart(ctx, {
+    myLineChart = new Chart(ctx, {
       type: "line",
       data: {
-        labels: dates,
-        datasets: [
-          {
-            label: "Deaths",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#FF4E34",
-            backgroundColor: "#FF4E3426",
-            fill: false,
-            data: deaths_data,
-            yAxisID: "y-axis-1",
-            pointBorderWidth: 3,
-            pointHitRadius: 6,
-            pointRadius: 4,
-            pointBackgroundColor: "#1E1E21",
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          },
-          {
-            label: "Active",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#FFC831",
-            backgroundColor: "#FFC83126",
-            fill: false,
-            data: active_data,
-            yAxisID: "y-axis-1",
-            pointBorderWidth: 3,
-            pointHitRadius: 6,
-            pointRadius: 4,
-            pointBackgroundColor: "#1E1E21",
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          },
-          {
-            label: "Recovered",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#40C0A5",
-            backgroundColor: "#40C0A526",
-            fill: false,
-            data: recovered_data,
-            yAxisID: "y-axis-1",
-            pointBorderWidth: 3,
-            pointHitRadius: 6,
-            pointRadius: 4,
-            pointBackgroundColor: "#1E1E21",
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          }
-        ]
+        labels: [],
+        datasets: []
       },
       options: {
+        legend: {
+          labels: {
+            usePointStyle: true
+          }
+        },
+        aspectRatio: 2.4,
         responsive: true,
         hoverMode: "index",
         stacked: false,
