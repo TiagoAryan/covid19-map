@@ -105,8 +105,6 @@
   }
 
   function initChart(country_data) {
-    console.log(country_data);
-    console.log(country);
     var confirmed = country_data.confirmed.locations.filter(
       e => country === e.country_code
     )[0];

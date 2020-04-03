@@ -22,7 +22,7 @@
   let c_infec_lines = [];
   let geo_infec_lines = [];
   let showdate = "00/00/00";
-let bounds;
+  let bounds;
   let show = "";
   let inPlay = true;
 
@@ -69,7 +69,7 @@ let bounds;
   function playhistory() {
     if (!inPlay) {
       inPlay = true;
-      // play();
+      play();
     }
   }
 
@@ -127,7 +127,6 @@ let bounds;
               if (
                 geo_infec_lines[c_infec_lines.indexOf(country_name)] !== null
               ) {
-                console.log("drawww");
 
                 var from =
                   geo_infec_lines[c_infec_lines.indexOf(country_name)][0];
@@ -380,7 +379,7 @@ let bounds;
       res.deaths.locations = sort(res.deaths.locations);
       res.recovered.locations = sort(res.recovered.locations);
 
-      // play();
+      play();
     });
   }
 
@@ -427,6 +426,7 @@ let bounds;
     }
     return inside;
   }
+  
   function showList(scope) {
     if (!show) show = scope;
     else if (show != scope) show = scope;
@@ -474,49 +474,6 @@ let bounds;
                 p[o.children[k].node_attrs.division.value].latitude
               ];
 
-              /*
-              console.log(
-                "From " +
-                  (o.node_attrs.division
-                    ? o.node_attrs.division.value
-                    : "XXXX") +
-                  " to " +
-                  (o.children[k].node_attrs.division
-                    ? o.children[k].node_attrs.division.value
-                    : "YYYY") +
-                  "/" +
-                  (o.children[k].node_attrs.country
-                    ? o.children[k].node_attrs.country.value
-                    : "")
-              );
-              console.log(
-                "From " +
-                  p[o.node_attrs.division.value].latitude +
-                  "/" +
-                  p[o.node_attrs.division.value].longitude +
-                  " to " +
-                  p[o.children[k].node_attrs.division.value].latitude +
-                  "/" +
-                  p[o.children[k].node_attrs.division.value].longitude
-              );
-
-              /*var route = {
-                type: "FeatureCollection",
-                features: [
-                  {
-                    type: "Feature",
-                    geometry: {
-                      type: "LineString",
-                      coordinates: [from, to]
-                    }
-                  }
-                ]
-              };
-
-              console.log(turf.lineDistance(route.features[0], "kilometers"));*/
-              //if (  n < 1 && turf.lineDistance(route.features[0], "kilometers") > 1500 )
-              //drawline(n++, from, to);
-
               c_infec_lines.push(o.children[k].node_attrs.country.value);
               geo_infec_lines.push([from, to]);
             }
@@ -535,7 +492,6 @@ let bounds;
   */
 
   function drawline(k, from, to) {
-    console.log(k + " " + from + " " + to);
     var speedFactor = 30; // number of frames per longitude degree
     var animation; // to store and cancel the animation
     var startTime = 0;
@@ -746,7 +702,11 @@ let bounds;
 {#if res !== undefined}
   <Info data={res} country={country_clicked} name={country_name_clicked} />
   <Bestof data={res} {show} />
-  <Details data={res} bounds={bounds} country={country_clicked} name={country_name_clicked} />
+  <Details
+    data={res}
+    {bounds}
+    country={country_clicked}
+    name={country_name_clicked} />
 {/if}
 <button id="replay" style="position:fixed; top 12px; right:200px; z-index:1000">
   Replay

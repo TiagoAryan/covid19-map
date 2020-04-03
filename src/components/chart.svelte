@@ -2,22 +2,12 @@
   export let data;
   export let country;
 
-  let res, dates;
+  let res;
   var chart;
-  var c_infected = [];
-  var c_healthy = [];
 
-  $: country && initChart(data);
+  $: country && initChart(res);
 
   res = data;
-
-  dates = Object.keys(res.confirmed.locations[0].history).sort(function(a, b) {
-    return new Date(a) - new Date(b);
-  });
-
-  res.confirmed.locations = sort(res.confirmed.locations);
-  res.deaths.locations = sort(res.deaths.locations);
-  res.recovered.locations = sort(res.recovered.locations);
 
   function sort(all) {
     let all_order = [];
@@ -51,7 +41,7 @@
 
         var a_date = new Date(parts_a[2], parts_a[1] - 1, parts_a[0]);
         var b_date = new Date(parts_b[2], parts_b[1] - 1, parts_b[0]);
-        return new Date(parts_b) - new Date(a_date);
+        return new Date(b_date) - new Date(a_date);
       })
       .forEach(function(key) {
         all_order2[key] = all_order[key];
@@ -105,6 +95,17 @@
   }
 
   function initChart(country_data) {
+    let dates = Object.keys(res.confirmed.locations[0].history).sort(function(
+      a,
+      b
+    ) {
+      return new Date(a) - new Date(b);
+    });
+
+    country_data.confirmed.locations = sort(country_data.confirmed.locations);
+    country_data.deaths.locations = sort(country_data.deaths.locations);
+    country_data.recovered.locations = sort(country_data.recovered.locations);
+
     var confirmed = country_data.confirmed.locations.filter(
       e => country === e.country_code
     )[0];
@@ -115,32 +116,29 @@
       e => country === e.country_code
     )[0];
 
+    console.log(deaths);
     var active_data = [];
     var recovered_data = [];
     var deaths_data = [];
     let k = 0;
     for (var d of dates) {
-      let dt =
-        ("0" + new Date(d).getDate()).slice(-2) +
-        "/" +
-        ("0" + (new Date(d).getMonth() + 1)).slice(-2) +
-        "/" +
-        new Date(d)
-          .getFullYear()
-          .toString()
-          .substr(-2);
-      deaths_data.push(deaths ? deaths.history[dt] : 0);
-      recovered_data.push(recovered ? recovered.history[dt] : 0);
+      let date = new Date(d);
+      console.log(d);
+      console.log(date);
+      deaths_data.push(deaths ? deaths.history[date] : 0);
+      recovered_data.push(recovered ? recovered.history[date] : 0);
       active_data.push(
         confirmed
-          ? confirmed.history[dt]
+          ? confirmed.history[date]
           : 0 - deaths
-          ? deaths.history[dt]
+          ? deaths.history[date]
           : 0 - recovered
-          ? recovered.history[dt]
+          ? recovered.history[date]
           : 0
       );
     }
+
+    console.log(deaths_data);
 
     var ctx = document.getElementById("myChart").getContext("2d");
     var myLineChart = new Chart(ctx, {
@@ -248,7 +246,6 @@
     var ano = data.split("/")[2];
 
     return ("0" + dia).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + ano;
-    // Utilizo o .slice(-2) para garantir o formato com 2 digitos.
   }
 </script>
 
