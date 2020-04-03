@@ -6,9 +6,10 @@
   var chart;
   var c_infected = [];
   var c_healthy = [];
+  var myScaterChart;
 
   onMount(async () => {
-    initChartPoint(data);
+    initChartPoint();
   });
 
   res = data;
@@ -68,41 +69,50 @@
   // CHART
   //---------------
 
-  function initChart(country_data) {
-    var confirmed = country_data.confirmed.locations.filter(
-      e => country === e.country_code
-    )[0];
-    var recovered = country_data.recovered.locations.filter(
-      e => country === e.country_code
-    )[0];
-    var deaths = country_data.deaths.locations.filter(
-      e => country === e.country_code
-    )[0];
+  function initChartPoint() {
+    var fatality_data = [
+      {
+        x: 40,
+        y: 2.5
+      },
+      {
+        x: 45.2,
+        y: 1.8
+      },
+      {
+        x: 46.2,
+        y: 1.92
+      },
+      {
+        x: 66.2,
+        y: 2.92
+      },
+      {
+        x: 42.2,
+        y: 1.92
+      },
+      {
+        x: 45.2,
+        y: 1.42
+      },
+      {
+        x: 46.2,
+        y: 1.62
+      }
+    ];
+    var label_data = ["it", "fr", "ES", "US", "UK", "pt", "CH"];
+    var title_data = [
+      "Italy",
+      "France",
+      "Spain",
+      "US",
+      "UK",
+      "Portugal",
+      "China"
+    ];
 
-    var active_data = [];
-    var recovered_data = [];
-    var deaths_data = [];
-    let k = 0;
-
-    for (var d of dates) {
-      let dt =
-        ("0" + new Date(d).getDate()).slice(-2) +
-        "/" +
-        ("0" + (new Date(d).getMonth() + 1)).slice(-2) +
-        "/" +
-        new Date(d)
-          .getFullYear()
-          .toString()
-          .substr(-2);
-      deaths_data.push(deaths.history[dt]);
-      recovered_data.push(recovered.history[dt]);
-      active_data.push(
-        confirmed.history[dt] - deaths.history[dt] - recovered.history[dt]
-      );
-    }
-
-    var ctx = document.getElementById("myChart").getContext("2d");
-    var myLineChart = new Chart(ctx, {
+    var ctx = document.getElementById("myChartPoint").getContext("2d");
+    myScaterChart = new Chart(ctx, {
       type: "scatter",
       data: {
         labels: [30, 40, 50, 60, 70],
