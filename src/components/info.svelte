@@ -5,7 +5,6 @@
   export let data;
   export let country;
   export let name;
-
   let pop_total, deaths, confirmed, recovered;
 
   $: setpop = false;

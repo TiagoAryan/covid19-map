@@ -13,8 +13,6 @@
   let all = res.confirmed.locations;
   var all_order = [];
 
-  console.log(res);
-
   all.reduce(function(res, value) {
     if (!res[value.country]) {
       res[value.country] = {

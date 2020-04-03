@@ -53,7 +53,6 @@
       if (border.land == 1) color = "#40c0a5";
       else if (border.land == 2) color = "#ff4e34";
       else if (border.land == 3) color = "#ffc831";
-      console.log(border);
     } else {
       const response = await fetch("./borders.json");
       borders = await response.json();
