@@ -3,11 +3,9 @@
   export let country;
 
   let res;
-  var chart;
+  res = data;
 
   $: country && initChart(res);
-
-  res = data;
 
   function sort(all) {
     let all_order = [];
@@ -27,8 +25,7 @@
       let H_total = res[value.country].history;
 
       for (var [key, h] of Object.entries(value.history))
-        H_total[FormataStringData(key)] =
-          (H_total[FormataStringData(key)] || 0) + value.history[key];
+        H_total[key] = (H_total[key] || 0) + value.history[key];
 
       res[value.country].history = H_total;
       return res;
@@ -52,50 +49,8 @@
     );
   }
 
-  //---------------
-  // CHART
-  //---------------
-  function updateConfigAsNewObject(chart) {
-    chart.data = {
-      labels: [
-        "19 Mar",
-        "20 Mar",
-        "21 Mar",
-        "22 Mar",
-        "23 Mar",
-        "24 Mar",
-        "25 Mar",
-        "19 Mar",
-        "20 Mar",
-        "21 Mar",
-        "22 Mar",
-        "23 Mar",
-        "24 Mar",
-        "25 Mar"
-      ],
-      datasets: [
-        {
-          label: "Deaths",
-          defaultFontFamily: "Open Sans",
-          borderColor: "#FF4E34",
-          backgroundColor: "#FF4E3426",
-          fill: false,
-          data: [0, 1, 5, 7, 12, 18, 20, 31, 38, 39, 59, 60, 90, 102],
-          yAxisID: "y-axis-1",
-          pointBorderWidth: 3,
-          pointHitRadius: 8,
-          pointRadius: 6,
-          pointBackgroundColor: "#1E1E21",
-          pointHoverRadius: 12,
-          pointHoverBorderWidth: 3
-        }
-      ]
-    };
-    chart.update();
-  }
-
   function initChart(country_data) {
-    let dates = Object.keys(res.confirmed.locations[0].history).sort(function(
+    let dates = Object.keys(data.confirmed.locations[0].history).sort(function(
       a,
       b
     ) {
@@ -116,29 +71,23 @@
       e => country === e.country_code
     )[0];
 
-    console.log(deaths);
     var active_data = [];
     var recovered_data = [];
     var deaths_data = [];
     let k = 0;
     for (var d of dates) {
-      let date = new Date(d);
-      console.log(d);
-      console.log(date);
-      deaths_data.push(deaths ? deaths.history[date] : 0);
-      recovered_data.push(recovered ? recovered.history[date] : 0);
+      deaths_data.push(deaths ? deaths.history[d] : 0);
+      recovered_data.push(recovered ? recovered.history[d] : 0);
       active_data.push(
         confirmed
-          ? confirmed.history[date]
+          ? confirmed.history[d]
           : 0 - deaths
-          ? deaths.history[date]
+          ? deaths.history[d]
           : 0 - recovered
-          ? recovered.history[date]
+          ? recovered.history[d]
           : 0
       );
     }
-
-    console.log(deaths_data);
 
     var ctx = document.getElementById("myChart").getContext("2d");
     var myLineChart = new Chart(ctx, {
@@ -245,7 +194,7 @@
     var mes = data.split("/")[0];
     var ano = data.split("/")[2];
 
-    return ("0" + dia).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + ano;
+    return dia + "/" + ("0" + mes).slice(-2) + "/" + ano;
   }
 </script>
 

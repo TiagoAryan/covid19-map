@@ -1,6 +1,7 @@
 <script>
   import * as population from "./country-by-population.json";
   import * as country_by_flag from "./country-by-flag.json";
+  import { s } from "misc";
 
   export let data;
   export let country;
@@ -103,17 +104,17 @@
       <div class="col-block">
         <i class="dot dot_red" />
         <label>Deaths</label>
-        <div class="data">{deaths}</div>
+        <div class="data">{s(deaths)}</div>
       </div>
       <div class="col-block">
         <i class="dot dot_yellow" />
         <label>Active</label>
-        <div class="data">{confirmed - deaths - recovered}</div>
+        <div class="data">{s(confirmed - deaths - recovered)}</div>
       </div>
       <div class="col-block">
         <i class="dot dot_green" />
         <label>Recovered</label>
-        <div class="data">{recovered}</div>
+        <div class="data">{s(recovered)}</div>
       </div>
       <div class="col-block-btn">
         <div class="button" on:click={() => change()}>
@@ -146,8 +147,7 @@
         aria-valuemax="100" />
     </div>
     <label class="progress_label">
-      {pop_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
-      {setpop ? 'Population' : 'Cases'}
+      {s(pop_total)} {setpop ? 'Population' : 'Cases'}
     </label>
   </div>
 </div>

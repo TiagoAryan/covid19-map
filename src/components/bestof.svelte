@@ -2,34 +2,27 @@
   import { onMount } from "svelte";
   import * as population from "./country-by-population.json";
   import * as country_by_flag from "./country-by-flag.json";
+  import { s } from "misc";
 
   export let data;
   export let show;
 
-  let all;
+  let all, length;
   let all_sorted = [],
     all_order = [];
 
   $: show && run();
 
   function run() {
+    length = Object.keys(data.confirmed.locations[0].history).length;
+
     all_sorted = [];
     all_order = [];
     if (show == "deaths") all = data.deaths.locations;
     else if (show == "confirmed") all = data.confirmed.locations;
     else if (show == "recovered") all = data.recovered.locations;
 
-    all.reduce(function(data, value) {
-      if (!data[value.country]) {
-        data[value.country] = { country: value.country, latest: 0 };
-        all_order.push(data[value.country]);
-      }
-      data[value.country].latest += value.latest;
-      data[value.country].country_code = value.country_code;
-      return data;
-    }, {});
-
-    all_sorted = all_order.sort(function(a, b) {
+    all_sorted = all.sort(function(a, b) {
       return b.latest - a.latest;
     });
   }
@@ -86,14 +79,26 @@
     <div class="container-list">
       {#each all_sorted.slice(0, 10) as item, i}
         <li>
-          <label># {i + 1}</label>
+          <label>
+            {#if Object.values(all_sorted[i].history)[length - 2] < Object.values(all_sorted[i + 1].history)[length - 2]}
+              <i class="fas fa-sort-up" />
+            {:else if i > 0 && Object.values(all_sorted[i].history)[length - 2] > Object.values(all_sorted[i - 1].history)[length - 2]}
+              <i class="fas fa-sort-down" />
+            {:else}#{/if}
+            {i + 1}
+          </label>
           <div class="flag">
             <img
               src={country_by_flag.default.filter(e => item.country === e.country)[0].flag_base64}
               alt="flag" />
           </div>
           <p class="list-name">{item.country}</p>
-          <p class="list-count">{item.latest}</p>
+          <p class="list-count">
+            <span class="badge badge-light">
+              + {s(item.latest - Object.values(item.history)[length - 2])}
+            </span>
+            {s(item.latest)}
+          </p>
         </li>
       {/each}
     </div>
