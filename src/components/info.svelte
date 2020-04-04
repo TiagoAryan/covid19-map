@@ -1,7 +1,6 @@
 <script>
   import * as population from "./country-by-population.json";
-  import * as country_by_flag from "./country-by-flag.json";
-  import { s } from "misc";
+  import { s, flag } from "misc";
 
   export let data;
   export let country;
@@ -87,9 +86,7 @@
   <div class="container-header">
     <div class="container-header-contents">
       <div class="flag">
-        <img
-          src={country_by_flag.default.filter(e => name === e.country)[0].flag_base64}
-          alt="flag" />
+        <img src={flag(name)} alt="flag" />
       </div>
       <h5 class="container-title">{name}</h5>
       <div style="float:right" class="button" on:click={() => showContainers()}>

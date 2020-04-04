@@ -13,11 +13,12 @@
   let btn_text = "Growth Evolution";
   let btn_icon = "chart-line";
 
+  $: country, fillChart(chart, data, chart_mode);
+
   onMount(async () => {
     initChart();
+    console.log(country);
   });
-
-  $: country && fillChart(chart, data, chart_mode);
 
   function sort(all) {
     let all_order = [];
@@ -72,128 +73,130 @@
       return new Date(a) - new Date(b);
     });
 
-    country_data.confirmed.locations = sort(country_data.confirmed.locations);
-    country_data.deaths.locations = sort(country_data.deaths.locations);
-    country_data.recovered.locations = sort(country_data.recovered.locations);
+    if (country) {
+      country_data.confirmed.locations = sort(country_data.confirmed.locations);
+      country_data.deaths.locations = sort(country_data.deaths.locations);
+      country_data.recovered.locations = sort(country_data.recovered.locations);
 
-    var confirmed = country_data.confirmed.locations.filter(
-      e => country === e.country_code
-    )[0];
-    var recovered = country_data.recovered.locations.filter(
-      e => country === e.country_code
-    )[0];
-    var deaths = country_data.deaths.locations.filter(
-      e => country === e.country_code
-    )[0];
+      var confirmed = country_data.confirmed.locations.filter(
+        e => country === e.country_code
+      )[0];
+      var recovered = country_data.recovered.locations.filter(
+        e => country === e.country_code
+      )[0];
+      var deaths = country_data.deaths.locations.filter(
+        e => country === e.country_code
+      )[0];
 
-    var active_data = [];
-    var recovered_data = [];
-    var deaths_data = [];
-    var range_dates = [];
+      var active_data = [];
+      var recovered_data = [];
+      var deaths_data = [];
+      var range_dates = [];
 
-    var growth_data = [];
-    let k = 0;
-    let count;
-    var previous_d = 0;
-    for (var d of dates) {
-      if (confirmed.history[d] != 0) {
-        range_dates.push(d);
-        deaths_data.push(deaths.history[d]);
-        recovered_data.push(recovered.history[d]);
-        active_data.push(
-          confirmed.history[d] - deaths.history[d] - recovered.history[d]
-        );
-        if (k > 0) {
-          let growth = parseInt(
-            ((confirmed.history[d] - confirmed.history[previous_d]) * 100) /
-              confirmed.history[previous_d]
+      var growth_data = [];
+      let k = 0;
+      let count;
+      var previous_d = 0;
+      for (var d of dates) {
+        if (confirmed.history[d] != 0) {
+          range_dates.push(d);
+          deaths_data.push(deaths.history[d]);
+          recovered_data.push(recovered.history[d]);
+          active_data.push(
+            confirmed.history[d] - deaths.history[d] - recovered.history[d]
           );
-          growth_data.push(growth);
-        } else {
-          growth_data.push(0);
+          if (k > 0) {
+            let growth = parseInt(
+              ((confirmed.history[d] - confirmed.history[previous_d]) * 100) /
+                confirmed.history[previous_d]
+            );
+            growth_data.push(growth);
+          } else {
+            growth_data.push(0);
+          }
+          previous_d = d;
+          k++;
         }
-        previous_d = d;
-        k++;
       }
+      if (mode) {
+        chart.data = {
+          labels: range_dates,
+          datasets: [
+            {
+              label: "Deaths",
+              defaultFontFamily: "Open Sans",
+              borderColor: "#FF4E34",
+              backgroundColor: "#FF4E3426",
+              fill: false,
+              data: deaths_data,
+              yAxisID: "y-axis-1",
+              pointBackgroundColor: "#1E1E21",
+              pointBorderWidth: 2,
+              borderWidth: 2,
+              pointHitRadius: 5,
+              pointRadius: 3,
+              pointHoverRadius: 12,
+              pointHoverBorderWidth: 3
+            },
+            {
+              label: "Active",
+              defaultFontFamily: "Open Sans",
+              borderColor: "#FFC831",
+              backgroundColor: "#FFC83126",
+              fill: false,
+              data: active_data,
+              yAxisID: "y-axis-1",
+              pointBackgroundColor: "#1E1E21",
+              pointBorderWidth: 2,
+              borderWidth: 2,
+              pointHitRadius: 5,
+              pointRadius: 3,
+              pointHoverRadius: 12,
+              pointHoverBorderWidth: 3
+            },
+            {
+              label: "Recovered",
+              defaultFontFamily: "Open Sans",
+              borderColor: "#40C0A5",
+              backgroundColor: "#40C0A526",
+              fill: false,
+              data: recovered_data,
+              yAxisID: "y-axis-1",
+              pointBackgroundColor: "#1E1E21",
+              pointBorderWidth: 2,
+              borderWidth: 2,
+              pointHitRadius: 5,
+              pointRadius: 3,
+              pointHoverRadius: 12,
+              pointHoverBorderWidth: 3
+            }
+          ]
+        };
+      } else {
+        chart.data = {
+          labels: range_dates,
+          datasets: [
+            {
+              label: "Growth %",
+              defaultFontFamily: "Open Sans",
+              borderColor: "#FFC831",
+              backgroundColor: "#FFC83126",
+              fill: false,
+              data: growth_data,
+              yAxisID: "y-axis-1",
+              pointBackgroundColor: "#1E1E21",
+              pointBorderWidth: 2,
+              borderWidth: 2,
+              pointHitRadius: 5,
+              pointRadius: 3,
+              pointHoverRadius: 12,
+              pointHoverBorderWidth: 3
+            }
+          ]
+        };
+      }
+      chart.update();
     }
-    if (mode) {
-      chart.data = {
-        labels: range_dates,
-        datasets: [
-          {
-            label: "Deaths",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#FF4E34",
-            backgroundColor: "#FF4E3426",
-            fill: false,
-            data: deaths_data,
-            yAxisID: "y-axis-1",
-            pointBackgroundColor: "#1E1E21",
-            pointBorderWidth: 2,
-            borderWidth: 2,
-            pointHitRadius: 5,
-            pointRadius: 3,
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          },
-          {
-            label: "Active",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#FFC831",
-            backgroundColor: "#FFC83126",
-            fill: false,
-            data: active_data,
-            yAxisID: "y-axis-1",
-            pointBackgroundColor: "#1E1E21",
-            pointBorderWidth: 2,
-            borderWidth: 2,
-            pointHitRadius: 5,
-            pointRadius: 3,
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          },
-          {
-            label: "Recovered",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#40C0A5",
-            backgroundColor: "#40C0A526",
-            fill: false,
-            data: recovered_data,
-            yAxisID: "y-axis-1",
-            pointBackgroundColor: "#1E1E21",
-            pointBorderWidth: 2,
-            borderWidth: 2,
-            pointHitRadius: 5,
-            pointRadius: 3,
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          }
-        ]
-      };
-    } else {
-      chart.data = {
-        labels: range_dates,
-        datasets: [
-          {
-            label: "Growth %",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#FFC831",
-            backgroundColor: "#FFC83126",
-            fill: false,
-            data: growth_data,
-            yAxisID: "y-axis-1",
-            pointBackgroundColor: "#1E1E21",
-            pointBorderWidth: 2,
-            borderWidth: 2,
-            pointHitRadius: 5,
-            pointRadius: 3,
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          }
-        ]
-      };
-    }
-    chart.update();
   }
 
   function initChart(country_data) {
