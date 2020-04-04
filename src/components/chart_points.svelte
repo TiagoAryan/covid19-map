@@ -1,6 +1,7 @@
 <script>
-  export let data;
   import { onMount } from "svelte";
+  import * as country_by_flag from "./country-by-flag.json";
+  export let data;
 
   let res, dates;
   var chart;
@@ -105,8 +106,8 @@
       "Italy",
       "France",
       "Spain",
-      "US",
-      "UK",
+      "United States",
+      "United Kingdom",
       "Portugal",
       "China"
     ];
@@ -193,7 +194,11 @@
               var innerHtml = "<thead>";
 
               innerHtml +=
-                "<tr><th><div class='flag' style='margin-right:8px'><img src='https://lh3.googleusercontent.com/proxy/a7eV6aOOY35eljYSidVTlvgrvQ8jkjDB8ihYOpTtvI-yvAyVBz_vmAaI1YcTpfbwwt63pCrZKAnDCg6_YYrn50r_NIezzROfR9Gv971MYr3gyP5-I5dM6erRlFWsncSa_r3embHq' alt='flag' /></div>" +
+                "<tr><th><div class='flag' style='margin-right:8px'><img src='" +
+                country_by_flag.default.filter(
+                  e => title_data[index] === e.country
+                )[0].flag_base64 +
+                "' alt='flag' /></div>" +
                 title_data[index] +
                 "</th></tr>";
 

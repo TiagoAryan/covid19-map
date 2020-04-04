@@ -8,16 +8,9 @@
   var chart;
   res = data;
 
-  $: country && fillChart(chart, res);
+  $: country && fillChart(chart, data);
   onMount(() => {
     initChart();
-  });
-
-  var dates = Object.keys(data.confirmed.locations[0].history).sort(function(
-    a,
-    b
-  ) {
-    return new Date(a) - new Date(b);
   });
 
   function sort(all) {
@@ -51,7 +44,7 @@
 
         var a_date = new Date(parts_a[2], parts_a[1] - 1, parts_a[0]);
         var b_date = new Date(parts_b[2], parts_b[1] - 1, parts_b[0]);
-        return new Date(parts_b) - new Date(a_date);
+        return new Date(b_date) - new Date(a_date);
       })
       .forEach(function(key) {
         all_order2[key] = all_order[key];
@@ -66,6 +59,17 @@
   // CHART
   //---------------
   function fillChart(chart, country_data) {
+    var dates = Object.keys(data.confirmed.locations[0].history).sort(function(
+      a,
+      b
+    ) {
+      return new Date(a) - new Date(b);
+    });
+
+    country_data.confirmed.locations = sort(country_data.confirmed.locations);
+    country_data.deaths.locations = sort(country_data.deaths.locations);
+    country_data.recovered.locations = sort(country_data.recovered.locations);
+
     var confirmed = country_data.confirmed.locations.filter(
       e => country === e.country_code
     )[0];
@@ -82,21 +86,12 @@
     var range_dates = [];
     let k = 0;
     for (var d of dates) {
-      let dt =
-        ("0" + new Date(d).getDate()).slice(-2) +
-        "/" +
-        ("0" + (new Date(d).getMonth() + 1)).slice(-2) +
-        "/" +
-        new Date(d)
-          .getFullYear()
-          .toString()
-          .substr(-2);
-      if (confirmed.history[dt] != 0) {
-        range_dates.push(dt);
-        deaths_data.push(deaths.history[dt]);
-        recovered_data.push(recovered.history[dt]);
+      if (confirmed.history[d] != 0) {
+        range_dates.push(d);
+        deaths_data.push(deaths.history[d]);
+        recovered_data.push(recovered.history[d]);
         active_data.push(
-          confirmed.history[dt] - deaths.history[dt] - recovered.history[dt]
+          confirmed.history[d] - deaths.history[d] - recovered.history[d]
         );
       }
     }
