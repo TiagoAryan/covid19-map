@@ -1,11 +1,24 @@
 <script>
+  import { onMount } from "svelte";
+
   export let data;
   export let country;
 
   let res;
+  var chart;
   res = data;
 
-  $: country && initChart(res);
+  $: country && fillChart(chart, res);
+  onMount(() => {
+    initChart();
+  });
+
+  var dates = Object.keys(data.confirmed.locations[0].history).sort(function(
+    a,
+    b
+  ) {
+    return new Date(a) - new Date(b);
+  });
 
   function sort(all) {
     let all_order = [];
@@ -38,7 +51,7 @@
 
         var a_date = new Date(parts_a[2], parts_a[1] - 1, parts_a[0]);
         var b_date = new Date(parts_b[2], parts_b[1] - 1, parts_b[0]);
-        return new Date(b_date) - new Date(a_date);
+        return new Date(parts_b) - new Date(a_date);
       })
       .forEach(function(key) {
         all_order2[key] = all_order[key];
@@ -49,18 +62,10 @@
     );
   }
 
-  function initChart(country_data) {
-    let dates = Object.keys(data.confirmed.locations[0].history).sort(function(
-      a,
-      b
-    ) {
-      return new Date(a) - new Date(b);
-    });
-
-    country_data.confirmed.locations = sort(country_data.confirmed.locations);
-    country_data.deaths.locations = sort(country_data.deaths.locations);
-    country_data.recovered.locations = sort(country_data.recovered.locations);
-
+  //---------------
+  // CHART
+  //---------------
+  function fillChart(chart, country_data) {
     var confirmed = country_data.confirmed.locations.filter(
       e => country === e.country_code
     )[0];
@@ -74,75 +79,99 @@
     var active_data = [];
     var recovered_data = [];
     var deaths_data = [];
+    var range_dates = [];
     let k = 0;
     for (var d of dates) {
-      deaths_data.push(deaths ? deaths.history[d] : 0);
-      recovered_data.push(recovered ? recovered.history[d] : 0);
-      active_data.push(
-        confirmed
-          ? confirmed.history[d]
-          : 0 - deaths
-          ? deaths.history[d]
-          : 0 - recovered
-          ? recovered.history[d]
-          : 0
-      );
+      let dt =
+        ("0" + new Date(d).getDate()).slice(-2) +
+        "/" +
+        ("0" + (new Date(d).getMonth() + 1)).slice(-2) +
+        "/" +
+        new Date(d)
+          .getFullYear()
+          .toString()
+          .substr(-2);
+      if (confirmed.history[dt] != 0) {
+        range_dates.push(dt);
+        deaths_data.push(deaths.history[dt]);
+        recovered_data.push(recovered.history[dt]);
+        active_data.push(
+          confirmed.history[dt] - deaths.history[dt] - recovered.history[dt]
+        );
+      }
     }
 
+    chart.data = {
+      labels: range_dates,
+      datasets: [
+        {
+          label: "Deaths",
+          defaultFontFamily: "Open Sans",
+          borderColor: "#FF4E34",
+          backgroundColor: "#FF4E3426",
+          fill: false,
+          data: deaths_data,
+          yAxisID: "y-axis-1",
+          pointBackgroundColor: "#1E1E21",
+          pointBorderWidth: 2,
+          borderWidth: 2,
+          pointHitRadius: 5,
+          pointRadius: 3,
+          pointHoverRadius: 12,
+          pointHoverBorderWidth: 3
+        },
+        {
+          label: "Active",
+          defaultFontFamily: "Open Sans",
+          borderColor: "#FFC831",
+          backgroundColor: "#FFC83126",
+          fill: false,
+          data: active_data,
+          yAxisID: "y-axis-1",
+          pointBackgroundColor: "#1E1E21",
+          pointBorderWidth: 2,
+          borderWidth: 2,
+          pointHitRadius: 5,
+          pointRadius: 3,
+          pointHoverRadius: 12,
+          pointHoverBorderWidth: 3
+        },
+        {
+          label: "Recovered",
+          defaultFontFamily: "Open Sans",
+          borderColor: "#40C0A5",
+          backgroundColor: "#40C0A526",
+          fill: false,
+          data: recovered_data,
+          yAxisID: "y-axis-1",
+          pointBackgroundColor: "#1E1E21",
+          pointBorderWidth: 2,
+          borderWidth: 2,
+          pointHitRadius: 5,
+          pointRadius: 3,
+          pointHoverRadius: 12,
+          pointHoverBorderWidth: 3
+        }
+      ]
+    };
+    chart.update();
+  }
+
+  function initChart(country_data) {
     var ctx = document.getElementById("myChart").getContext("2d");
-    var myLineChart = new Chart(ctx, {
+    chart = new Chart(ctx, {
       type: "line",
       data: {
-        labels: dates,
-        datasets: [
-          {
-            label: "Deaths",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#FF4E34",
-            backgroundColor: "#FF4E3426",
-            fill: false,
-            data: deaths_data,
-            yAxisID: "y-axis-1",
-            pointBorderWidth: 3,
-            pointHitRadius: 6,
-            pointRadius: 4,
-            pointBackgroundColor: "#1E1E21",
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          },
-          {
-            label: "Active",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#FFC831",
-            backgroundColor: "#FFC83126",
-            fill: false,
-            data: active_data,
-            yAxisID: "y-axis-1",
-            pointBorderWidth: 3,
-            pointHitRadius: 6,
-            pointRadius: 4,
-            pointBackgroundColor: "#1E1E21",
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          },
-          {
-            label: "Recovered",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#40C0A5",
-            backgroundColor: "#40C0A526",
-            fill: false,
-            data: recovered_data,
-            yAxisID: "y-axis-1",
-            pointBorderWidth: 3,
-            pointHitRadius: 6,
-            pointRadius: 4,
-            pointBackgroundColor: "#1E1E21",
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          }
-        ]
+        labels: [],
+        datasets: []
       },
       options: {
+        legend: {
+          labels: {
+            usePointStyle: true
+          }
+        },
+        aspectRatio: 2.4,
         responsive: true,
         hoverMode: "index",
         stacked: false,

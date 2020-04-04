@@ -1,13 +1,16 @@
 <script>
   export let data;
-  export let country;
+  import { onMount } from "svelte";
 
   let res, dates;
   var chart;
   var c_infected = [];
   var c_healthy = [];
+  var myScaterChart;
 
-  $: country && initChart(data);
+  onMount(async () => {
+    initChartPoint();
+  });
 
   res = data;
 
@@ -65,123 +68,62 @@
   //---------------
   // CHART
   //---------------
-  function updateConfigAsNewObject(chart) {
-    chart.data = {
-      labels: [
-        "19 Mar",
-        "20 Mar",
-        "21 Mar",
-        "22 Mar",
-        "23 Mar",
-        "24 Mar",
-        "25 Mar",
-        "19 Mar",
-        "20 Mar",
-        "21 Mar",
-        "22 Mar",
-        "23 Mar",
-        "24 Mar",
-        "25 Mar"
-      ],
-      datasets: [
-        {
-          label: "Deaths",
-          defaultFontFamily: "Open Sans",
-          borderColor: "#FF4E34",
-          backgroundColor: "#FF4E3426",
-          fill: false,
-          data: [0, 1, 5, 7, 12, 18, 20, 31, 38, 39, 59, 60, 90, 102],
-          yAxisID: "y-axis-1",
-          pointBorderWidth: 3,
-          pointHitRadius: 8,
-          pointRadius: 6,
-          pointBackgroundColor: "#1E1E21",
-          pointHoverRadius: 12,
-          pointHoverBorderWidth: 3
-        }
-      ]
-    };
-    chart.update();
-  }
 
-  function initChart(country_data) {
-    var confirmed = country_data.confirmed.locations.filter(
-      e => country === e.country_code
-    )[0];
-    var recovered = country_data.recovered.locations.filter(
-      e => country === e.country_code
-    )[0];
-    var deaths = country_data.deaths.locations.filter(
-      e => country === e.country_code
-    )[0];
+  function initChartPoint() {
+    var fatality_data = [
+      {
+        x: 40,
+        y: 2.5
+      },
+      {
+        x: 45.2,
+        y: 1.8
+      },
+      {
+        x: 46.2,
+        y: 1.92
+      },
+      {
+        x: 66.2,
+        y: 2.92
+      },
+      {
+        x: 42.2,
+        y: 1.92
+      },
+      {
+        x: 45.2,
+        y: 1.42
+      },
+      {
+        x: 46.2,
+        y: 1.62
+      }
+    ];
+    var label_data = ["it", "fr", "ES", "US", "UK", "pt", "CH"];
+    var title_data = [
+      "Italy",
+      "France",
+      "Spain",
+      "US",
+      "UK",
+      "Portugal",
+      "China"
+    ];
 
-    var active_data = [];
-    var recovered_data = [];
-    var deaths_data = [];
-    let k = 0;
-    for (var d of dates) {
-      let dt =
-        ("0" + new Date(d).getDate()).slice(-2) +
-        "/" +
-        ("0" + (new Date(d).getMonth() + 1)).slice(-2) +
-        "/" +
-        new Date(d)
-          .getFullYear()
-          .toString()
-          .substr(-2);
-      deaths_data.push(deaths.history[dt]);
-      recovered_data.push(recovered.history[dt]);
-      active_data.push(
-        confirmed.history[dt] - deaths.history[dt] - recovered.history[dt]
-      );
-    }
-
-    var ctx = document.getElementById("myChart").getContext("2d");
-    var myLineChart = new Chart(ctx, {
-      type: "line",
+    var ctx = document.getElementById("myChartPoint").getContext("2d");
+    myScaterChart = new Chart(ctx, {
+      type: "scatter",
       data: {
-        labels: dates,
+        labels: [30, 40, 50, 60, 70],
         datasets: [
           {
-            label: "Deaths",
-            defaultFontFamily: "Open Sans",
+            label: "Hight Fatality for Average Age",
             borderColor: "#FF4E34",
             backgroundColor: "#FF4E3426",
-            fill: false,
-            data: deaths_data,
-            yAxisID: "y-axis-1",
-            pointBorderWidth: 3,
-            pointHitRadius: 6,
-            pointRadius: 4,
-            pointBackgroundColor: "#1E1E21",
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          },
-          {
-            label: "Active",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#FFC831",
-            backgroundColor: "#FFC83126",
-            fill: false,
-            data: active_data,
-            yAxisID: "y-axis-1",
-            pointBorderWidth: 3,
-            pointHitRadius: 6,
-            pointRadius: 4,
-            pointBackgroundColor: "#1E1E21",
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          },
-          {
-            label: "Recovered",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#40C0A5",
-            backgroundColor: "#40C0A526",
-            fill: false,
-            data: recovered_data,
-            yAxisID: "y-axis-1",
-            pointBorderWidth: 3,
-            pointHitRadius: 6,
+            data: fatality_data,
+            pointBorderWidth: 2,
+            pointHitRadius: 4,
             pointRadius: 4,
             pointBackgroundColor: "#1E1E21",
             pointHoverRadius: 12,
@@ -190,6 +132,13 @@
         ]
       },
       options: {
+        legend: {
+          labels: {
+            usePointStyle: true
+          }
+        },
+        aspectRatio: 2.4,
+
         responsive: true,
         hoverMode: "index",
         stacked: false,
@@ -198,6 +147,90 @@
         title: {
           display: false,
           text: "Chart.js Line Chart - Multi Axis"
+        },
+        tooltips: {
+          enabled: false,
+          xPadding: 8,
+          yPadding: 8,
+          backgroundColor: "rgba(0,0,0,0.8)",
+
+          custom: function(tooltipModel) {
+            var tooltipEl = document.getElementById("chartjs-tooltip");
+            // Create element on first render
+            if (!tooltipEl) {
+              tooltipEl = document.createElement("div");
+              tooltipEl.id = "chartjs-tooltip";
+              tooltipEl.innerHTML = "<table></table>";
+              document.body.appendChild(tooltipEl);
+            }
+
+            // Hide if no tooltip
+            if (tooltipModel.opacity === 0) {
+              tooltipEl.style.opacity = 0;
+              return;
+            }
+            // Set caret Position
+            tooltipEl.classList.remove("above", "below", "no-transform");
+            if (tooltipModel.yAlign) {
+              tooltipEl.classList.add(tooltipModel.yAlign);
+            } else {
+              tooltipEl.classList.add("no-transform");
+            }
+            function getBody(bodyItem) {
+              return bodyItem.lines;
+            }
+
+            // Set Text
+            if (tooltipModel.body) {
+              var index = tooltipModel.dataPoints[0].index;
+              var titleLines = tooltipModel.title || [];
+              var bodyLines = tooltipModel.body.map(getBody);
+              var fatality = tooltipModel.dataPoints[0].value;
+              var averageAge = tooltipModel.dataPoints[0].label;
+
+              console.log(tooltipModel);
+
+              var innerHtml = "<thead>";
+
+              innerHtml +=
+                "<tr><th><div class='flag' style='margin-right:8px'><img src='https://lh3.googleusercontent.com/proxy/a7eV6aOOY35eljYSidVTlvgrvQ8jkjDB8ihYOpTtvI-yvAyVBz_vmAaI1YcTpfbwwt63pCrZKAnDCg6_YYrn50r_NIezzROfR9Gv971MYr3gyP5-I5dM6erRlFWsncSa_r3embHq' alt='flag' /></div>" +
+                title_data[index] +
+                "</th></tr>";
+
+              innerHtml += "</thead><tbody>";
+
+              innerHtml +=
+                "<tr><th> <div style='width:80px; display:inline-block; opacity:0.4; font-weight:300'>Average Age</div> <div style='display:inline-block; width:40px; text-align:right; font-size:14px'>" +
+                averageAge;
+              "</div></th></tr>";
+              innerHtml +=
+                "<tr><th> <div style='width:80px; display:inline-block; opacity:0.4; font-weight:300'>Fatality Rate</div> <div style='display:inline-block; width:40px; text-align:right; font-size:14px'>" +
+                fatality;
+              "</div></th></tr>";
+
+              innerHtml += "</tbody>";
+
+              var tableRoot = tooltipEl.querySelector("table");
+              tableRoot.innerHTML = innerHtml;
+            }
+
+            // `this` will be the overall tooltip
+            var position = this._chart.canvas.getBoundingClientRect();
+
+            // Display, position, and set styles for font
+            tooltipEl.style.opacity = 1;
+            tooltipEl.style.position = "absolute";
+            tooltipEl.style.left =
+              position.left + window.pageXOffset + tooltipModel.caretX + "px";
+            tooltipEl.style.top =
+              position.top + window.pageYOffset + tooltipModel.caretY + "px";
+            tooltipEl.style.fontFamily = tooltipModel._bodyFontFamily;
+            tooltipEl.style.fontSize = tooltipModel.bodyFontSize + "px";
+            tooltipEl.style.fontStyle = tooltipModel._bodyFontStyle;
+            tooltipEl.style.padding =
+              tooltipModel.yPadding + "px " + tooltipModel.xPadding + "px";
+            tooltipEl.style.pointerEvents = "none";
+          }
         },
         scales: {
           yAxes: [
@@ -222,12 +255,6 @@
                 labels: {
                   boxWidth: 20
                 }
-              },
-              tooltips: {
-                titleFontFamily: "Open Sans",
-                titleFontSize: 15,
-                bodyFontFamily: "Open Sans",
-                bodyFontSize: 13
               }
             }
           ]

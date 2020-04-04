@@ -14,11 +14,12 @@
   .container_details_box {
     width: calc(100vw - 18px);
     top: 100px;
-    height: calc(100vh - 112px);
+    height: calc(100vh - 24px);
 
     left: 12px;
+    top: 12px;
     display: inline;
-    padding-bottom: 30px;
+    padding-bottom: 0px;
     margin-right: 0;
     position: absolute;
     transform: translateX(0px);
@@ -34,7 +35,7 @@
   }
   .container_details {
     width: calc(100vw - 18px);
-    height: calc(100vh - 112px);
+    height: calc(100vh - 24px);
     position: relative;
     display: block;
   }
@@ -54,15 +55,21 @@
 <div class="container_details_box hidden">
   <div class="container_details">
     <div class="box-half">
-      <Preview {data} {country} {name} />
       {#if !country}
+        <Preview {data} {country} {name} />
+
         <Countries {data} {bounds} />
       {/if}
 
     </div>
     <div class="box-half box-half-right">
+      {#if country}
+        <Preview {data} {country} {name} />
+      {/if}
       <Chart {data} {country} />
-      <ChartPoints {data} {country} />
+      {#if !country}
+        <ChartPoints {data} {country} />
+      {/if}
 
     </div>
   </div>
