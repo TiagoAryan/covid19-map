@@ -64,7 +64,7 @@
   }
   .container-body {
     height: calc(100% - 40px);
-    overflow: scroll;
+    overflow-y: scroll;
   }
 </style>
 

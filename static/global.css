@@ -28,6 +28,20 @@ h5 {
   vertical-align: top;
   line-height: 1.6rem;
 }
+
+*::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+}
+.badge-light {
+  color: #f8f9fa;
+  background-color: #f8f9fa1f;
+  margin-right: 8px;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
 div {
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box; /* Firefox, other Gecko */
