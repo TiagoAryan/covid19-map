@@ -29,6 +29,11 @@
     -o-transition-duration: 0.4s;
     transition-duration: 0.4s;
   }
+  .container_details_box-half {
+    left: auto;
+    width: calc(50vw - 18px);
+    right: 12px;
+  }
   .container_details_box.hidden {
     transform: translateY(100vh);
     opacity: 0;
@@ -52,16 +57,17 @@
   }
 </style>
 
-<div class="container_details_box hidden">
+<div
+  class="container_details_box {country ? 'container_details_box-half' : ''}
+  hidden">
   <div class="container_details">
-    <div class="box-half">
-      {#if !country}
+    {#if !country}
+      <div class="box-half">
         <Preview {data} {country} {name} />
-
         <Countries {data} {bounds} />
-      {/if}
+      </div>
+    {/if}
 
-    </div>
     <div class="box-half box-half-right">
       {#if country}
         <Preview {data} {country} {name} />
@@ -70,7 +76,6 @@
       {#if !country}
         <ChartPoints {data} {country} />
       {/if}
-
     </div>
   </div>
 </div>

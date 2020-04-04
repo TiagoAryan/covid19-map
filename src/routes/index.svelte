@@ -24,6 +24,7 @@
   let showdate = "00/00/00";
   let bounds;
   let show = "";
+  let show_details = "hidden";
   let inPlay = true;
 
   function play() {
@@ -127,7 +128,6 @@
               if (
                 geo_infec_lines[c_infec_lines.indexOf(country_name)] !== null
               ) {
-
                 var from =
                   geo_infec_lines[c_infec_lines.indexOf(country_name)][0];
                 var to =
@@ -282,6 +282,7 @@
 
     //Listener function taking an event object
     function onMapClick(e) {
+      show = "";
       var click_pos = L.latLng(e.latlng.lat, e.latlng.lng);
       var bound = L.latLngBounds(L.geoJson(country).getBounds());
       var circleOptions = {
@@ -428,7 +429,7 @@
     }
     return inside;
   }
-  
+
   function showList(scope) {
     if (!show) show = scope;
     else if (show != scope) show = scope;
@@ -708,8 +709,6 @@
     data={res}
     {bounds}
     country={country_clicked}
-    name={country_name_clicked} />
+    name={country_name_clicked}
+    {show_details} />
 {/if}
-<button id="replay" style="position:fixed; top 12px; right:200px; z-index:1000">
-  Replay
-</button>

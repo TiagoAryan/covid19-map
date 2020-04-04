@@ -1,6 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import * as country_by_flag from "./country-by-flag.json";
+  import * as averagecountryAge from "./country-average-age.json";
+
   export let data;
 
   let res, dates;
@@ -73,32 +75,32 @@
   function initChartPoint() {
     var fatality_data = [
       {
-        x: 40,
-        y: 2.5
+        x: 45.5,
+        y: 12.3
       },
       {
-        x: 45.2,
-        y: 1.8
+        x: 41.4,
+        y: 10.0
       },
       {
-        x: 46.2,
-        y: 1.92
+        x: 42.7,
+        y: 9.39
       },
       {
-        x: 66.2,
-        y: 2.92
+        x: 38.1,
+        y: 1.08
+      },
+      {
+        x: 40.5,
+        y: 9.33
       },
       {
         x: 42.2,
-        y: 1.92
+        y: 2.4
       },
       {
-        x: 45.2,
-        y: 1.42
-      },
-      {
-        x: 46.2,
-        y: 1.62
+        x: 37.4,
+        y: 4.03
       }
     ];
     var label_data = ["it", "fr", "ES", "US", "UK", "pt", "CH"];
@@ -116,7 +118,7 @@
     myScaterChart = new Chart(ctx, {
       type: "scatter",
       data: {
-        labels: [30, 40, 50, 60, 70],
+        labels: [20, 30, 40, 50],
         datasets: [
           {
             label: "Hight Fatality for Average Age",
@@ -139,7 +141,6 @@
           }
         },
         aspectRatio: 2.4,
-
         responsive: true,
         hoverMode: "index",
         stacked: false,

@@ -167,6 +167,13 @@ button,
   -o-transition-duration: 0.2s;
   transition-duration: 0.2s;
 }
+.button p,
+button p {
+  margin: 0px;
+  font-weight: 400;
+  font-size: 0.75rem;
+  display: inline-block;
+}
 button:hover,
 .button:hover {
   background-color: #708fff;
