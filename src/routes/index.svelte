@@ -591,7 +591,7 @@
     // Start the animation.
     animate(counter);
 
-    document.getElementById("replay").addEventListener("click", function() {
+    /*  document.getElementById("replay").addEventListener("click", function() {
       // Set the coordinates of the original point back to origin
       point.features[0].geometry.coordinates = from;
       route_draw.features[0].geometry.coordinates = [from];
@@ -605,7 +605,7 @@
 
       // Restart the animation.
       animate(counter);
-    });
+    }); */
 
     function animate() {
       // Update point geometry to a new position based on counter denoting
