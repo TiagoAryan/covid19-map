@@ -5,11 +5,17 @@
   export let country;
 
   let res;
-  var chart;
+  let chart;
   res = data;
+  let chart_mode = true;
+  let canvasElement;
+  let box_title = "Infected Count";
+  let btn_text = "Growth Evolution";
+  let btn_icon = "chart-line";
 
-  $: country, fillChart(chart, data);
-  onMount(() => {
+  $: country, fillChart(chart, data, chart_mode);
+
+  onMount(async () => {
     initChart();
     console.log(country);
   });
@@ -59,11 +65,7 @@
   //---------------
   // CHART
   //---------------
-  function fillChart(chart, country_data) {
-    var active_data = [];
-    var recovered_data = [];
-    var deaths_data = [];
-    var range_dates = [];
+  function fillChart(chart, country_data, mode) {
     var dates = Object.keys(data.confirmed.locations[0].history).sort(function(
       a,
       b
@@ -71,11 +73,11 @@
       return new Date(a) - new Date(b);
     });
 
-    country_data.confirmed.locations = sort(country_data.confirmed.locations);
-    country_data.deaths.locations = sort(country_data.deaths.locations);
-    country_data.recovered.locations = sort(country_data.recovered.locations);
-
     if (country) {
+      country_data.confirmed.locations = sort(country_data.confirmed.locations);
+      country_data.deaths.locations = sort(country_data.deaths.locations);
+      country_data.recovered.locations = sort(country_data.recovered.locations);
+
       var confirmed = country_data.confirmed.locations.filter(
         e => country === e.country_code
       )[0];
@@ -86,6 +88,15 @@
         e => country === e.country_code
       )[0];
 
+      var active_data = [];
+      var recovered_data = [];
+      var deaths_data = [];
+      var range_dates = [];
+
+      var growth_data = [];
+      let k = 0;
+      let count;
+      var previous_d = 0;
       for (var d of dates) {
         if (confirmed.history[d] != 0) {
           range_dates.push(d);
@@ -94,68 +105,102 @@
           active_data.push(
             confirmed.history[d] - deaths.history[d] - recovered.history[d]
           );
+          if (k > 0) {
+            let growth = parseInt(
+              ((confirmed.history[d] - confirmed.history[previous_d]) * 100) /
+                confirmed.history[previous_d]
+            );
+            growth_data.push(growth);
+          } else {
+            growth_data.push(0);
+          }
+          previous_d = d;
+          k++;
         }
       }
-
-      chart.data = {
-        labels: range_dates,
-        datasets: [
-          {
-            label: "Deaths",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#FF4E34",
-            backgroundColor: "#FF4E3426",
-            fill: false,
-            data: deaths_data,
-            yAxisID: "y-axis-1",
-            pointBackgroundColor: "#1E1E21",
-            pointBorderWidth: 2,
-            borderWidth: 2,
-            pointHitRadius: 5,
-            pointRadius: 3,
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          },
-          {
-            label: "Active",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#FFC831",
-            backgroundColor: "#FFC83126",
-            fill: false,
-            data: active_data,
-            yAxisID: "y-axis-1",
-            pointBackgroundColor: "#1E1E21",
-            pointBorderWidth: 2,
-            borderWidth: 2,
-            pointHitRadius: 5,
-            pointRadius: 3,
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          },
-          {
-            label: "Recovered",
-            defaultFontFamily: "Open Sans",
-            borderColor: "#40C0A5",
-            backgroundColor: "#40C0A526",
-            fill: false,
-            data: recovered_data,
-            yAxisID: "y-axis-1",
-            pointBackgroundColor: "#1E1E21",
-            pointBorderWidth: 2,
-            borderWidth: 2,
-            pointHitRadius: 5,
-            pointRadius: 3,
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          }
-        ]
-      };
+      if (mode) {
+        chart.data = {
+          labels: range_dates,
+          datasets: [
+            {
+              label: "Deaths",
+              defaultFontFamily: "Open Sans",
+              borderColor: "#FF4E34",
+              backgroundColor: "#FF4E3426",
+              fill: false,
+              data: deaths_data,
+              yAxisID: "y-axis-1",
+              pointBackgroundColor: "#1E1E21",
+              pointBorderWidth: 2,
+              borderWidth: 2,
+              pointHitRadius: 5,
+              pointRadius: 3,
+              pointHoverRadius: 12,
+              pointHoverBorderWidth: 3
+            },
+            {
+              label: "Active",
+              defaultFontFamily: "Open Sans",
+              borderColor: "#FFC831",
+              backgroundColor: "#FFC83126",
+              fill: false,
+              data: active_data,
+              yAxisID: "y-axis-1",
+              pointBackgroundColor: "#1E1E21",
+              pointBorderWidth: 2,
+              borderWidth: 2,
+              pointHitRadius: 5,
+              pointRadius: 3,
+              pointHoverRadius: 12,
+              pointHoverBorderWidth: 3
+            },
+            {
+              label: "Recovered",
+              defaultFontFamily: "Open Sans",
+              borderColor: "#40C0A5",
+              backgroundColor: "#40C0A526",
+              fill: false,
+              data: recovered_data,
+              yAxisID: "y-axis-1",
+              pointBackgroundColor: "#1E1E21",
+              pointBorderWidth: 2,
+              borderWidth: 2,
+              pointHitRadius: 5,
+              pointRadius: 3,
+              pointHoverRadius: 12,
+              pointHoverBorderWidth: 3
+            }
+          ]
+        };
+      } else {
+        chart.data = {
+          labels: range_dates,
+          datasets: [
+            {
+              label: "Growth %",
+              defaultFontFamily: "Open Sans",
+              borderColor: "#FFC831",
+              backgroundColor: "#FFC83126",
+              fill: false,
+              data: growth_data,
+              yAxisID: "y-axis-1",
+              pointBackgroundColor: "#1E1E21",
+              pointBorderWidth: 2,
+              borderWidth: 2,
+              pointHitRadius: 5,
+              pointRadius: 3,
+              pointHoverRadius: 12,
+              pointHoverBorderWidth: 3
+            }
+          ]
+        };
+      }
       chart.update();
     }
   }
 
-  function initChart() {
-    var ctx = document.getElementById("myChart").getContext("2d");
+  function initChart(country_data) {
+    var ctx = canvasElement.getContext("2d");
     chart = new Chart(ctx, {
       type: "line",
       data: {
@@ -168,6 +213,9 @@
             usePointStyle: true
           }
         },
+        tooltips: {
+          mode: "index"
+        },
         aspectRatio: 2.4,
         responsive: true,
         hoverMode: "index",
@@ -178,6 +226,7 @@
           display: false,
           text: "Chart.js Line Chart - Multi Axis"
         },
+
         scales: {
           yAxes: [
             {
@@ -222,6 +271,23 @@
 
     return dia + "/" + ("0" + mes).slice(-2) + "/" + ano;
   }
+
+  function changeChart(e) {
+    if (chart_mode) {
+      chart_mode = false;
+      fillChart(chart, data, false);
+      btn_text = "Infected Count";
+      box_title = "Growth Evolution";
+      btn_icon = "user-friends";
+    } else {
+      chart_mode = true;
+      fillChart(chart, data, true);
+      box_title = "Infected Count";
+      btn_text = "Growth Evolution";
+      btn_icon = "chart-line";
+    }
+    //fillChart(chart, data);
+  }
 </script>
 
 <style>
@@ -245,10 +311,14 @@
 
     <div class="container-header-contents">
 
-      <h5 class="container-title">Infected Evolution</h5>
+      <h5 class="container-title">{box_title}</h5>
+      <div style="float:right" class="button" on:click={() => changeChart()}>
+        <i class="fas fa-{btn_icon}" />
+        <p>{btn_text}</p>
+      </div>
     </div>
   </div>
   <div class="container-body">
-    <canvas id="myChart" />
+    <canvas id="myChart" bind:this={canvasElement} />
   </div>
 </div>

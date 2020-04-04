@@ -44,7 +44,7 @@
     myScaterChart = new Chart(ctx, {
       type: "scatter",
       data: {
-        labels: [30, 40, 50, 60, 70],
+        labels: [20, 30, 40, 50],
         datasets: [
           {
             label: "Hight Fatality for Average Age",
@@ -67,7 +67,6 @@
           }
         },
         aspectRatio: 2.4,
-
         responsive: true,
         hoverMode: "index",
         stacked: false,

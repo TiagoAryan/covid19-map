@@ -24,6 +24,7 @@
   let showdate = "00/00/00";
   let bounds;
   let show = "";
+  let show_details = "hidden";
   let inPlay = true;
 
   function play() {
@@ -281,6 +282,7 @@
 
     //Listener function taking an event object
     function onMapClick(e) {
+      show = "";
       var click_pos = L.latLng(e.latlng.lat, e.latlng.lng);
       var bound = L.latLngBounds(L.geoJson(country).getBounds());
       var circleOptions = {
@@ -699,8 +701,6 @@
     data={res}
     {bounds}
     country={country_clicked}
-    name={country_name_clicked} />
+    name={country_name_clicked}
+    {show_details} />
 {/if}
-<button id="replay" style="position:fixed; top 12px; right:200px; z-index:1000">
-  Replay
-</button>
