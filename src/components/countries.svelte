@@ -1,6 +1,6 @@
 <script>
   import getCountryISO2 from "country-iso-3-to-2";
-  import * as country_by_flag from "./country-by-flag.json";
+  import { flag } from "misc";
 
   export let data;
   export let bounds;
@@ -85,9 +85,7 @@
           {#each c_infected as item, i}
             <li>
               <div class="flag">
-                <img
-                  src={country_by_flag.default.filter(e => item[0] === e.country)[0].flag_base64}
-                  alt="flag" />
+                <img src={flag(item[0])} alt="flag" />
               </div>
               <p class="list-name">{item[0]}</p>
             </li>
@@ -108,9 +106,7 @@
           {#each c_healthy as item, i}
             <li>
               <div class="flag">
-                <img
-                  src={country_by_flag.default.filter(e => item[0] === e.country)[0].flag_base64}
-                  alt="flag" />
+                <img src={flag(item[0])} alt="flag" />
               </div>
               <p class="list-name">{item[0]}</p>
             </li>

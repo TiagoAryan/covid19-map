@@ -1,13 +1,15 @@
 <script>
   import { onMount } from "svelte";
-  import * as country_by_flag from "./country-by-flag.json";
+  import * as avgage from "./avgage.json";
+  import { flag } from "misc";
+
   export let data;
 
   let res, dates;
   var chart;
-  var c_infected = [];
-  var c_healthy = [];
   var myScaterChart;
+  var fatality_data = [];
+  var title_data = [];
 
   onMount(async () => {
     initChartPoint();
@@ -15,55 +17,22 @@
 
   res = data;
 
-  dates = Object.keys(res.confirmed.locations[0].history).sort(function(a, b) {
-    return new Date(a) - new Date(b);
+  let all = data.confirmed.locations.sort(function(a, b) {
+    return b.latest - a.latest;
   });
 
-  res.confirmed.locations = sort(res.confirmed.locations);
-  res.deaths.locations = sort(res.deaths.locations);
-  res.recovered.locations = sort(res.recovered.locations);
-
-  function sort(all) {
-    let all_order = [];
-    let all_order2 = [];
-
-    all.reduce(function(res, value) {
-      if (!res[value.country]) {
-        res[value.country] = {
-          country: value.country,
-          country_code: value.country_code,
-          latest: 0,
-          history: {}
-        };
-        all_order.push(res[value.country]);
-      }
-      res[value.country].latest += value.latest;
-      let H_total = res[value.country].history;
-
-      for (var [key, h] of Object.entries(value.history))
-        H_total[FormataStringData(key)] =
-          (H_total[FormataStringData(key)] || 0) + value.history[key];
-
-      res[value.country].history = H_total;
-      return res;
-    }, {});
-
-    Object.keys(all_order)
-      .sort(function(a, b) {
-        var parts_a = a.split("/");
-        var parts_b = b.split("/");
-
-        var a_date = new Date(parts_a[2], parts_a[1] - 1, parts_a[0]);
-        var b_date = new Date(parts_b[2], parts_b[1] - 1, parts_b[0]);
-        return new Date(parts_b) - new Date(a_date);
-      })
-      .forEach(function(key) {
-        all_order2[key] = all_order[key];
-      });
-
-    return all_order2.sort((a, b) =>
-      a.country > b.country ? 1 : b.country > a.country ? -1 : 0
-    );
+  for (var country of all.slice(0, 10)) {
+    fatality_data.push({
+      x: avgage.default[country.country],
+      y: (
+        (data.deaths.locations.filter(
+          e => country.country_code === e.country_code
+        )[0].latest *
+          100) /
+        country.latest
+      ).toFixed(2)
+    });
+    title_data.push(country.country);
   }
 
   //---------------
@@ -71,47 +40,6 @@
   //---------------
 
   function initChartPoint() {
-    var fatality_data = [
-      {
-        x: 40,
-        y: 2.5
-      },
-      {
-        x: 45.2,
-        y: 1.8
-      },
-      {
-        x: 46.2,
-        y: 1.92
-      },
-      {
-        x: 66.2,
-        y: 2.92
-      },
-      {
-        x: 42.2,
-        y: 1.92
-      },
-      {
-        x: 45.2,
-        y: 1.42
-      },
-      {
-        x: 46.2,
-        y: 1.62
-      }
-    ];
-    var label_data = ["it", "fr", "ES", "US", "UK", "pt", "CH"];
-    var title_data = [
-      "Italy",
-      "France",
-      "Spain",
-      "United States",
-      "United Kingdom",
-      "Portugal",
-      "China"
-    ];
-
     var ctx = document.getElementById("myChartPoint").getContext("2d");
     myScaterChart = new Chart(ctx, {
       type: "scatter",
@@ -189,15 +117,11 @@
               var fatality = tooltipModel.dataPoints[0].value;
               var averageAge = tooltipModel.dataPoints[0].label;
 
-              console.log(tooltipModel);
-
               var innerHtml = "<thead>";
 
               innerHtml +=
                 "<tr><th><div class='flag' style='margin-right:8px'><img src='" +
-                country_by_flag.default.filter(
-                  e => title_data[index] === e.country
-                )[0].flag_base64 +
+                flag(title_data[index]) +
                 "' alt='flag' /></div>" +
                 title_data[index] +
                 "</th></tr>";

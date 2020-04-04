@@ -127,7 +127,6 @@
               if (
                 geo_infec_lines[c_infec_lines.indexOf(country_name)] !== null
               ) {
-
                 var from =
                   geo_infec_lines[c_infec_lines.indexOf(country_name)][0];
                 var to =
@@ -428,7 +427,7 @@
     }
     return inside;
   }
-  
+
   function showList(scope) {
     if (!show) show = scope;
     else if (show != scope) show = scope;
@@ -484,14 +483,6 @@
       }
     }
   }
-
-  /*
-
-    var from = [-8.860741408529293, 39.37847862713318];
-    var to = [13.52702270571615, 42.01022099769696];
-
-            drawline(from, to);
-  */
 
   function drawline(k, from, to) {
     var speedFactor = 30; // number of frames per longitude degree
@@ -579,8 +570,8 @@
       source: "route_draw_" + k,
       type: "line",
       paint: {
-        "line-width": 2,
-        "line-color": "#FFC831"
+        "line-width": 1,
+        "line-color": "#5172ee"
       }
     });
 
@@ -664,7 +655,7 @@
   <script src="./js/bounds.js" on:load={init()}>
 
   </script>
-  <title>Sapper project template</title>
+  <title>Covid 19 Info</title>
 </svelte:head>
 
 <div id="map" />

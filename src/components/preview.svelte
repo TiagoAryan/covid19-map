@@ -1,7 +1,6 @@
 <script>
   import * as population from "./country-by-population.json";
-  import * as country_by_flag from "./country-by-flag.json";
-  import { s } from "misc";
+  import { s, flag } from "misc";
 
   export let data;
   export let country;
@@ -13,11 +12,11 @@
     deaths,
     confirmed,
     recovered;
-  let color;
+  let cland, csea, cair;
 
   $: setpop = false;
 
-  $: country, getContent(), getBorders();
+  $: country, getContent();
 
   function getContent() {
     if (country) {
@@ -35,6 +34,7 @@
       } else {
         pop_total = confirmed;
       }
+      getBorders();
     } else {
       deaths = data.latest.deaths;
       confirmed = data.latest.confirmed;
@@ -48,16 +48,26 @@
   }
 
   async function getBorders() {
-    if (borders && country) {
-      border = borders.filter(e => country === e.code)[0].transit;
-
-      if (border.land == 1) color = "#40c0a5";
-      else if (border.land == 2) color = "#ff4e34";
-      else if (border.land == 3) color = "#ffc831";
-    } else {
+    if (!borders) {
       const response = await fetch("./borders.json");
       borders = await response.json();
     }
+
+    if (borders.filter(e => country === e.code)[0]) {
+      border = borders.filter(e => country === e.code)[0].transit;
+
+      if (border.land == 1) cland = "#40c0a5";
+      else if (border.land == 2) cland = "#ff4e34";
+      else if (border.land == 3) cland = "#ffc831";
+
+      if (border.sea == 1) csea = "#40c0a5";
+      else if (border.sea == 2) csea = "#ff4e34";
+      else if (border.sea == 3) csea = "#ffc831";
+
+      if (border.air == 1) cair = "#40c0a5";
+      else if (border.air == 2) cair = "#ff4e34";
+      else if (border.air == 3) cair = "#ffc831";
+    } else border = 0;
   }
 
   function findCode(items, attribute, value) {
@@ -126,21 +136,21 @@
   <div class="container-header">
     <div class="container-header-contents">
       <div class="flag">
-        <img
-          src={country_by_flag.default.filter(e => name === e.country)[0].flag_base64}
-          alt="flag" />
+        <img src={flag(name)} alt="flag" />
       </div>
 
       <h5 class="container-title">{name}</h5>
       <div class="borders">
-        {#if border.land}
-          <i class="fas fa-car" style="color:{color}" />
-        {/if}
-        {#if border.sea}
-          <i class="fas fa-ship" style="color:{color}" />
-        {/if}
-        {#if border.air}
-          <i class="fas fa-plane" style="color:{color}" />
+        {#if border}
+          {#if border.land}
+            <i class="fas fa-car" style="color:{cland}" />
+          {/if}
+          {#if border.sea}
+            <i class="fas fa-ship" style="color:{csea}" />
+          {/if}
+          {#if border.air}
+            <i class="fas fa-plane" style="color:{cair}" />
+          {/if}
         {/if}
       </div>
       <div style="float:right" class="button" on:click={() => showContainers()}>

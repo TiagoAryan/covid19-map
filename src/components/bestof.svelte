@@ -1,8 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import * as population from "./country-by-population.json";
-  import * as country_by_flag from "./country-by-flag.json";
-  import { s } from "misc";
+  import { s, flag } from "misc";
 
   export let data;
   export let show;
@@ -88,9 +86,7 @@
             {i + 1}
           </label>
           <div class="flag">
-            <img
-              src={country_by_flag.default.filter(e => item.country === e.country)[0].flag_base64}
-              alt="flag" />
+            <img src={flag(item.country)} alt="flag" />
           </div>
           <p class="list-name">{item.country}</p>
           <p class="list-count">

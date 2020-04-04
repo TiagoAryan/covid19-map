@@ -68,7 +68,7 @@
       {/if}
       <Chart {data} {country} />
       {#if !country}
-        <ChartPoints {data} {country} />
+        <ChartPoints {data} />
       {/if}
 
     </div>
