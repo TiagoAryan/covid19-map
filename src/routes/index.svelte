@@ -598,8 +598,11 @@
       type: "line",
       paint: {
         "line-width": 1,
-        "line-color": "#FFF"
+        "line-color": "rgba(255, 255, 255, 0.5)",
+        "line-dasharray": [3, 6]
+        
       }
+      
     });
 
     gl._glMap.addLayer({
@@ -636,8 +639,13 @@
     function animate() {
       // Update point geometry to a new position based on counter denoting
       // the index to access the arc.
+      if(counter+1<route.features[0].geometry.coordinates.length){
       point.features[0].geometry.coordinates =
+        route.features[0].geometry.coordinates[counter+1];
+      }else{
+         point.features[0].geometry.coordinates =
         route.features[0].geometry.coordinates[counter];
+      }
 
       // Calculate the bearing to ensure the icon is rotated to match the route arc
       // The bearing is calculate between the current point and the next point, except

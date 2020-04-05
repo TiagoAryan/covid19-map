@@ -8,8 +8,15 @@
   let res, dates;
   var chart;
   var myScaterChart;
-  var fatality_data = [];
-  var title_data = [];
+  var fatality_data_red = [];
+  var fatality_data_yellow = [];
+  var fatality_data_green = [];
+  var title_data_red = [];
+  var title_data_yellow = [];
+  var title_data_green = [];
+  let container_box;
+  let ratio = 2.4;
+  let canvasElement;
 
   onMount(async () => {
     initChartPoint();
@@ -22,35 +29,81 @@
   });
 
   for (var country of all.slice(0, 50)) {
-    fatality_data.push({
-      x: avgage.default[country.country],
-      y: (
-        (data.deaths.locations.filter(
+    var fatality_rate= ((data.deaths.locations.filter(
           e => country.country_code === e.country_code
         )[0].latest *
           100) /
         country.latest
-      ).toFixed(2)
+      ).toFixed(2);
+    var average_age=  avgage.default[country.country];
+    if(average_age/fatality_rate <4){
+    fatality_data_red.push({
+      x: average_age,
+      y: fatality_rate
     });
-    title_data.push(country.country);
+      title_data_red.push(country.country);
+
+    }else if(average_age/fatality_rate <16){
+    fatality_data_yellow.push({
+        x: average_age,
+        y: fatality_rate
+      });
+      title_data_yellow.push(country.country);
+
+    }else{
+      fatality_data_green.push({
+        x: average_age,
+        y: fatality_rate
+      });
+      title_data_green.push(country.country);
+
+    }
+    
   }
+  
 
   //---------------
   // CHART
   //---------------
 
   function initChartPoint() {
-    var ctx = document.getElementById("myChartPoint").getContext("2d");
+    ratio= container_box.offsetWidth/(container_box.offsetHeight - 88);
+
+    var ctx = canvasElement.getContext("2d");
     myScaterChart = new Chart(ctx, {
       type: "scatter",
       data: {
         labels: [20, 30, 40, 50],
         datasets: [
           {
-            label: "Hight Fatality for Average Age",
+            label: "Hight",
             borderColor: "#FF4E34",
             backgroundColor: "#FF4E3426",
-            data: fatality_data,
+            data: fatality_data_red,
+            pointBorderWidth: 2,
+            pointHitRadius: 4,
+            pointRadius: 4,
+            pointBackgroundColor: "#1E1E21",
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          },
+          {
+            label: "Medium ",
+            borderColor: "#FFC831",
+            backgroundColor: "#FFC83126",
+            data: fatality_data_yellow,
+            pointBorderWidth: 2,
+            pointHitRadius: 4,
+            pointRadius: 4,
+            pointBackgroundColor: "#1E1E21",
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          },
+          {
+            label: "Normal",
+            borderColor: "#40C0A5",
+            backgroundColor: "#40C0A526",
+            data: fatality_data_green,
             pointBorderWidth: 2,
             pointHitRadius: 4,
             pointRadius: 4,
@@ -66,7 +119,7 @@
             usePointStyle: true
           }
         },
-        aspectRatio: 2.4,
+        aspectRatio: ratio,
         responsive: true,
         hoverMode: "index",
         stacked: false,
@@ -110,12 +163,24 @@
 
             // Set Text
             if (tooltipModel.body) {
+              var dataindex = tooltipModel.dataPoints[0].datasetIndex;
               var index = tooltipModel.dataPoints[0].index;
               var titleLines = tooltipModel.title || [];
               var bodyLines = tooltipModel.body.map(getBody);
               var fatality = tooltipModel.dataPoints[0].value;
               var averageAge = tooltipModel.dataPoints[0].label;
 
+              let title_data;
+              if(dataindex==0){
+                title_data=title_data_red;
+              }else if(dataindex==1){
+                title_data=title_data_yellow;
+
+              }else{
+                title_data=title_data_green;
+
+
+              }
               var innerHtml = "<thead>";
               innerHtml +=
                 "<tr><th><div class='flag' style='margin-right:8px'><img src='" +
@@ -215,16 +280,16 @@
   }
 </style>
 
-<div class="container-basic container-chart">
+<div class="container-basic container-chart" bind:this={container_box}>
 
   <div class="container-header">
 
     <div class="container-header-contents">
 
-      <h5 class="container-title">Fatality Rate</h5>
+      <h5 class="container-title">Fatality Rate related to average age</h5>
     </div>
   </div>
   <div class="container-body">
-    <canvas id="myChartPoint" />
+    <canvas id="myChartPoint" bind:this={canvasElement} />
   </div>
 </div>

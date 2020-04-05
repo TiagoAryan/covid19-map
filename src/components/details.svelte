@@ -1,7 +1,9 @@
 <script>
   import Preview from "../components/preview.svelte";
+  import Stats from "../components/stats.svelte";
   import Countries from "../components/countries.svelte";
   import Chart from "../components/chart.svelte";
+  import ChartW from "../components/chart_world.svelte";
   import ChartPoints from "../components/chart_points.svelte";
 
   export let data;
@@ -63,7 +65,7 @@
   .container_details_box-half {
     left: auto;
     width: calc(100% - 24px);
-    max-width: 600px;
+    max-width: 800px;
     right: 12px;
   }
   .container_details_box-half .container_details,
@@ -73,7 +75,11 @@
   .container_details_box-half .box-half-right {
     margin-left: 0px;
   }
-
+  @media (max-width: 1280px) {
+    .container_details_box-half {
+    max-width: 600px;
+  }
+  }
   @media (max-width: 768px) {
     .box-half {
       width: 100%;
@@ -92,8 +98,9 @@
   <div class="container_details">
     {#if !country}
       <div class="box-half">
-        <Preview {data} {country} {name} />
-        <Countries {data} {bounds} />
+        
+        <ChartW {data} {country} />
+        <ChartPoints {data} />
       </div>
     {/if}
 
@@ -101,10 +108,13 @@
       class="box-half box-half-right {country ? 'container_details_box-half-right' : ''}">
       {#if country}
         <Preview {data} {country} {name} />
+        <Stats {data} {country} {name} />
+        <Chart {data} {country} />
+
       {/if}
-      <Chart {data} {country} />
       {#if !country}
-        <ChartPoints {data} />
+        <Preview {data} {country} {name} />
+        <Countries {data} {bounds} />
       {/if}
     </div>
   </div>
