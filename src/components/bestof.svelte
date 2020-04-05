@@ -5,13 +5,18 @@
   export let data;
   export let show;
 
+  let box_title="Total";
+  let btn_icon= "fa-list-ul";
+  let btn_text= "Last Day";
+  let list_mode=true;
+
   let all, length;
   let all_sorted = [],
     all_order = [];
 
-  $: show && run();
+  $: show && run(list_mode);
 
-  function run() {
+  function run(r) {
     length = Object.keys(data.confirmed.locations[0].history).length;
 
     all_sorted = [];
@@ -20,9 +25,31 @@
     else if (show == "confirmed") all = data.confirmed.locations;
     else if (show == "recovered") all = data.recovered.locations;
 
-    all_sorted = all.sort(function(a, b) {
-      return b.latest - a.latest;
-    });
+    if(r){
+       all_sorted = all.sort(function(a, b) {
+        return b.latest - a.latest;
+      });
+    }else{
+      all_sorted = all.sort(function(a, b) {
+        return b.latest - a.latest;
+      });
+    }
+    
+  }
+  function changeListDisplay(){
+    if (list_mode) {
+      list_mode = false;
+      run(false);
+      box_title="Last Day";
+      btn_icon= "fa-layer-group";
+      btn_text= "Total";
+    } else {
+      run(true);
+      list_mode = true;
+      box_title="Total";
+      btn_icon= "fa-list-ul";
+      btn_text= "Last Day";
+    }
   }
 </script>
 
@@ -62,6 +89,37 @@
   #bestof_deaths {
     top: 244px;
   }
+  .container-body{
+    padding:0px;
+  }
+  .container-body li{
+    padding:3px 24px;
+  }
+  .list_green{
+    background-color:#40C0A51a;
+  }
+  .list_green label{
+    color: #40C0A5;
+    font-weight:500;
+    opacity:1;
+  }
+  .list_green label i{
+    color: #40C0A5;
+
+  }
+
+  .list_red{
+    background-color:#ff4e341a;
+  }
+  .list_red label{
+    color: #FF4E34;
+    font-weight:500;
+    opacity:1;
+  }
+  .list_red label i{
+    color: #FF4E34;
+
+  }
 </style>
 
 <div
@@ -70,13 +128,23 @@
   <div class="container-header">
     <div class="container-header-contents">
 
-      <h5 class="container-title">Most {show}</h5>
+      <h5 class="container-title">Most {show} </h5>
+      <div
+          style="float:right"
+          class="button"
+          on:click={() => changeListDisplay()}>
+          <i class="fas {btn_icon}" />
+          {btn_text}
+        </div>
+         <label>— {box_title}</label>
     </div>
   </div>
   <div class="container-body">
     <div class="container-list">
       {#each all_sorted.slice(0, 10) as item, i}
-        <li>
+          <li class="{Object.values(all_sorted[i].history)[length - 2] < Object.values(all_sorted[i + 1].history)[length - 2] ? "list_red" :""} 
+              {i > 0 && Object.values(all_sorted[i].history)[length - 2] > Object.values(all_sorted[i - 1].history)[length - 2] ? "list_green" :""} ">
+      
           <label>
             {#if Object.values(all_sorted[i].history)[length - 2] < Object.values(all_sorted[i + 1].history)[length - 2]}
               <i class="fas fa-sort-up" />
