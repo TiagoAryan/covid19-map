@@ -280,7 +280,7 @@
   async function init() {
     bounds = countries_bounds;
     map = L.map("map", {
-      minZoom: 3,
+      minZoom: 2.5,
       maxZoom: 8
     }).setView([20, 0], 2.5);
     var popup = new L.Popup();
@@ -510,7 +510,6 @@
   }
 
   function drawline(k, from, to) {
-    console.log("draw");
     var speedFactor = 30; // number of frames per longitude degree
     var animation; // to store and cancel the animation
     var startTime = 0;
@@ -617,22 +616,6 @@
     // Start the animation.
     animate(counter);
 
-    /*  document.getElementById("replay").addEventListener("click", function() {
-      // Set the coordinates of the original point back to origin
-      point.features[0].geometry.coordinates = from;
-      route_draw.features[0].geometry.coordinates = [from];
-
-      // Update the source layer
-      gl._glMap.getSource("point_" + k).setData(point);
-      gl._glMap.getSource("route_draw_" + k).setData(route_draw);
-
-      // Reset the counter
-      counter = 0;
-
-      // Restart the animation.
-      animate(counter);
-    }); */
-
     function animate() {
       // Update point geometry to a new position based on counter denoting
       // the index to access the arc.
@@ -691,12 +674,12 @@
 <div class="container-date">
   <div class="date">{showdate}</div>
   <div class="navigate-time">
-    <div class="button secondary adj-left">
+    <!-- <div class="button secondary adj-left">
       <i class="fas fa-chevron-left" />
     </div>
     <div class="button secondary adj-right">
       <i class="fas fa-chevron-right" />
-    </div>
+    </div>-->
     <button
       class="button {inPlay}"
       on:click={() => playhistory()}

@@ -137,11 +137,12 @@
                   confirmed.history[previous_d]
               );
               growth_data.push(growth);
-              growth_per_day.push((confirmed.history[d] - confirmed.history[previous_d]) )
+              growth_per_day.push(
+                confirmed.history[d] - confirmed.history[previous_d]
+              );
             } else {
               growth_data.push(0);
-              growth_per_day.push((confirmed.history[d] ) );
-
+              growth_per_day.push(confirmed.history[d]);
             }
             previous_d = d;
             k++;
@@ -170,7 +171,7 @@
       }
     }
     if (chart_mode) {
-      chart.type="line";
+      chart.type = "line";
       chart.data = {
         labels: range_dates,
         datasets: [
@@ -225,12 +226,12 @@
         ]
       };
     } else {
-      chart.type="bar";
+      chart.type = "bar";
       chart.data = {
         labels: range_dates,
         datasets: [
           {
-            type: 'line',
+            type: "line",
             label: "Growth %",
             defaultFontFamily: "Open Sans",
             borderColor: "#40C0A5",
@@ -246,9 +247,9 @@
             pointHoverRadius: 4,
             pointHoverBorderWidth: 2
           },
-          
+
           {
-            type: 'bar',
+            type: "bar",
             label: "New Cases per Day",
             defaultFontFamily: "Open Sans",
             borderColor: "#FFC831",
@@ -328,7 +329,7 @@
                   bodyFontSize: 13
                 }
               },
-               {
+              {
                 type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
                 display: true,
                 position: "right",
@@ -336,7 +337,7 @@
                 gridLines: {
                   drawOnChartArea: false // only want the grid lines for one axis to show up
                 }
-               }
+              }
             ]
           }
         }
@@ -355,13 +356,13 @@
   function changeChart(e) {
     if (chart_mode) {
       chart_mode = false;
-      fillChart(chart, data, false);
+      fillChart();
       btn_text = "Infected Count";
       box_title = "Growth Evolution";
       btn_icon = "user-friends";
     } else {
       chart_mode = true;
-      fillChart(chart, data, true);
+      fillChart();
       box_title = "Infected Count";
       btn_text = "Growth Evolution";
       btn_icon = "chart-line";
