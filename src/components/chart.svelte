@@ -292,7 +292,7 @@
 
 <style>
   .container-chart {
-    width: calc(100% - 12px);
+    width: 100%;
     height: calc(50% - 6px);
     margin-bottom: 12px;
     display: inline-block;

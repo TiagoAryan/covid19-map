@@ -55,6 +55,35 @@
   .box-half-right {
     margin-left: 6px;
   }
+  .container_details_box {
+    left: auto;
+    width: calc(100vw - 24px);
+    right: 12px;
+  }
+  .container_details_box-half {
+    left: auto;
+    width: calc(100% - 24px);
+    max-width: 600px;
+    right: 12px;
+  }
+  .container_details_box-half .container_details,
+  .container_details_box-half .box-half {
+    width: 100%;
+  }
+  .container_details_box-half .box-half-right {
+    margin-left: 0px;
+  }
+
+  @media (max-width: 768px) {
+    .box-half {
+      width: 100%;
+      margin-bottom: 12px;
+      height: auto;
+    }
+    .box-half-right {
+      margin-left: 0px;
+    }
+  }
 </style>
 
 <div
@@ -68,7 +97,8 @@
       </div>
     {/if}
 
-    <div class="box-half box-half-right">
+    <div
+      class="box-half box-half-right {country ? 'container_details_box-half-right' : ''}">
       {#if country}
         <Preview {data} {country} {name} />
       {/if}

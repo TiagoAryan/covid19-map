@@ -83,6 +83,9 @@ label {
   display: block;
   padding: 2px 0px;
 }
+.list-name {
+  font-size: 0.8rem;
+}
 .container-icons {
   position: fixed;
   top: 100px;
@@ -197,6 +200,12 @@ button:hover,
 button.secondary,
 .button.secondary {
   background-color: rgba(235, 238, 255, 0.2);
+}
+button.true,
+.button.true {
+  opacity: 0.6;
+  background-color: rgba(235, 238, 255, 0.2);
+  color: rgba(0, 0, 0, 0.4);
 }
 button.secondary:hover,
 .button.secondary:hover {
@@ -325,4 +334,69 @@ button:hover,
   background-color: #38383b !important;
   border-bottom: 0;
   color: white;
+}
+.leaflet-container .leaflet-control-attribution {
+  background: rgba(0, 0, 0, 0.7);
+}
+.leaflet-container a {
+  color: #828282;
+}
+@media (max-width: 1024px) {
+  .col-block {
+    width: 24%;
+  }
+}
+@media (max-width: 768px) {
+  html,
+  body {
+    font-size: 11pt;
+  }
+  .container-bottom {
+    display: block;
+    left: 12px;
+    margin: 0px auto;
+    width: calc(100% - 24px);
+  }
+}
+@media (max-width: 480px) {
+  html,
+  body {
+    font-size: 10pt;
+  }
+
+  .col-block {
+    width: 32%;
+  }
+  .col-block-btn {
+    float: inherit;
+    margin-top: 10px;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+  .progress-bar {
+    height: 12px;
+  }
+  .container-basic {
+    padding: 12px 0px 12px 0px;
+  }
+  .container-header-contents,
+  .container-body {
+    padding: 0px 18px;
+  }
+  .container-header {
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }
+  button,
+  .button {
+    height: 25px;
+    padding: 5px 10px;
+  }
+  .flag img {
+    object-fit: contain;
+    height: 16px;
+    width: 28px;
+  }
 }
