@@ -27,6 +27,8 @@
   let show_details = "hidden";
   let inPlay = true;
 
+  let show_info = "show";
+
   function play() {
     let length = Object.keys(res.confirmed.locations[0].history).length;
     let dates = Object.keys(res.confirmed.locations[0].history).sort(function(
@@ -44,6 +46,11 @@
         if (layer instanceof L.Circle) layer.remove();
         if (layer instanceof L.Polygon) layer.remove();
       });
+      if (gl) {
+        gl._map.eachLayer(function(layer) {
+          if (layer instanceof L.Polyline) layer.remove();
+        });
+      }
       let date = new Date(dates[ii]);
       showdate =
         ("0" + date.getDate()).slice(-2) +
@@ -283,6 +290,7 @@
     //Listener function taking an event object
     function onMapClick(e) {
       show = "";
+      show_info = "show";
       var click_pos = L.latLng(e.latlng.lat, e.latlng.lng);
       var bound = L.latLngBounds(L.geoJson(country).getBounds());
       var circleOptions = {
@@ -671,7 +679,10 @@
     <div class="button secondary adj-right">
       <i class="fas fa-chevron-right" />
     </div>
-    <button class="button" on:click={() => playhistory()} disabled={inPlay}>
+    <button
+      class="button {inPlay}"
+      on:click={() => playhistory()}
+      disabled={inPlay}>
       <i class="fas fa-play" />
     </button>
   </div>
@@ -695,7 +706,11 @@
 </div>
 
 {#if res !== undefined}
-  <Info data={res} country={country_clicked} name={country_name_clicked} />
+  <Info
+    data={res}
+    country={country_clicked}
+    name={country_name_clicked}
+    {show_info} />
   <Bestof data={res} {show} />
   <Details
     data={res}

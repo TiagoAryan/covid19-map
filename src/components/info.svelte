@@ -6,7 +6,7 @@
   export let country;
   export let name;
   let pop_total, deaths, confirmed, recovered;
-
+  let show_container = "show";
   $: setpop = false;
 
   $: country, getContent();
@@ -82,18 +82,21 @@
   function showContainers() {
     var el = document.querySelector(".container_details_box");
     el.classList.toggle("hidden");
-    /*
-    var el2 = document.querySelector(".container-countries");
-    el2.classList.toggle("hidden");
-    */
+    if (!show_container) show_container = "show";
+    // else show_container = "";
   }
 </script>
 
 <style>
-
+  .container-total {
+    bottom: -200px;
+  }
+  .container-total.show {
+    bottom: 0px;
+  }
 </style>
 
-<div class="container-basic container-bottom container-total">
+<div class="container-basic container-bottom container-total {show_container}">
 
   <div class="container-header">
     <div class="container-header-contents">

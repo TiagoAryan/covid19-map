@@ -127,10 +127,26 @@
   }
   .borders i {
     font-weight: 900;
-    border: 1px solid white;
     font-size: 9pt;
     padding: 2px;
     border-radius: 4px;
+    padding: 4px;
+    border: 1px solid white;
+  }
+  .flag img {
+    height: 28px;
+    width: 46px;
+  }
+  .button_close {
+    float: right;
+  }
+  .container-title {
+    margin-right: 12px;
+  }
+  @media (max-width: 768px) {
+    .container-total {
+      height: auto;
+    }
   }
 </style>
 
@@ -146,19 +162,25 @@
       <div class="borders">
         {#if border}
           {#if border.land}
-            <i class="fas fa-car" style="color:{cland}" />
+            <i
+              class="fas fa-car"
+              style="border-color: {cland}; color:{cland}" />
           {/if}
           {#if border.sea}
-            <i class="fas fa-ship" style="color:{csea}" />
+            <i class="fas fa-ship" style="border-color: {csea}; color:{csea}" />
           {/if}
           {#if border.air}
-            <i class="fas fa-plane" style="color:{cair}" />
+            <i
+              class="fas fa-plane"
+              style="border-color: {cair}; color:{cair}" />
           {/if}
         {/if}
       </div>
-      <div style="float:right" class="button" on:click={() => showContainers()}>
-        <i class="fas fa-user-friends" />
-        Details
+      <div
+        class="button secondary button_close"
+        on:click={() => showContainers()}>
+        <i class="fas fa-times" />
+        Close
       </div>
     </div>
   </div>

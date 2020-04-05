@@ -47,7 +47,7 @@
     width: 40px;
   }
   .container-list .flag {
-    width: 35px;
+    width: 28px;
   }
   .container-basic {
     width: 100%;
@@ -64,7 +64,19 @@
   }
   .container-body {
     height: calc(100% - 40px);
-    overflow: scroll;
+    overflow-y: scroll;
+  }
+  .list-name {
+    font-size: 0.8rem;
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% - 48px);
+    line-height: 0.9rem;
+  }
+  @media (max-width: 768px) {
+    .container-list-group {
+      height: 400px;
+    }
   }
 </style>
 
