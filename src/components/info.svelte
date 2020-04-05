@@ -13,19 +13,31 @@
 
   function getContent() {
     if (country) {
-      deaths = data.deaths.locations.filter(e => country === e.country_code)[0]
-        .latest;
-      confirmed = data.confirmed.locations.filter(
-        e => country === e.country_code
-      )[0].latest;
-      recovered = data.recovered.locations.filter(
-        e => country === e.country_code
-      )[0].latest;
+      if (data.deaths.locations.filter(e => country === e.country_code)[0]) {
+        deaths = data.deaths.locations.filter(
+          e => country === e.country_code
+        )[0].latest;
+        confirmed = data.confirmed.locations.filter(
+          e => country === e.country_code
+        )[0].latest;
+        recovered = data.recovered.locations.filter(
+          e => country === e.country_code
+        )[0].latest;
 
-      if (setpop) {
-        pop_total = findPop(population.default, "code", country);
+        if (setpop) {
+          pop_total = findPop(population.default, "code", country);
+        } else {
+          pop_total = confirmed;
+        }
       } else {
-        pop_total = confirmed;
+        deaths = 0;
+        confirmed = 0;
+        recovered = 0;
+        if (setpop) {
+          pop_total = findPop(population.default, "code", country);
+        } else {
+          pop_total = 0;
+        }
       }
     } else {
       deaths = data.latest.deaths;
@@ -89,10 +101,15 @@
         <img src={flag(name)} alt="flag" />
       </div>
       <h5 class="container-title">{name}</h5>
-      <div style="float:right" class="button" on:click={() => showContainers()}>
-        <i class="fas fa-user-friends" />
-        Details
-      </div>
+      {#if confirmed}
+        <div
+          style="float:right"
+          class="button"
+          on:click={() => showContainers()}>
+          <i class="fas fa-user-friends" />
+          Details
+        </div>
+      {/if}
     </div>
   </div>
   <div class="container-body">

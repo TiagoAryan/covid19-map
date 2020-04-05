@@ -9,9 +9,9 @@
   let res, borders;
   let border = 0,
     pop_total = 0,
-    deaths,
-    confirmed,
-    recovered;
+    deaths = 0,
+    confirmed = 0,
+    recovered = 0;
   let cland, csea, cair;
 
   $: setpop = false;
@@ -20,21 +20,24 @@
 
   function getContent() {
     if (country) {
-      deaths = data.deaths.locations.filter(e => country === e.country_code)[0]
-        .latest;
-      confirmed = data.confirmed.locations.filter(
-        e => country === e.country_code
-      )[0].latest;
-      recovered = data.recovered.locations.filter(
-        e => country === e.country_code
-      )[0].latest;
+      if (data.deaths.locations.filter(e => country === e.country_code)[0]) {
+        deaths = data.deaths.locations.filter(
+          e => country === e.country_code
+        )[0].latest;
+        confirmed = data.confirmed.locations.filter(
+          e => country === e.country_code
+        )[0].latest;
+        recovered = data.recovered.locations.filter(
+          e => country === e.country_code
+        )[0].latest;
 
-      if (setpop) {
-        pop_total = findPop(population.default, "code", country);
-      } else {
-        pop_total = confirmed;
+        if (setpop) {
+          pop_total = findPop(population.default, "code", country);
+        } else {
+          pop_total = confirmed;
+        }
+        getBorders();
       }
-      getBorders();
     } else {
       deaths = data.latest.deaths;
       confirmed = data.latest.confirmed;

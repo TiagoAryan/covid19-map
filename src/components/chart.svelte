@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { chart_d } from "misc";
 
   export let data;
   export let country;
@@ -13,12 +14,7 @@
   let btn_text = "Growth Evolution";
   let btn_icon = "chart-line";
 
-  $: country, fillChart(chart, data, chart_mode);
-
-  onMount(async () => {
-    initChart();
-    console.log(country);
-  });
+  $: country, fillChart();
 
   function sort(all) {
     let all_order = [];
@@ -62,10 +58,46 @@
     );
   }
 
+  function sort_total(dates, all) {
+    var total = [];
+    for (var d of dates) {
+      var tot = 0;
+      for (var item of all) tot += item.history[d];
+      total.push(tot);
+    }
+    return total;
+  }
+  function sort_total_a(dates, all) {
+    var total = [];
+    for (var d of dates) {
+      var tot = 0;
+      for (var i = 0; i < data.confirmed.locations.length; i++) {
+        tot +=
+          data.confirmed.locations[i].history[d] -
+          data.deaths.locations[i].history[d] -
+          data.recovered.locations[i].history[d];
+      }
+      total.push(tot);
+    }
+    return total;
+  }
+
   //---------------
   // CHART
   //---------------
-  function fillChart(chart, country_data, mode) {
+  async function fillChart() {
+    await onMount(() => {
+      initChart();
+    });
+    var active_data = [];
+    var recovered_data = [];
+    var deaths_data = [];
+    var range_dates = [];
+
+    var growth_data = [];
+    let k = 0;
+    let count;
+    var previous_d = 0;
     var dates = Object.keys(data.confirmed.locations[0].history).sort(function(
       a,
       b
@@ -74,194 +106,210 @@
     });
 
     if (country) {
-      country_data.confirmed.locations = sort(country_data.confirmed.locations);
-      country_data.deaths.locations = sort(country_data.deaths.locations);
-      country_data.recovered.locations = sort(country_data.recovered.locations);
+      data.confirmed.locations = sort(data.confirmed.locations);
+      data.deaths.locations = sort(data.deaths.locations);
+      data.recovered.locations = sort(data.recovered.locations);
 
-      var confirmed = country_data.confirmed.locations.filter(
+      var confirmed = data.confirmed.locations.filter(
         e => country === e.country_code
       )[0];
-      var recovered = country_data.recovered.locations.filter(
+      var recovered = data.recovered.locations.filter(
         e => country === e.country_code
       )[0];
-      var deaths = country_data.deaths.locations.filter(
+      var deaths = data.deaths.locations.filter(
         e => country === e.country_code
       )[0];
 
-      var active_data = [];
-      var recovered_data = [];
-      var deaths_data = [];
-      var range_dates = [];
-
-      var growth_data = [];
-      let k = 0;
-      let count;
-      var previous_d = 0;
-      for (var d of dates) {
-        if (confirmed.history[d] != 0) {
-          range_dates.push(d);
-          deaths_data.push(deaths.history[d]);
-          recovered_data.push(recovered.history[d]);
-          active_data.push(
-            confirmed.history[d] - deaths.history[d] - recovered.history[d]
-          );
-          if (k > 0) {
-            let growth = parseInt(
-              ((confirmed.history[d] - confirmed.history[previous_d]) * 100) /
-                confirmed.history[previous_d]
+      if (confirmed) {
+        var i = 0;
+        for (var d of dates) {
+          if (confirmed.history[d] != 0) {
+            range_dates.push(chart_d(d));
+            deaths_data.push(deaths.history[d]);
+            recovered_data.push(recovered.history[d]);
+            active_data.push(
+              confirmed.history[d] - deaths.history[d] - recovered.history[d]
             );
-            growth_data.push(growth);
-          } else {
-            growth_data.push(0);
+            if (k > 0) {
+              let growth = parseInt(
+                ((confirmed.history[d] - confirmed.history[previous_d]) * 100) /
+                  confirmed.history[previous_d]
+              );
+              growth_data.push(growth);
+            } else {
+              growth_data.push(0);
+            }
+            previous_d = d;
+            k++;
           }
-          previous_d = d;
-          k++;
+
+          i++;
         }
       }
-      if (mode) {
-        chart.data = {
-          labels: range_dates,
-          datasets: [
-            {
-              label: "Deaths",
-              defaultFontFamily: "Open Sans",
-              borderColor: "#FF4E34",
-              backgroundColor: "#FF4E3426",
-              fill: false,
-              data: deaths_data,
-              yAxisID: "y-axis-1",
-              pointBackgroundColor: "#1E1E21",
-              pointBorderWidth: 2,
-              borderWidth: 2,
-              pointHitRadius: 5,
-              pointRadius: 3,
-              pointHoverRadius: 12,
-              pointHoverBorderWidth: 3
-            },
-            {
-              label: "Active",
-              defaultFontFamily: "Open Sans",
-              borderColor: "#FFC831",
-              backgroundColor: "#FFC83126",
-              fill: false,
-              data: active_data,
-              yAxisID: "y-axis-1",
-              pointBackgroundColor: "#1E1E21",
-              pointBorderWidth: 2,
-              borderWidth: 2,
-              pointHitRadius: 5,
-              pointRadius: 3,
-              pointHoverRadius: 12,
-              pointHoverBorderWidth: 3
-            },
-            {
-              label: "Recovered",
-              defaultFontFamily: "Open Sans",
-              borderColor: "#40C0A5",
-              backgroundColor: "#40C0A526",
-              fill: false,
-              data: recovered_data,
-              yAxisID: "y-axis-1",
-              pointBackgroundColor: "#1E1E21",
-              pointBorderWidth: 2,
-              borderWidth: 2,
-              pointHitRadius: 5,
-              pointRadius: 3,
-              pointHoverRadius: 12,
-              pointHoverBorderWidth: 3
-            }
-          ]
-        };
-      } else {
-        chart.data = {
-          labels: range_dates,
-          datasets: [
-            {
-              label: "Growth %",
-              defaultFontFamily: "Open Sans",
-              borderColor: "#FFC831",
-              backgroundColor: "#FFC83126",
-              fill: false,
-              data: growth_data,
-              yAxisID: "y-axis-1",
-              pointBackgroundColor: "#1E1E21",
-              pointBorderWidth: 2,
-              borderWidth: 2,
-              pointHitRadius: 5,
-              pointRadius: 3,
-              pointHoverRadius: 12,
-              pointHoverBorderWidth: 3
-            }
-          ]
-        };
+    } else {
+      for (var d of dates) range_dates.push(chart_d(d));
+      deaths_data = sort_total(dates, data.deaths.locations);
+      recovered_data = sort_total(dates, data.recovered.locations);
+      active_data = sort_total_a(dates);
+
+      for (var d of dates) {
+        if (k > 0) {
+          let growth = parseInt(
+            ((active_data[k] - active_data[k - 1]) * 100) / active_data[k - 1]
+          );
+          growth_data.push(growth);
+        } else {
+          growth_data.push(0);
+        }
+        previous_d = d;
+        k++;
       }
-      chart.update();
     }
+    if (chart_mode) {
+      chart.data = {
+        labels: range_dates,
+        datasets: [
+          {
+            label: "Deaths",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#FF4E34",
+            backgroundColor: "#FF4E3426",
+            fill: false,
+            data: deaths_data,
+            yAxisID: "y-axis-1",
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
+            pointHitRadius: 5,
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          },
+          {
+            label: "Active",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#FFC831",
+            backgroundColor: "#FFC83126",
+            fill: false,
+            data: active_data,
+            yAxisID: "y-axis-1",
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
+            pointHitRadius: 5,
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          },
+          {
+            label: "Recovered",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#40C0A5",
+            backgroundColor: "#40C0A526",
+            fill: false,
+            data: recovered_data,
+            yAxisID: "y-axis-1",
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
+            pointHitRadius: 5,
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          }
+        ]
+      };
+    } else {
+      chart.data = {
+        labels: range_dates,
+        datasets: [
+          {
+            label: "Growth %",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#FFC831",
+            backgroundColor: "#FFC83126",
+            fill: false,
+            data: growth_data,
+            yAxisID: "y-axis-1",
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
+            pointHitRadius: 5,
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          }
+        ]
+      };
+    }
+    chart.update();
   }
 
-  function initChart(country_data) {
-    var ctx = canvasElement.getContext("2d");
-    chart = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: [],
-        datasets: []
-      },
-      options: {
-        legend: {
-          labels: {
-            usePointStyle: true
-          }
+  function initChart() {
+    if (chart === undefined) {
+      var ctx = canvasElement.getContext("2d");
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: []
         },
-        tooltips: {
-          mode: "index"
-        },
-        aspectRatio: 2.4,
-        responsive: true,
-        hoverMode: "index",
-        stacked: false,
-        spanGaps: true,
-        showLines: true,
-        title: {
-          display: false,
-          text: "Chart.js Line Chart - Multi Axis"
-        },
-
-        scales: {
-          yAxes: [
-            {
-              type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-              display: true,
-              position: "left",
-              id: "y-axis-1",
-              gridLines: {
-                drawOnChartArea: false // only want the grid lines for one axis to show up
-              },
-              layout: {
-                padding: {
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 20
-                }
-              },
-              legend: {
-                display: true,
-                labels: {
-                  boxWidth: 20
-                }
-              },
-              tooltips: {
-                titleFontFamily: "Open Sans",
-                titleFontSize: 15,
-                bodyFontFamily: "Open Sans",
-                bodyFontSize: 13
-              }
+        options: {
+          legend: {
+            labels: {
+              usePointStyle: true
             }
-          ]
+          },
+          tooltips: {
+            mode: "index"
+          },
+          aspectRatio: 2.4,
+          responsive: true,
+          hoverMode: "index",
+          stacked: false,
+          spanGaps: true,
+          showLines: true,
+          title: {
+            display: false,
+            text: "Chart.js Line Chart - Multi Axis"
+          },
+
+          scales: {
+            yAxes: [
+              {
+                type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                display: true,
+                position: "left",
+                id: "y-axis-1",
+                gridLines: {
+                  drawOnChartArea: false // only want the grid lines for one axis to show up
+                },
+                layout: {
+                  padding: {
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 20
+                  }
+                },
+                legend: {
+                  display: true,
+                  labels: {
+                    boxWidth: 20
+                  }
+                },
+                tooltips: {
+                  titleFontFamily: "Open Sans",
+                  titleFontSize: 15,
+                  bodyFontFamily: "Open Sans",
+                  bodyFontSize: 13
+                }
+              }
+            ]
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   function FormataStringData(data) {
