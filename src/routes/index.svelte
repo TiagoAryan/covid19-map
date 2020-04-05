@@ -19,6 +19,7 @@
   let res;
   let pop_total = 7772494610;
   var missing_country = [];
+  var n_lines = 0;
   let c_infec_lines = [];
   let geo_infec_lines = [];
   let showdate = "00/00/00";
@@ -38,19 +39,27 @@
       return new Date(a) - new Date(b);
     });
 
+    if (n_lines) {
+      for (var x = 0; x < n_lines; x++) {
+        gl._glMap.removeLayer("route_draw_" + x);
+        gl._glMap.removeLayer("point_" + x);
+        gl._glMap.removeSource("route_draw_" + x);
+        gl._glMap.removeSource("point_" + x);
+        gl._glMap.removeSource("route_" + x);
+      }
+      n_lines = 0;
+      missing_country = [];
+    }
+
     let ii = 0;
     const interval = setInterval(() => {
       var layers = [];
+
       //clean layers
       map.eachLayer(function(layer) {
         if (layer instanceof L.Circle) layer.remove();
         if (layer instanceof L.Polygon) layer.remove();
       });
-      if (gl) {
-        gl._map.eachLayer(function(layer) {
-          if (layer instanceof L.Polyline) layer.remove();
-        });
-      }
       let date = new Date(dates[ii]);
       showdate =
         ("0" + date.getDate()).slice(-2) +
@@ -82,8 +91,8 @@
   }
 
   function InfectedCountries(res, date) {
-    var i = 0;
-    var c = 0;
+    var i = 0,
+      c = 0;
     var data = res.confirmed;
     var data_rec = res.recovered;
 
@@ -139,7 +148,7 @@
                   geo_infec_lines[c_infec_lines.indexOf(country_name)][0];
                 var to =
                   geo_infec_lines[c_infec_lines.indexOf(country_name)][1];
-                drawline(c_infec_lines.indexOf(country_name), from, to);
+                drawline(n_lines++, from, to);
               }
             }
           }
@@ -267,6 +276,7 @@
       }
     }
   }
+
   async function init() {
     bounds = countries_bounds;
     map = L.map("map", {
@@ -378,6 +388,11 @@
         selected_country_id = "";
       }
     }
+
+    gl._glMap.loadImage("img/plane.png", function(error, image) {
+      if (error) throw error;
+      gl._glMap.addImage("plane", image);
+    });
 
     getSpread();
 
@@ -495,6 +510,7 @@
   }
 
   function drawline(k, from, to) {
+    console.log("draw");
     var speedFactor = 30; // number of frames per longitude degree
     var animation; // to store and cancel the animation
     var startTime = 0;
@@ -561,6 +577,7 @@
     };
 
     var counter = 0;
+
     gl._glMap.addSource("route_" + k, {
       type: "geojson",
       data: route
@@ -581,7 +598,7 @@
       type: "line",
       paint: {
         "line-width": 1,
-        "line-color": "#5172ee"
+        "line-color": "#FFF"
       }
     });
 
@@ -590,6 +607,7 @@
       source: "point_" + k,
       type: "symbol",
       layout: {
+        "icon-image": "plane",
         "icon-rotate": -50,
         "icon-rotation-alignment": "map",
         "icon-allow-overlap": true,

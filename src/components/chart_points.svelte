@@ -21,7 +21,7 @@
     return b.latest - a.latest;
   });
 
-  for (var country of all.slice(0, 10)) {
+  for (var country of all.slice(0, 50)) {
     fatality_data.push({
       x: avgage.default[country.country],
       y: (
@@ -117,7 +117,6 @@
               var averageAge = tooltipModel.dataPoints[0].label;
 
               var innerHtml = "<thead>";
-
               innerHtml +=
                 "<tr><th><div class='flag' style='margin-right:8px'><img src='" +
                 flag(title_data[index]) +
