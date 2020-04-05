@@ -95,6 +95,7 @@
     var range_dates = [];
 
     var growth_data = [];
+    var growth_per_day = [];
     let k = 0;
     let count;
     var previous_d = 0;
@@ -136,8 +137,11 @@
                   confirmed.history[previous_d]
               );
               growth_data.push(growth);
+              growth_per_day.push((confirmed.history[d] - confirmed.history[previous_d]) )
             } else {
               growth_data.push(0);
+              growth_per_day.push((confirmed.history[d] ) );
+
             }
             previous_d = d;
             k++;
@@ -166,6 +170,7 @@
       }
     }
     if (chart_mode) {
+      chart.type="line";
       chart.data = {
         labels: range_dates,
         datasets: [
@@ -220,24 +225,42 @@
         ]
       };
     } else {
+      chart.type="bar";
       chart.data = {
         labels: range_dates,
         datasets: [
           {
+            type: 'line',
             label: "Growth %",
             defaultFontFamily: "Open Sans",
-            borderColor: "#FFC831",
-            backgroundColor: "#FFC83126",
+            borderColor: "#40C0A5",
+            backgroundColor: "#40C0A526",
             fill: false,
             data: growth_data,
             yAxisID: "y-axis-1",
             pointBackgroundColor: "#1E1E21",
             pointBorderWidth: 2,
             borderWidth: 2,
+            pointHitRadius: 3,
+            pointRadius: 1,
+            pointHoverRadius: 4,
+            pointHoverBorderWidth: 2
+          },
+          
+          {
+            type: 'bar',
+            label: "New Cases per Day",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#FFC831",
+            backgroundColor: "#FFC831",
+            fill: false,
+            data: growth_per_day,
+            yAxisID: "y-axis-2",
+            borderWidth: 1,
             pointHitRadius: 5,
-            pointRadius: 3,
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
+            pointRadius: 1,
+            pointHoverRadius: 1,
+            pointHoverBorderWidth: 2
           }
         ]
       };
@@ -304,7 +327,16 @@
                   bodyFontFamily: "Open Sans",
                   bodyFontSize: 13
                 }
-              }
+              },
+               {
+                type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                display: true,
+                position: "right",
+                id: "y-axis-2",
+                gridLines: {
+                  drawOnChartArea: false // only want the grid lines for one axis to show up
+                }
+               }
             ]
           }
         }
