@@ -88,6 +88,7 @@
   // CHART
   //---------------
   async function fillChart() {
+
     await onMount(() => {
       initChart();
     });
@@ -139,12 +140,11 @@
                   confirmed.history[previous_d]
               );
               growth_data.push(growth);
-              growth_per_day.push(
-                confirmed.history[d] - confirmed.history[previous_d]
-              );
+              growth_per_day.push((confirmed.history[d] - confirmed.history[previous_d]) )
             } else {
               growth_data.push(0);
-              growth_per_day.push(confirmed.history[d]);
+              growth_per_day.push((confirmed.history[d] ) );
+
             }
             previous_d = d;
             k++;
@@ -173,40 +173,40 @@
       }
     }
     if (chart_mode) {
-      chart.type = "line";
-      chart.options.scales = {
-        yAxes: [
-          {
-            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-            display: true,
-            position: "left",
-            id: "y-axis-1",
-            gridLines: {
-              drawOnChartArea: false // only want the grid lines for one axis to show up
-            },
-            layout: {
-              padding: {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 20
+      chart.type="line";
+      chart.options.scales={
+            yAxes: [
+              {
+                type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                display: true,
+                position: "left",
+                id: "y-axis-1",
+                gridLines: {
+                  drawOnChartArea: false // only want the grid lines for one axis to show up
+                },
+                layout: {
+                  padding: {
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 20
+                  }
+                },
+                legend: {
+                  display: true,
+                  labels: {
+                    boxWidth: 20
+                  }
+                },
+                tooltips: {
+                  titleFontFamily: "Open Sans",
+                  titleFontSize: 15,
+                  bodyFontFamily: "Open Sans",
+                  bodyFontSize: 13
+                }
               }
-            },
-            legend: {
-              display: true,
-              labels: {
-                boxWidth: 20
-              }
-            },
-            tooltips: {
-              titleFontFamily: "Open Sans",
-              titleFontSize: 15,
-              bodyFontFamily: "Open Sans",
-              bodyFontSize: 13
-            }
-          }
-        ]
-      };
+            ]
+          };
       chart.data = {
         labels: range_dates,
         datasets: [
@@ -261,54 +261,54 @@
         ]
       };
     } else {
-      chart.type = "bar";
-      chart.options.scales = {
-        yAxes: [
-          {
-            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-            display: true,
-            position: "left",
-            id: "y-axis-1",
-            gridLines: {
-              drawOnChartArea: false // only want the grid lines for one axis to show up
-            },
-            layout: {
-              padding: {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 20
-              }
-            },
-            legend: {
-              display: true,
-              labels: {
-                boxWidth: 20
-              }
-            },
-            tooltips: {
-              titleFontFamily: "Open Sans",
-              titleFontSize: 15,
-              bodyFontFamily: "Open Sans",
-              bodyFontSize: 13
-            }
-          },
-          {
-            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-            display: true,
-            position: "right",
-            id: "y-axis-2",
-            gridLines: {
-              drawOnChartArea: false // only want the grid lines for one axis to show up
-            }
-          }
-        ]
-      };
+      chart.type="bar";
+      chart.options.scales={
+            yAxes: [
+              {
+                type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                display: true,
+                position: "left",
+                id: "y-axis-1",
+                gridLines: {
+                  drawOnChartArea: false // only want the grid lines for one axis to show up
+                },
+                layout: {
+                  padding: {
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 20
+                  }
+                },
+                legend: {
+                  display: true,
+                  labels: {
+                    boxWidth: 20
+                  }
+                },
+                tooltips: {
+                  titleFontFamily: "Open Sans",
+                  titleFontSize: 15,
+                  bodyFontFamily: "Open Sans",
+                  bodyFontSize: 13
+                }
+              },
+               {
+                type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                display: true,
+                position: "right",
+                id: "y-axis-2",
+                gridLines: {
+                  drawOnChartArea: false // only want the grid lines for one axis to show up
+                }
+               }
+            ]
+          };
       chart.data = {
         labels: range_dates,
         datasets: [
           {
-            type: "line",
+            type: 'line',
             label: "Growth %",
             defaultFontFamily: "Open Sans",
             borderColor: "#40C0A5",
@@ -324,9 +324,9 @@
             pointHoverRadius: 4,
             pointHoverBorderWidth: 2
           },
-
+          
           {
-            type: "bar",
+            type: 'bar',
             label: "New Cases per Day",
             defaultFontFamily: "Open Sans",
             borderColor: "#FFC831",
@@ -347,8 +347,8 @@
   }
 
   function initChart() {
-    ratio = container_box.offsetWidth / (container_box.offsetHeight - 88);
-
+    ratio= container_box.offsetWidth/(container_box.offsetHeight - 88);
+    
     if (chart === undefined) {
       var ctx = canvasElement.getContext("2d");
       chart = new Chart(ctx, {
@@ -426,13 +426,13 @@
   function changeChart(e) {
     if (chart_mode) {
       chart_mode = false;
-      fillChart();
+      fillChart(chart, data, false);
       btn_text = "Infected Count";
       box_title = "Growth Evolution";
       btn_icon = "user-friends";
     } else {
       chart_mode = true;
-      fillChart();
+      fillChart(chart, data, true);
       box_title = "Infected Count";
       btn_text = "Growth Evolution";
       btn_icon = "chart-line";
@@ -453,17 +453,17 @@
     transition-duration: 0.4s;
     vertical-align: top;
   }
-  .container-chart.country {
+  .container-chart.country{
     height: calc(100vh - 348px);
+
   }
-  .container-chart.world {
+  .container-chart.world{
     height: calc(50% - 12px);
+
   }
 </style>
 
-<div
-  class="container-basic container-chart {country ? 'country' : 'world'}"
-  bind:this={container_box}>
+<div class="container-basic container-chart {country ? "country": "world"}" bind:this={container_box}>
 
   <div class="container-header">
 
