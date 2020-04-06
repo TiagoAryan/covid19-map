@@ -89,13 +89,18 @@
       play();
     }
   }
+  
 
   function InfectedCountries(res, date) {
     var i = 0,
       c = 0;
     var data = res.confirmed;
     var data_rec = res.recovered;
+    var data_dea = res.deaths;
 
+//console.log(data)
+//console.log(data_rec)
+//console.log(data_dea)
     for (var k = 0; k < data.locations.length; k++) {
       var country_name = data.locations[k].country;
       var country_code = data.locations[k].country_code;
@@ -118,7 +123,13 @@
 
         if (number_people > 0) {
           var number_people_rec = data_rec.locations[k].history[date];
+
+
+          var people_conf = data.locations[k].country;
           var people_rec = data_rec.locations[k].country;
+          var people_dea = data_dea.locations[k].country;
+
+          //console.log(people_conf+" - "+ people_dea +" - "+people_rec);
 
           var country_json = L.geoJson(country_in_map);
           if (number_people_rec < number_people - number_people_rec) {

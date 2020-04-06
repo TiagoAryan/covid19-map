@@ -6,6 +6,7 @@
   export let country;
   export let name;
   let pop_total, deaths, confirmed, recovered;
+
   let show_container = "show";
   $: setpop = false;
 
@@ -94,9 +95,34 @@
   .container-total.show {
     bottom: 0px;
   }
+  .body-infected{
+    display: block;
+  }
+  .body-healthy{
+    display: none;
+  }
+  .healthy .body-infected{
+    display: none;
+  }
+  .healthy .body-healthy{
+    display: block;
+  }
+  .body-healthy{
+    color:white;
+    opacity: 0.4;
+    padding:20px 0px;
+    text-align: center;
+  }
+  .body-healthy h5{
+    display: inline-block;
+    font-weight: 300;
+  }
+  .body-healthy i{
+    margin-right: 12px;
+  }
 </style>
 
-<div class="container-basic container-bottom container-total {show_container}">
+<div class="container-basic container-bottom container-total {show_container} {confirmed===0 ? "healthy" : ""}">
 
   <div class="container-header">
     <div class="container-header-contents">
@@ -115,7 +141,7 @@
       {/if}
     </div>
   </div>
-  <div class="container-body">
+  <div class="container-body body-infected">
 
     <div class="container-data-details">
       <div class="col-block">
@@ -166,5 +192,9 @@
     <label class="progress_label">
       {s(pop_total)} {setpop ? 'Population' : 'Cases'}
     </label>
+  </div>
+  <div class="container-body body-healthy">
+      <i class="fas fa-heartbeat"></i>
+      <h5>This country has no cases of Covid-19</h5>
   </div>
 </div>

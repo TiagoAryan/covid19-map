@@ -140,6 +140,8 @@
             // Create element on first render
             if (!tooltipEl) {
               tooltipEl = document.createElement("div");
+              tooltipEl.style.backgroundColor ="rgba(0,0,0,0.8)";
+              tooltipEl.style.borderRadius ="4px";
               tooltipEl.id = "chartjs-tooltip";
               tooltipEl.innerHTML = "<table></table>";
               document.body.appendChild(tooltipEl);
@@ -192,13 +194,11 @@
               innerHtml += "</thead><tbody>";
 
               innerHtml +=
-                "<tr><th> <div style='width:80px; display:inline-block; opacity:0.4; font-weight:300'>Average Age</div> <div style='display:inline-block; width:40px; text-align:right; font-size:14px'>" +
-                averageAge;
-              "</div></th></tr>";
+                "<tr><th> <div style='width:80px; display:inline-block; opacity:0.4; font-weight:300'>Average Age</div> <div style='font-weight:400; display:inline-block; width:40px; text-align:right; font-size:15px'>" +
+                averageAge+"</div></th></tr>";
               innerHtml +=
-                "<tr><th> <div style='width:80px; display:inline-block; opacity:0.4; font-weight:300'>Fatality Rate</div> <div style='display:inline-block; width:40px; text-align:right; font-size:14px'>" +
-                fatality;
-              "</div></th></tr>";
+                "<tr><th> <div style='width:80px; display:inline-block; opacity:0.4; font-weight:300'>Fatality Rate</div> <div style='font-weight:400; display:inline-block; width:40px; text-align:right; font-size:15px'>" +
+                round(fatality, 1) +"%</div></th></tr>";
 
               innerHtml += "</tbody>";
 
@@ -255,6 +255,11 @@
     });
   }
 
+
+  function round(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
   function FormataStringData(data) {
     var dia = data.split("/")[1];
     var mes = data.split("/")[0];
@@ -286,7 +291,8 @@
 
     <div class="container-header-contents">
 
-      <h5 class="container-title">Fatality Rate related to average age</h5>
+      <h5 class="container-title">Fatality related to Average Age</h5>
+      <label style="display:block"> 50 countries with more Deaths</label>
     </div>
   </div>
   <div class="container-body">

@@ -5,6 +5,7 @@
   import Chart from "../components/chart.svelte";
   import ChartW from "../components/chart_world.svelte";
   import ChartPoints from "../components/chart_points.svelte";
+  import ChartBar from "../components/chart_bar.svelte";
 
   export let data;
   export let bounds;
@@ -115,6 +116,8 @@
       {#if !country}
         <Preview {data} {country} {name} />
         <Countries {data} {bounds} />
+        <ChartBar {data} {country} />
+
       {/if}
     </div>
   </div>

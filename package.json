@@ -20,7 +20,8 @@
     "jhucsse.covid": "^1.3.2",
     "polka": "next",
     "serialize-javascript": "^3.0.0",
-    "sirv": "^0.4.2"
+    "sirv": "^0.4.2",
+    "svelte-tooltip": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
