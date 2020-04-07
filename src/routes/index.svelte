@@ -8,10 +8,12 @@
   import Chart from "../components/chart.svelte";
   import Details from "../components/details.svelte";
 
+  let days = 66;
   var map, gl;
   var selected_country, selected_country_id;
   var colors = ["#FFC831", "#FF4E34", "#40C0A5"];
   var circle_size = 8000;
+  var play_speed = 1;
   var circle = [];
   var c = 0;
   let country_clicked,
@@ -25,10 +27,12 @@
   let showdate = "00/00/00";
   let bounds;
   let show = "";
-  let show_details = "hidden";
+  let show_details = false;
   let inPlay = true;
 
   let show_info = "show";
+
+  $: show_details;
 
   function play() {
     let length = Object.keys(res.confirmed.locations[0].history).length;
@@ -61,6 +65,7 @@
         if (layer instanceof L.Polygon) layer.remove();
       });
       let date = new Date(dates[ii]);
+      days++;
       showdate =
         ("0" + date.getDate()).slice(-2) +
         "/" +
@@ -76,7 +81,7 @@
         clearInterval(interval);
         inPlay = false;
       }
-    }, 10);
+    }, play_speed);
 
     return () => {
       clearInterval(interval);
@@ -95,6 +100,7 @@
       c = 0;
     var data = res.confirmed;
     var data_rec = res.recovered;
+    var data_dea = res.deaths;
 
     for (var k = 0; k < data.locations.length; k++) {
       var country_name = data.locations[k].country;
@@ -118,10 +124,14 @@
 
         if (number_people > 0) {
           var number_people_rec = data_rec.locations[k].history[date];
-          var people_rec = data_rec.locations[k].country;
+          var number_people_dea = data_dea.locations[k].history[date];
 
           var country_json = L.geoJson(country_in_map);
-          if (number_people_rec < number_people - number_people_rec) {
+          if (number_people_rec < number_people_dea) {
+            //red
+            country_json.getLayers()[0].options.fillColor = "#ff4e34";
+            country_json.getLayers()[0].options.color = "#ff4e34";
+          } else if (number_people_rec < number_people - number_people_rec) {
             //yellow
             country_json.getLayers()[0].options.fillColor = "#FFC831";
             country_json.getLayers()[0].options.color = "#FFC831";
@@ -342,7 +352,6 @@
                 country_clicked = getCountryISO2(country_id_3);
                 country_name_clicked = country[1].properties.name;
 
-                //map.fitBounds(country_json.getBounds());
                 break;
               }
             }
@@ -374,7 +383,6 @@
               var country_id_3 = country[1].id;
               country_clicked = getCountryISO2(country_id_3);
               country_name_clicked = country[1].properties.name;
-              //map.fitBounds(country_json.getBounds());
 
               break;
             }
@@ -405,6 +413,22 @@
 
       play();
     });
+  }
+
+  function fitMap(args) {
+    show_details = !show_details;
+    if (args.detail.country != "World") {
+      var country_json = L.geoJson(
+        Object.entries(countries_bounds).filter(
+          e => args.detail.country == e[0]
+        )[0]
+      );
+      map.fitBounds(country_json.getBounds());
+    }
+  }
+
+  function cchange() {
+    show_details = !show_details;
   }
 
   function sort(all) {
@@ -599,9 +623,7 @@
         "line-width": 1,
         "line-color": "rgba(255, 255, 255, 0.5)",
         "line-dasharray": [3, 6]
-        
       }
-      
     });
 
     gl._glMap.addLayer({
@@ -622,12 +644,12 @@
     function animate() {
       // Update point geometry to a new position based on counter denoting
       // the index to access the arc.
-      if(counter+1<route.features[0].geometry.coordinates.length){
-      point.features[0].geometry.coordinates =
-        route.features[0].geometry.coordinates[counter+1];
-      }else{
-         point.features[0].geometry.coordinates =
-        route.features[0].geometry.coordinates[counter];
+      if (counter + 1 < route.features[0].geometry.coordinates.length) {
+        point.features[0].geometry.coordinates =
+          route.features[0].geometry.coordinates[counter + 1];
+      } else {
+        point.features[0].geometry.coordinates =
+          route.features[0].geometry.coordinates[counter];
       }
 
       // Calculate the bearing to ensure the icon is rotated to match the route arc
@@ -680,7 +702,7 @@
 <div id="map" />
 
 <div class="container-date">
-  <div class="date">{showdate}</div>
+  <div class="date">Day {days} | {showdate}</div>
   <div class="navigate-time">
     <!-- <div class="button secondary adj-left">
       <i class="fas fa-chevron-left" />
@@ -719,12 +741,14 @@
     data={res}
     country={country_clicked}
     name={country_name_clicked}
-    {show_info} />
+    {show_details}
+    on:fitMap={args => fitMap(args)} />
   <Bestof data={res} {show} />
   <Details
     data={res}
     {bounds}
     country={country_clicked}
     name={country_name_clicked}
-    {show_details} />
+    {show_details}
+    on:cchange={() => cchange()} />
 {/if}

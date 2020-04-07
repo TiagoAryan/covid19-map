@@ -1,6 +1,7 @@
 <script>
-  import * as population from "./country-by-population.json";
-  import { s, flag } from "misc";
+  import { createEventDispatcher } from "svelte";
+  import { s, getPop, flag } from "misc";
+  const dispatch = createEventDispatcher();
 
   export let data;
   export let country;
@@ -32,7 +33,7 @@
         )[0].latest;
 
         if (setpop) {
-          pop_total = findPop(population.default, "code", country);
+          pop_total = getPop("code", country);
         } else {
           pop_total = confirmed;
         }
@@ -82,15 +83,6 @@
     return null;
   }
 
-  function findPop(items, attribute, value) {
-    for (var i = 0; i < items.length; i++) {
-      if (items[i][attribute] === value) {
-        return items[i].z * 1000;
-      }
-    }
-    return null;
-  }
-
   function change() {
     if (setpop) {
       setpop = !setpop;
@@ -101,13 +93,8 @@
       else pop_total = 7772494610;
     }
   }
-  function showContainers() {
-    var el = document.querySelector(".container_details_box");
-    el.classList.toggle("hidden");
-    /*
-    var el2 = document.querySelector(".container-countries");
-    el2.classList.toggle("hidden");
-    */
+  function cchange() {
+    dispatch("cchange");
   }
 </script>
 
@@ -176,9 +163,7 @@
           {/if}
         {/if}
       </div>
-      <div
-        class="button secondary button_close"
-        on:click={() => showContainers()}>
+      <div class="button secondary button_close" on:click={cchange}>
         <i class="fas fa-times" />
         Close
       </div>

@@ -1,12 +1,17 @@
 <script>
-  import * as population from "./country-by-population.json";
-  import { s, flag } from "misc";
+  import { createEventDispatcher } from "svelte";
+  import { s, getPop, flag } from "misc";
+  const dispatch = createEventDispatcher();
 
   export let data;
   export let country;
   export let name;
+  export let show_details;
+
   let pop_total, deaths, confirmed, recovered;
-  let show_container = "show";
+
+  $: show_details;
+
   $: setpop = false;
 
   $: country, getContent();
@@ -25,7 +30,7 @@
         )[0].latest;
 
         if (setpop) {
-          pop_total = findPop(population.default, "code", country);
+          pop_total = getPop("code", country);
         } else {
           pop_total = confirmed;
         }
@@ -34,7 +39,7 @@
         confirmed = 0;
         recovered = 0;
         if (setpop) {
-          pop_total = findPop(population.default, "code", country);
+          pop_total = getPop("code", country);
         } else {
           pop_total = 0;
         }
@@ -79,11 +84,11 @@
       else pop_total = 7772494610;
     }
   }
-  function showContainers() {
-    var el = document.querySelector(".container_details_box");
-    el.classList.toggle("hidden");
-    if (!show_container) show_container = "show";
-    // else show_container = "";
+
+  function fitMap() {
+    dispatch("fitMap", {
+      country: name
+    });
   }
 </script>
 
@@ -94,9 +99,14 @@
   .container-total.show {
     bottom: 0px;
   }
+  .flag img {
+    height: 28px;
+    width: 46px;
+  }
 </style>
 
-<div class="container-basic container-bottom container-total {show_container}">
+<div
+  class="container-basic container-bottom container-total {show_details ? 'hidden' : 'show'}">
 
   <div class="container-header">
     <div class="container-header-contents">
@@ -105,10 +115,7 @@
       </div>
       <h5 class="container-title">{name}</h5>
       {#if confirmed}
-        <div
-          style="float:right"
-          class="button"
-          on:click={() => showContainers()}>
+        <div style="float:right" class="button" on:click={fitMap}>
           <i class="fas fa-user-friends" />
           Details
         </div>

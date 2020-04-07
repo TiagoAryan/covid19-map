@@ -1,15 +1,66 @@
 <script>
-  import * as population from "./country-by-population.json";
-  import { s, flag } from "misc";
+  import { getPop } from "misc";
 
+  export let data;
   export let country;
-  let days=123;
-  let res;
 
-  $: setpop = false;
+  let days, fatality, pop_total, points;
 
+  $: country, getContent();
 
+  function getContent() {
+    if (data.confirmed.locations.filter(e => country === e.country_code)[0]) {
+      if (country == "CN") days = 66;
+      else if (country == "TH" || country == "NP") days = 9;
+      else if (country == "JP") days = 6;
+      else if (country == "US") days = 3;
+      else if (country == "KR") days = 2;
+      else days = 0;
 
+      let d = data.confirmed.locations.filter(
+        e => country === e.country_code
+      )[0].history;
+      Object.keys(d).forEach(function(key) {
+        if (d[key] != 0) days++;
+      });
+
+      let deaths = data.deaths.locations.filter(
+        e => country === e.country_code
+      )[0].latest;
+      let confirmed = data.confirmed.locations.filter(
+        e => country === e.country_code
+      )[0].latest;
+      let recovered = data.recovered.locations.filter(
+        e => country === e.country_code
+      )[0].latest;
+
+      fatality = (deaths / confirmed) * 100;
+
+      let length = Object.keys(data.confirmed.locations[0].history).length;
+
+      let pc7 = Object.values(
+        data.confirmed.locations.filter(e => country === e.country_code)[0]
+          .history
+      )[length - 8];
+      let pc0 = Object.values(
+        data.confirmed.locations.filter(e => country === e.country_code)[0]
+          .history
+      )[length - 1];
+
+      pop_total = getPop("code", country);
+
+      let inf = ((pc0 / pop_total) * 100 * 100 * 2) / 7;
+      if (inf > 2) inf = 2;
+
+      let gro = ((100 - (pc7 / pc0) * 100) * 4) / 50;
+      if (gro > 4) gro = 4;
+
+      let fat = (fatality * 4) / 13;
+      if (fat > 4) fat = 4;
+
+      points = 10 - (inf + gro + fat);
+    }
+  }
 </script>
 
 <style>
@@ -18,42 +69,42 @@
     display: inline-block;
     margin: 0;
     margin-bottom: 12px;
-    height:110px;
+    height: 110px;
     width: 100%;
     left: 0;
     vertical-align: top;
   }
-  .col-block{
+  .col-block {
     width: 32%;
   }
-  h4{
-    margin: 0px
+  h4 {
+    margin: 0px;
   }
-  .label-big h4{
+  .label-big h4 {
     display: inline-block;
     margin: 0;
     font-weight: 600;
   }
-  .label-big{
+  .label-big {
     padding: 6px 12px;
     border-radius: 6px;
     display: inherit;
-  } 
-  .label-yellow{
+  }
+  .label-yellow {
     color: #ffc831;
-    background-color: rgba(255, 200, 49, 0.2) ;
+    background-color: rgba(255, 200, 49, 0.2);
   }
-  .label-red{
-    color:  #ff4e34;
-    background-color: rgba(255, 78, 52, 0.2) ;
+  .label-red {
+    color: #ff4e34;
+    background-color: rgba(255, 78, 52, 0.2);
   }
-  .label-green{
-   color: #40c0a5;
+  .label-green {
+    color: #40c0a5;
     background-color: rgba(64, 192, 165, 0.2);
   }
-  .col-block label{
+  .col-block label {
     display: block;
-    margin-bottom: 4px
+    margin-bottom: 4px;
   }
 </style>
 
@@ -64,20 +115,22 @@
     <div class="container-data-details">
       <div class="col-block">
         <label>Days since first infected</label>
-        <h4> {days} Days</h4>
+        <h4>{days} Days</h4>
       </div>
       <div class="col-block">
-          <label>Fatality</label>
+        <label>Fatality</label>
         <div class="label-big label-yellow">
-        
-          <h4> 2.4%</h4>
+
+          <h4>{fatality.toFixed(1)}%</h4>
         </div>
       </div>
       <div class="col-block">
         <label>Current Situation</label>
         <div class="label-big label-green">
 
-        <h4> 2 / 10</h4>
+          <h4 title="progress of the situation in the last 7 days">
+            {points.toFixed(0)} / 10
+          </h4>
         </div>
 
       </div>

@@ -10,6 +10,11 @@
   export let bounds;
   export let country;
   export let name;
+  export let show_details;
+
+  $: show_details;
+
+  var dados = JSON.parse(JSON.stringify(data));
 </script>
 
 <style>
@@ -77,8 +82,8 @@
   }
   @media (max-width: 1280px) {
     .container_details_box-half {
-    max-width: 600px;
-  }
+      max-width: 600px;
+    }
   }
   @media (max-width: 768px) {
     .box-half {
@@ -94,27 +99,26 @@
 
 <div
   class="container_details_box {country ? 'container_details_box-half' : ''}
-  hidden">
+  {!show_details ? 'hidden' : ''}">
   <div class="container_details">
     {#if !country}
       <div class="box-half">
-        
-        <ChartW {data} {country} />
-        <ChartPoints {data} />
+
+        <ChartW data={dados} {country} />
+        <ChartPoints data={dados} />
       </div>
     {/if}
 
     <div
       class="box-half box-half-right {country ? 'container_details_box-half-right' : ''}">
       {#if country}
-        <Preview {data} {country} {name} />
-        <Stats {data} {country} {name} />
-        <Chart {data} {country} />
-
+        <Preview data={dados} {country} {name} on:cchange />
+        <Stats data={dados} {country} />
+        <Chart data={dados} {country} />
       {/if}
       {#if !country}
-        <Preview {data} {country} {name} />
-        <Countries {data} {bounds} />
+        <Preview data={dados} {country} {name} on:cchange />
+        <Countries data={dados} {bounds} />
       {/if}
     </div>
   </div>
