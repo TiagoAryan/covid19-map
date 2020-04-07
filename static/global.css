@@ -125,23 +125,28 @@ label {
   background-color: rgba(235, 238, 255, 0.1);
   height: 16px;
   border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0px 0px 0px 2px #ffc831;
+
 }
 .progress-bar {
   display: inline-block;
-  border: 2px solid #40c0a5;
   background-color: rgba(64, 192, 165, 0.2);
+  box-shadow: inset 0px 0px 0px 2px #40c0a5;
+
   height: 16px;
   margin: 0;
   float: left;
   border-radius: 0px 20px 20px 0px;
 }
 .bg-danger {
-  border: 2px solid #ff4e34;
   background-color: rgba(255, 78, 52, 0.2) !important;
+  box-shadow: inset 0px 0px 0px 2px #ff4e34;
+
   border-radius: 20px 0px 0px 20px;
 }
 .bg-warning {
-  border: 2px solid #ffc831;
+  box-shadow: inset 0px 0px 0px 2px #ffc831;
   background-color: rgba(255, 200, 49, 0.2) !important;
   border-radius: 0px;
 }
@@ -228,6 +233,7 @@ button:hover,
   display: inline-block;
   vertical-align: top;
   margin-right: 8px;
+  position: relative;
 }
 .flag img {
   object-fit: contain;
@@ -341,6 +347,27 @@ button:hover,
 .leaflet-container a {
   color: #828282;
 }
+.tooltip.top{
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  margin-top: -24px !important;
+  padding: 6px 12px !important;
+  font-size: 0.8rem;
+  z-index: 100;
+  display: block;
+  
+}
+.tooltip.top:after{
+  content:"";
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid rgba(0, 0, 0, 0.9);
+}
+.container-basic{
+  overflow: visible;
+}
 @media (max-width: 1024px) {
   .col-block {
     width: 24%;
@@ -377,6 +404,7 @@ button:hover,
   }
   .progress-bar {
     height: 12px;
+    
   }
   .container-basic {
     padding: 12px 0px 12px 0px;

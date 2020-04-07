@@ -99,6 +99,20 @@
   .container-total.show {
     bottom: 0px;
   }
+
+  .body-healthy {
+    color: white;
+    opacity: 0.4;
+    padding: 20px 0px;
+    text-align: center;
+  }
+  .body-healthy h5 {
+    display: inline-block;
+    font-weight: 300;
+  }
+  .body-healthy i {
+    margin-right: 12px;
+  }
   .flag img {
     height: 28px;
     width: 46px;
@@ -114,64 +128,70 @@
         <img src={flag(name)} alt="flag" />
       </div>
       <h5 class="container-title">{name}</h5>
-      {#if confirmed}
-        <div style="float:right" class="button" on:click={fitMap}>
-          <i class="fas fa-user-friends" />
-          Details
-        </div>
-      {/if}
+      <div style="float:right" class="button" on:click={fitMap}>
+        <i class="fas fa-user-friends" />
+        Details
+      </div>
     </div>
   </div>
-  <div class="container-body">
+  {#if confirmed}
+    <div class="container-body body-infected">
 
-    <div class="container-data-details">
-      <div class="col-block">
-        <i class="dot dot_red" />
-        <label>Deaths</label>
-        <div class="data">{s(deaths)}</div>
-      </div>
-      <div class="col-block">
-        <i class="dot dot_yellow" />
-        <label>Active</label>
-        <div class="data">{s(confirmed - deaths - recovered)}</div>
-      </div>
-      <div class="col-block">
-        <i class="dot dot_green" />
-        <label>Recovered</label>
-        <div class="data">{s(recovered)}</div>
-      </div>
-      <div class="col-block-btn">
-        <div class="button" on:click={() => change()}>
-          <i class="fas fa-user-friends" />
-          All
+      <div class="container-data-details">
+        <div class="col-block">
+          <i class="dot dot_red" />
+          <label>Deaths</label>
+          <div class="data">{s(deaths)}</div>
+        </div>
+        <div class="col-block">
+          <i class="dot dot_yellow" />
+          <label>Active</label>
+          <div class="data">{s(confirmed - deaths - recovered)}</div>
+        </div>
+        <div class="col-block">
+          <i class="dot dot_green" />
+          <label>Recovered</label>
+          <div class="data">{s(recovered)}</div>
+        </div>
+        <div class="col-block-btn">
+          <div class="button" on:click={() => change()}>
+            <i class="fas fa-user-friends" />
+            All
+          </div>
         </div>
       </div>
+      <div class="progress">
+        <div
+          class="progress-bar bg-danger"
+          role="progressbar"
+          style="width: {deaths ? (deaths * 100) / pop_total : 0}%"
+          aria-valuenow={deaths ? (deaths * 100) / pop_total : 0}
+          aria-valuemin="0"
+          aria-valuemax="100" />
+        <div
+          class="progress-bar bg-warning"
+          role="progressbar"
+          style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}%"
+          aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}
+          aria-valuemin="0"
+          aria-valuemax="100" />
+        <div
+          class="progress-bar"
+          role="progressbar"
+          style="width: {recovered ? (recovered * 100) / pop_total : 0}%"
+          aria-valuenow={recovered ? (recovered * 100) / pop_total : 0}
+          aria-valuemin="0"
+          aria-valuemax="100" />
+      </div>
+      <label class="progress_label">
+        {s(pop_total)} {setpop ? 'Population' : 'Cases'}
+      </label>
     </div>
-    <div class="progress">
-      <div
-        class="progress-bar bg-danger"
-        role="progressbar"
-        style="width: {deaths ? (deaths * 100) / pop_total : 0}%"
-        aria-valuenow={deaths ? (deaths * 100) / pop_total : 0}
-        aria-valuemin="0"
-        aria-valuemax="100" />
-      <div
-        class="progress-bar bg-warning"
-        role="progressbar"
-        style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}%"
-        aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}
-        aria-valuemin="0"
-        aria-valuemax="100" />
-      <div
-        class="progress-bar"
-        role="progressbar"
-        style="width: {recovered ? (recovered * 100) / pop_total : 0}%"
-        aria-valuenow={recovered ? (recovered * 100) / pop_total : 0}
-        aria-valuemin="0"
-        aria-valuemax="100" />
+  {:else}
+    <div class="container-body body-healthy">
+      <i class="fas fa-heartbeat" />
+      <h5>This country has no cases of Covid-19</h5>
+      <i class="fas fa-heartbeat" />
     </div>
-    <label class="progress_label">
-      {s(pop_total)} {setpop ? 'Population' : 'Cases'}
-    </label>
-  </div>
+  {/if}
 </div>

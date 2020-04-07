@@ -1,6 +1,7 @@
 <script>
   import getCountryISO2 from "country-iso-3-to-2";
   import { flag } from "misc";
+    import SvelteTooltip from 'svelte-tooltip';
 
   export let data;
   export let bounds;
@@ -48,6 +49,21 @@
   }
   .container-list .flag {
     width: 28px;
+
+  }
+  .flag{
+    transform: scale(0.9);
+    opacity: 0.9;
+    
+       -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+
+  }
+  .flag:hover{
+    transform: scale(1.1);
+    opacity: 1;
   }
   .container-basic {
     width: 100%;
@@ -62,21 +78,14 @@
     vertical-align: top;
     height: 100%;
   }
-  .container-body {
-    height: calc(100% - 40px);
-    overflow-y: scroll;
+  .container-body{
+    overflow: scroll;
+    height: 100%;
   }
-  .list-name {
-    font-size: 0.8rem;
-    display: inline-block;
-    vertical-align: top;
-    width: calc(100% - 48px);
-    line-height: 0.9rem;
+  .container-basic{
+    height: 200px;
   }
   @media (max-width: 768px) {
-    .container-list-group {
-      height: 400px;
-    }
   }
 </style>
 
@@ -95,12 +104,11 @@
         <div class="container-list">
 
           {#each c_infected as item, i}
-            <li>
+            <SvelteTooltip tip="{item[0]}" top >
               <div class="flag">
                 <img src={flag(item[0])} alt="flag" />
               </div>
-              <p class="list-name">{item[0]}</p>
-            </li>
+            </SvelteTooltip>
           {/each}
         </div>
       </div>
@@ -116,12 +124,11 @@
       <div class="container-body">
         <div class="container-list">
           {#each c_healthy as item, i}
-            <li>
+            <SvelteTooltip tip="{item[0]}" top >
               <div class="flag">
                 <img src={flag(item[0])} alt="flag" />
               </div>
-              <p class="list-name">{item[0]}</p>
-            </li>
+            </SvelteTooltip>
           {/each}
         </div>
       </div>
