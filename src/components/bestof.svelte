@@ -7,10 +7,9 @@
   export let show;
 
   let box_title = "Total";
-  let btn_icon = "fa-list-ul";
   let btn_text = "Last Day";
   var list_mode;
-
+  var show_options="hidden";
   let all, length;
   let all_sorted = [];
 
@@ -59,21 +58,28 @@
   function changeListDisplay(mode) {
     if (mode == "total") {
       list_mode = "total";
-      box_title = "Last Day";
-      btn_icon = "fa-layer-group";
+      box_title = "Total";
       btn_text = "Total";
     } else if (mode == "last") {
       list_mode = "last";
-      box_title = "Total";
-      btn_icon = "fa-list-ul";
+      box_title = "Last Day";
       btn_text = "Last Day";
     } else if (mode == "growth") {
       list_mode = "growth";
       box_title = "Growth % (min 100)";
-      btn_icon = "fa-list-ul";
       btn_text = "Growth %";
     }
+    show_options = "hidden";
+
     run();
+  }
+  function toggleOptions(){
+     if (show_options == "hidden") {
+      show_options = "show";
+    } else {
+      show_options = "hidden";
+    }
+
   }
 </script>
 
@@ -116,6 +122,69 @@
   .container-body {
     padding: 0px;
   }
+  .dropdown{
+    display: inline-block;
+    float: right;
+    position: relative;
+    
+  }
+  .dropdown .trigger{
+    padding: 6px 12px;
+    background-color: transparent;
+    border:1px solid white;
+    color:white;
+    opacity: 0.6;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    border-radius: 3px;
+  }
+  .dropdown .trigger:hover{
+    cursor: pointer;
+    opacity: 1;
+  }
+  .trigger i{
+    margin-left: 4px;
+  }
+  .options{
+    overflow: hidden;
+    position: absolute;
+    top: 40px;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    
+    border-radius: 3px;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    background-color: rgba(0,0,0,0.8);
+  }
+  .options.hidden{
+    height: 0px;
+    opacity: 0;
+  }
+  .options.show{
+    height: 120px;
+    opacity:1;
+  }
+  .option{
+    padding: 8px 16px;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+  }
+  .option:hover{
+    background-color: rgba(255,255,255,0.2);
+    cursor: pointer;
+
+  }
+  .container-header label{
+    display: block;
+  }
 </style>
 
 <div
@@ -125,27 +194,31 @@
     <div class="container-header-contents">
 
       <h5 class="container-title">Most {show}</h5>
-      <div
-        style="float:right"
-        class="button"
-        on:click={() => changeListDisplay('total')}>
-        <i class="fas {btn_icon}" />
-        Total
+      <div class="dropdown">
+        <div class="trigger" on:click={() => toggleOptions()}>Order by {btn_text}<i class="fas fa-chevron-down" ></i></div>
+        <div class="options {show_options}">
+          <div
+            class="option"
+            on:click={() => changeListDisplay('total')}>
+            <i class="fas fa-battery-full"></i>
+            Total
+          </div>
+          <div
+            class="option"
+            on:click={() => changeListDisplay('last')}>
+            <i class="fas fa-chart-bar"></i>
+            Last Day
+          </div>
+          <div
+            class="option"
+            on:click={() => changeListDisplay('growth')}>
+            <i class="fas fa-chart-line"></i>
+            Growth %
+          </div>
+        </div>
+      
       </div>
-      <div
-        style="float:right"
-        class="button"
-        on:click={() => changeListDisplay('last')}>
-        <i class="fas {btn_icon}" />
-        Last Day
-      </div>
-      <div
-        style="float:right"
-        class="button"
-        on:click={() => changeListDisplay('growth')}>
-        <i class="fas {btn_icon}" />
-        Growth %
-      </div>
+     
       <label>— {box_title}</label>
     </div>
   </div>
