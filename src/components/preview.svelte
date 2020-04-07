@@ -130,6 +130,12 @@
   .container-title {
     margin-right: 12px;
   }
+  @media (max-width: 1280px) {
+
+    .container-total {
+      height: 170px;
+    }
+  }
   @media (max-width: 768px) {
     .container-total {
       height: auto;

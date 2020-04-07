@@ -85,7 +85,10 @@
   .container-basic{
     height: 200px;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 1280px) {
+    .container-basic{
+      height: 170px;
+    }
   }
 </style>
 
