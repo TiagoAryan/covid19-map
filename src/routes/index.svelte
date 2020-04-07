@@ -405,6 +405,7 @@
     getSpread();
 
     await data.all().then(function(result) {
+      console.log(result);
       res = result;
 
       res.confirmed.locations = sort(res.confirmed.locations);
@@ -690,6 +691,27 @@
     width: 100vw;
     height: 100vh;
   }
+  .pane-loading{
+    position: fixed !important;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.6);
+    color:white;
+    text-align: center;
+    padding: 20vh 0px;
+        -webkit-transition-duration: 0.4s;
+    -moz-transition-duration: 0.4s;
+    -o-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    opacity: 1;
+  }
+  p{
+    margin-top: 20px;
+    font-size:2.6rem;
+    font-weight:300;
+    color:whitesmoke;
+  }
 </style>
 
 <svelte:head>
@@ -698,9 +720,12 @@
   </script>
   <title>Covid 19 Info</title>
 </svelte:head>
+<section>
 
 <div id="map" />
 
+
+{#if res !== undefined && res !== "" && res !== []}
 <div class="container-date">
   <div class="date">Day {days} | {showdate}</div>
   <div class="navigate-time">
@@ -735,8 +760,6 @@
     <i class="fas fa-user-times" />
   </div>
 </div>
-
-{#if res !== undefined}
   <Info
     data={res}
     country={country_clicked}
@@ -751,4 +774,10 @@
     name={country_name_clicked}
     {show_details}
     on:cchange={() => cchange()} />
+{:else}
+  <div class="pane-loading"> 
+  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  <p>Getting Data...</p>
+  </div>
 {/if}
+</section>
