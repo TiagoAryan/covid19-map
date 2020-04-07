@@ -7,6 +7,7 @@
   import Countries from "../components/countries.svelte";
   import Chart from "../components/chart.svelte";
   import Details from "../components/details.svelte";
+  import News from "../components/news.svelte";
 
   let days = 66;
   var map, gl;
@@ -780,4 +781,6 @@
   <p>Getting Data...</p>
   </div>
 {/if}
+  <News />
+
 </section>
