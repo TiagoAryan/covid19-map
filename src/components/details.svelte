@@ -91,7 +91,7 @@
     .box-half {
       width: 100%;
       margin-bottom: 12px;
-      height: auto;
+      height: 100vh;
     }
     .box-half-right {
       margin-left: 0px;

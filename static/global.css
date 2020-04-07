@@ -478,6 +478,9 @@ button:hover,
     margin: 0px auto;
     width: calc(100% - 24px);
   }
+  .progress{
+    height: 12px;
+  }
 }
 @media (max-width: 480px) {
   html,

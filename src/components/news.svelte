@@ -48,6 +48,11 @@ p{
   font-weight: 300;
   line-height: 1.1rem;
 }
+@media (max-width: 768px) {
+  .block-news{
+    display: none;
+  }
+}
 </style>
 <div class="block-news">
 <h4>News</h4>
