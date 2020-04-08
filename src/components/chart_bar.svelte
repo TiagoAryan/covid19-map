@@ -88,25 +88,125 @@
     await onMount(() => {
       initChart();
     });
-      chart.type = "bar";
+      chart.type = "line";
       
       chart.data = {
-        labels: ["Portugal","china", "US", "LA"],
+        labels: ["Day 1","Day 2", "Day 3", "Day 4","Day 5","Day 6", "Day 7", "Day 8","Day 9","Day 10"],
         datasets: [
           {
-            type: "bar",
-            label: "Count",
+            type: "line",
+            label: "Portugal",
             defaultFontFamily: "Open Sans",
             borderColor: "#FFC831",
             backgroundColor: "#FFC831",
             fill: false,
-            data: [2000,2930843, 38489082, 349331],
+            data: [100,120, 124, 392,495,596, 650,704,894,1020],
             yAxisID: "y-axis-1",
-            borderWidth: 1,
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
             pointHitRadius: 5,
-            pointRadius: 1,
-            pointHoverRadius: 1,
-            pointHoverBorderWidth: 2
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          },{
+            type: "line",
+            label: "Italy",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#34B2FF",
+            backgroundColor: "#34B2FF",
+            fill: false,
+            data: [100,320, 893, 1203,2040,2810, 3019,4059,6048,10020],
+            yAxisID: "y-axis-1",
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
+            pointHitRadius: 5,
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          }
+          ,{
+            type: "line",
+            label: "China",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#FF4E34",
+            backgroundColor: "#FF4E34",
+            fill: false,
+            data: [100,2019, 6094, 9201,9012,10292, 11092,13091,14091,1903],
+            yAxisID: "y-axis-1",
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
+            pointHitRadius: 5,
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          },{
+            type: "line",
+            label: "Portugal",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#40C0A5",
+            backgroundColor: "#40C0A5",
+            fill: false,
+            data: [100,401, 609, 703,740,780, 810,840,860,880],
+            yAxisID: "y-axis-1",
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
+            pointHitRadius: 5,
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          },{
+            type: "line",
+            label: "France",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#7FC040",
+            backgroundColor: "#7FC040",
+            fill: false,
+            data: [100,301, 609, 903,1740,1780, 1810,1840,1860,1880],
+            yAxisID: "y-axis-1",
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
+            pointHitRadius: 5,
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          },{
+            type: "line",
+            label: "US",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#D6602D",
+            backgroundColor: "#D6602D",
+            fill: false,
+            data: [100,10192, 16049, 19003,2740,37280, 40100,52840,62860,88880],
+            yAxisID: "y-axis-1",
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
+            pointHitRadius: 5,
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
+          }
+          ,{
+            type: "line",
+            label: "UK",
+            defaultFontFamily: "Open Sans",
+            borderColor: "#6634FF",
+            backgroundColor: "#6634FF",
+            fill: false,
+            data: [100,12192, 18049, 19003,2140,27280, 30100,42840,48860,58880],
+            yAxisID: "y-axis-1",
+            pointBackgroundColor: "#1E1E21",
+            pointBorderWidth: 2,
+            borderWidth: 2,
+            pointHitRadius: 5,
+            pointRadius: 3,
+            pointHoverRadius: 12,
+            pointHoverBorderWidth: 3
           }
         ]
       };
@@ -209,8 +309,13 @@
     height: calc(100vh - 348px);
   }
   .container-chart.world {
-    height: calc(50% - 12px);
+    height: calc(100% - 414px);
   }
+@media (max-width: 1280px) {
+  .container-chart.world{
+    height: calc(100% - 363px);
+  }
+}
 </style>
 
 <div
@@ -221,7 +326,7 @@
 
     <div class="container-header-contents">
 
-      <h5 class="container-title">Front Countries</h5>
+      <h5 class="container-title">Countries Curves</h5>
       
     </div>
   </div>

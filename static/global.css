@@ -457,6 +457,10 @@ button:hover,
   body {
     font-size: 11pt;
   }
+  .container-bottom {
+    left: calc(50% - 300px);
+    width: 600px;
+  }
 }
 @media (max-width: 1024px) {
   .col-block {
@@ -473,6 +477,9 @@ button:hover,
     left: 12px;
     margin: 0px auto;
     width: calc(100% - 24px);
+  }
+  .progress{
+    height: 12px;
   }
 }
 @media (max-width: 480px) {

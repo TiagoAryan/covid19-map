@@ -283,6 +283,12 @@
     transition-duration: 0.4s;
     vertical-align: top;
   }
+  label{
+    margin: 0;
+  }
+  .container-header{
+    padding-bottom: 10px;
+  }
 </style>
 
 <div class="container-basic container-chart" bind:this={container_box}>

@@ -36,6 +36,7 @@
     -moz-transition-duration: 0.4s;
     -o-transition-duration: 0.4s;
     transition-duration: 0.4s;
+    z-index: 11;
   }
   .container_details_box-half {
     left: auto;
@@ -90,7 +91,7 @@
     .box-half {
       width: 100%;
       margin-bottom: 12px;
-      height: auto;
+      height: 100vh;
     }
     .box-half-right {
       margin-left: 0px;

@@ -6,8 +6,8 @@
   position: fixed;
   left: 12px;
   bottom:12px;
-  width: 340px;
-
+  width: 310px;
+  z-index: 10;
 }
 .container-body{
   position: relative;
@@ -16,7 +16,7 @@
 
 }
 .container-basic{
-  width: 340px;
+  width: 310px;
   position: relative;
   display: block;
 }
@@ -47,6 +47,11 @@ h4{
 p{
   font-weight: 300;
   line-height: 1.1rem;
+}
+@media (max-width: 768px) {
+  .block-news{
+    display: none;
+  }
 }
 </style>
 <div class="block-news">

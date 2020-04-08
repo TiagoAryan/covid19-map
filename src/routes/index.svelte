@@ -354,7 +354,11 @@
                 var country_id_3 = country[1].id;
                 country_clicked = getCountryISO2(country_id_3);
                 country_name_clicked = country[1].properties.name;
-
+                if (show_details) {
+                  var bounds = country_json.getBounds();
+                  var bounds_extended = getBoundsFloatLeft(bounds);
+                  map.flyToBounds(bounds_extended);
+                }
                 break;
               }
             }
@@ -387,6 +391,12 @@
               country_clicked = getCountryISO2(country_id_3);
               country_name_clicked = country[1].properties.name;
 
+              if (show_details) {
+                var bounds = country_json.getBounds();
+                var bounds_extended = getBoundsFloatLeft(bounds);
+                map.flyToBounds(bounds_extended);
+              }
+
               break;
             }
           }
@@ -397,6 +407,7 @@
         country_clicked = "";
         country_name_clicked = "World";
         selected_country_id = "";
+        map.fitWorld();
       }
     }
 
@@ -496,8 +507,24 @@
           e => args.detail.country == e[0]
         )[0]
       );
-      map.fitBounds(country_json.getBounds());
+      var bounds = country_json.getBounds();
+      var bounds_extended = getBoundsFloatLeft(bounds);
+      map.flyToBounds(bounds_extended);
+    } else {
+      map.fitWorld();
     }
+  }
+
+  function getBoundsFloatLeft(bounds) {
+    var point_1 = bounds.getNorthWest();
+    var point_2 = bounds.getSouthEast();
+    var double_country = point_2.lng - (point_1.lng - point_2.lng) * 2;
+    var country_center = point_1.lat + (point_1.lat - point_2.lat) / 2;
+
+    var estended_point = L.latLng(country_center, double_country);
+    var bounds_extended = bounds.extend(estended_point);
+
+    return bounds_extended;
   }
 
   function cchange() {
