@@ -56,6 +56,7 @@
       }
     }
   }
+  
   function changeListDisplay(mode) {
     if (mode == "total") {
       list_mode = "total";

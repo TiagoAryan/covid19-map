@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import data from "jhucsse.covid";
+  import { NovelCovid } from "novelcovid";
   import getCountryISO2 from "country-iso-3-to-2";
   import Info from "../components/info.svelte";
   import Bestof from "../components/bestof.svelte";
@@ -8,6 +9,7 @@
   import Chart from "../components/chart.svelte";
   import Details from "../components/details.svelte";
   import News from "../components/news.svelte";
+  import { toDate } from "misc";
 
   let days = 66;
   var map, gl;
@@ -25,7 +27,7 @@
   var n_lines = 0;
   let c_infec_lines = [];
   let geo_infec_lines = [];
-  let showdate = "00/00/00";
+  let showdate = "22 / 01 / 2020";
   let bounds;
   let show = "";
   let show_details = false;
@@ -69,9 +71,9 @@
       days++;
       showdate =
         ("0" + date.getDate()).slice(-2) +
-        "/" +
+        " / " +
         ("0" + (date.getMonth() + 1)).slice(-2) +
-        "/" +
+        " / " +
         date.getFullYear();
       InfectedCountries(res, dates[ii]);
       placeAllCircles(res, dates[ii]);
@@ -405,16 +407,85 @@
 
     getSpread();
 
-    await data.all().then(function(result) {
-      console.log(result);
-      res = result;
+    await data
+      .all()
+      .then(async function(result) {
+        result.confirmed.locations = sort(result.confirmed.locations);
+        result.deaths.locations = sort(result.deaths.locations);
+        result.recovered.locations = sort(result.recovered.locations);
 
-      res.confirmed.locations = sort(res.confirmed.locations);
-      res.deaths.locations = sort(res.deaths.locations);
-      res.recovered.locations = sort(res.recovered.locations);
+        res = await mergeNewData(result);
 
-      play();
-    });
+        play();
+      })
+      .catch(function(error) {
+        console.error(error);
+      });
+  }
+
+  async function mergeNewData(data) {
+    let all = await new NovelCovid().all();
+    let nov = await new NovelCovid().countries();
+
+    data.latest.confirmed = all.cases;
+    data.latest.deaths = all.deaths;
+    data.latest.recovered = all.recovered;
+    data.latest.critical = all.critical;
+    data.latest.tests = all.tests;
+
+    for (var nc of nov) {
+      if (
+        data.confirmed.locations.filter(
+          e => nc.countryInfo.iso2 === e.country_code
+        )[0]
+      ) {
+        let c = data.confirmed.locations.filter(
+          e => nc.countryInfo.iso2 === e.country_code
+        )[0];
+        c.latest = nc.cases;
+        c.history[toDate(nc.updated)] = nc.cases;
+        c.critical = nc.critical;
+        c.tests = nc.tests;
+        let d = data.deaths.locations.filter(
+          e => nc.countryInfo.iso2 === e.country_code
+        )[0];
+        d.latest = nc.deaths;
+        d.history[toDate(nc.updated)] = nc.deaths;
+        let r = data.recovered.locations.filter(
+          e => nc.countryInfo.iso2 === e.country_code
+        )[0];
+        r.latest = nc.recovered;
+        r.history[toDate(nc.updated)] = nc.recovered;
+      }
+    }
+
+    for (var nc of nov) {
+      if (
+        !data.confirmed.locations.filter(
+          e => nc.countryInfo.iso2 === e.country_code
+        )[0]
+      ) {
+        if (nc.countryInfo.iso2 == "HK" || nc.countryInfo.iso2 == "MO") {
+          let c = data.confirmed.locations.filter(
+            e => "CN" === e.country_code
+          )[0];
+          c.latest += nc.cases;
+          c.history[toDate(nc.updated)] += nc.cases;
+          c.critical += nc.critical;
+          c.tests += nc.tests;
+          let d = data.deaths.locations.filter(e => "CN" === e.country_code)[0];
+          d.latest += nc.deaths;
+          d.history[toDate(nc.updated)] += nc.deaths;
+          let r = data.recovered.locations.filter(
+            e => "CN" === e.country_code
+          )[0];
+          r.latest += nc.recovered;
+          r.history[toDate(nc.updated)] += nc.recovered;
+        }
+      }
+    }
+
+    return data;
   }
 
   function fitMap(args) {
@@ -692,26 +763,26 @@
     width: 100vw;
     height: 100vh;
   }
-  .pane-loading{
+  .pane-loading {
     position: fixed !important;
     width: 100vw;
     height: 100vh;
     z-index: 100;
     background-color: rgba(0, 0, 0, 0.6);
-    color:white;
+    color: white;
     text-align: center;
     padding: 20vh 0px;
-        -webkit-transition-duration: 0.4s;
+    -webkit-transition-duration: 0.4s;
     -moz-transition-duration: 0.4s;
     -o-transition-duration: 0.4s;
     transition-duration: 0.4s;
     opacity: 1;
   }
-  p{
+  p {
     margin-top: 20px;
-    font-size:2.6rem;
-    font-weight:300;
-    color:whitesmoke;
+    font-size: 2.6rem;
+    font-weight: 300;
+    color: whitesmoke;
   }
 </style>
 
@@ -723,64 +794,72 @@
 </svelte:head>
 <section>
 
-<div id="map" />
+  <div id="map" />
 
-
-{#if res !== undefined && res !== "" && res !== []}
-<div class="container-date">
-  <div class="date">Day {days} | {showdate}</div>
-  <div class="navigate-time">
-    <!-- <div class="button secondary adj-left">
+  {#if res !== undefined && res !== '' && res !== []}
+    <div class="container-date">
+      <div class="date">Day {days} | {showdate}</div>
+      <div class="navigate-time">
+        <!-- <div class="button secondary adj-left">
       <i class="fas fa-chevron-left" />
     </div>
     <div class="button secondary adj-right">
       <i class="fas fa-chevron-right" />
     </div>-->
-    <button
-      class="button {inPlay}"
-      on:click={() => playhistory()}
-      disabled={inPlay}>
-      <i class="fas fa-play" />
-    </button>
-  </div>
-</div>
-<div class="container-icons">
-  <div
-    class="container-basic container-icon"
-    on:click={() => showList('confirmed')}>
-    <i class="fas fa-procedures" />
-  </div>
-  <div
-    class="container-basic container-icon"
-    on:click={() => showList('recovered')}>
-    <i class="fas fa-notes-medical" />
-  </div>
-  <div
-    class="container-basic container-icon"
-    on:click={() => showList('deaths')}>
-    <i class="fas fa-user-times" />
-  </div>
-</div>
-  <Info
-    data={res}
-    country={country_clicked}
-    name={country_name_clicked}
-    {show_details}
-    on:fitMap={args => fitMap(args)} />
-  <Bestof data={res} {show} />
-  <Details
-    data={res}
-    {bounds}
-    country={country_clicked}
-    name={country_name_clicked}
-    {show_details}
-    on:cchange={() => cchange()} />
-{:else}
-  <div class="pane-loading"> 
-  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-  <p>Getting Data...</p>
-  </div>
-{/if}
+        <button
+          class="button {inPlay}"
+          on:click={() => playhistory()}
+          disabled={inPlay}>
+          <i class="fas fa-play" />
+        </button>
+      </div>
+    </div>
+    <div class="container-icons">
+      <div
+        class="container-basic container-icon"
+        on:click={() => showList('confirmed')}>
+        <i class="fas fa-procedures" />
+      </div>
+      <div
+        class="container-basic container-icon"
+        on:click={() => showList('recovered')}>
+        <i class="fas fa-notes-medical" />
+      </div>
+      <div
+        class="container-basic container-icon"
+        on:click={() => showList('deaths')}>
+        <i class="fas fa-user-times" />
+      </div>
+    </div>
+    <Info
+      data={res}
+      country={country_clicked}
+      name={country_name_clicked}
+      {show_details}
+      on:fitMap={args => fitMap(args)} />
+    <Bestof data={res} {show} />
+    <Details
+      data={res}
+      {bounds}
+      country={country_clicked}
+      name={country_name_clicked}
+      {show_details}
+      on:cchange={() => cchange()} />
+  {:else}
+    <div class="pane-loading">
+      <p>Getting Data</p>
+      <div class="lds-roller">
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>
+    </div>
+  {/if}
   <News />
 
 </section>

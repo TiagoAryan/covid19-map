@@ -39,12 +39,16 @@
         " (+" +
         s(item.latest - Object.values(item.history)[length - 2]) +
         ")";
+      let n = 1;
+      if (Object.values(item.history)[length - 2] !== 0)
+        n = Object.values(item.history)[length - 2];
+
       number =
         (
           ((Object.values(item.history)[length - 1] -
             Object.values(item.history)[length - 2]) *
             100) /
-          Object.values(item.history)[length - 2]
+          n
         ).toFixed(0) + "%";
     } else {
       title = "+" + s(item.latest - Object.values(item.history)[length - 2]);
