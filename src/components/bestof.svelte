@@ -99,6 +99,7 @@
     transition-duration: 0.4s;
 
     pointer-events: all;
+    z-index: 100;
   }
   .container-bestof.hidden {
     height: 0px;

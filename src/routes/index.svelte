@@ -426,7 +426,7 @@
         result.recovered.locations = sort(result.recovered.locations);
 
         res = await mergeNewData(result);
-        
+
         play();
       })
       .catch(function(error) {
@@ -762,6 +762,12 @@
         "line-dasharray": [3, 6]
       }
     });
+    var degrees = Math.atan2((from[0] - to[0]), (from[1] - to[1])) * 180 / Math.PI;
+
+    if (degrees < 0.0){
+          degrees += 360.0;
+    }
+    console.log(degrees);
 
     gl._glMap.addLayer({
       id: "point_" + k,
