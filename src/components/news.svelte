@@ -56,7 +56,7 @@
     <a href="/news" rel="prefetch">
       <div class="container-basic">
         <div class="container-body">
-          <tt>{item.source.name} - {moment(item.publishedAt).fromNow()}</tt>
+          <label>{item.source.name} - {moment(item.publishedAt).fromNow()}</label>
           <div class="news">{item.title}</div>
         </div>
       </div>
