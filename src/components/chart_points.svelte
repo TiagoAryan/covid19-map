@@ -120,15 +120,10 @@
         spanGaps: true,
         showLines: true,
         title: {
-          display: false,
-          text: "Chart.js Line Chart - Multi Axis"
+          display: false
         },
         tooltips: {
           enabled: false,
-          xPadding: 8,
-          yPadding: 8,
-          backgroundColor: "rgba(0,0,0,0.8)",
-
           custom: function(tooltipModel) {
             var tooltipEl = document.getElementById("chartjs-tooltip");
             // Create element on first render
@@ -136,6 +131,7 @@
               tooltipEl = document.createElement("div");
               tooltipEl.style.backgroundColor = "rgba(0,0,0,0.8)";
               tooltipEl.style.borderRadius = "4px";
+              tooltipEl.style.zIndex = "200";
               tooltipEl.id = "chartjs-tooltip";
               tooltipEl.innerHTML = "<table></table>";
               document.body.appendChild(tooltipEl);
@@ -270,6 +266,10 @@
   label {
     margin: 0;
   }
+  .container-header label{
+    display: block;
+  }
+
   .container-header {
     padding-bottom: 10px;
   }
@@ -282,7 +282,7 @@
     <div class="container-header-contents">
 
       <h5 class="container-title">Fatality related to Average Age</h5>
-      <label style="display:block">50 countries with more Deaths</label>
+      <label >— 100 countries with more Deaths</label>
     </div>
   </div>
   <div class="container-body">
