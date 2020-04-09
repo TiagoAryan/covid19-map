@@ -115,7 +115,7 @@
       class="box-half box-half-right {country ? 'container_details_box-half-right' : ''}">
       {#if country}
         <Preview data={dados} {country} {name} on:cchange />
-        <Stats data={dados} {country} />
+        <Stats data={JSON.parse(JSON.stringify(data))} {country} />
         <Chart data={dados} {country} />
       {/if}
       {#if !country}

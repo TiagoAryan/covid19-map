@@ -426,7 +426,7 @@
         result.recovered.locations = sort(result.recovered.locations);
 
         res = await mergeNewData(result);
-
+        
         play();
       })
       .catch(function(error) {
