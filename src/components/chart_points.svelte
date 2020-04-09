@@ -22,52 +22,46 @@
     initChartPoint();
   });
 
-  res = data;
-
   let all = data.confirmed.locations.sort(function(a, b) {
     return b.latest - a.latest;
   });
 
-  for (var country of all.slice(0, 50)) {
-    var fatality_rate= ((data.deaths.locations.filter(
-          e => country.country_code === e.country_code
-        )[0].latest *
-          100) /
-        country.latest
-      ).toFixed(2);
-    var average_age=  avgage.default[country.country];
-    if(average_age/fatality_rate <4){
-    fatality_data_red.push({
-      x: average_age,
-      y: fatality_rate
-    });
+  for (var country of all.slice(0, 100)) {
+    var fatality_rate = (
+      (data.deaths.locations.filter(
+        e => country.country_code === e.country_code
+      )[0].latest *
+        100) /
+      country.latest
+    ).toFixed(2);
+    var average_age = avgage.default[country.country];
+    if (average_age / fatality_rate < 4) {
+      fatality_data_red.push({
+        x: average_age,
+        y: fatality_rate
+      });
       title_data_red.push(country.country);
-
-    }else if(average_age/fatality_rate <16){
-    fatality_data_yellow.push({
+    } else if (average_age / fatality_rate < 16) {
+      fatality_data_yellow.push({
         x: average_age,
         y: fatality_rate
       });
       title_data_yellow.push(country.country);
-
-    }else{
+    } else {
       fatality_data_green.push({
         x: average_age,
         y: fatality_rate
       });
       title_data_green.push(country.country);
-
     }
-    
   }
-  
 
   //---------------
   // CHART
   //---------------
 
   function initChartPoint() {
-    ratio= container_box.offsetWidth/(container_box.offsetHeight - 88);
+    ratio = container_box.offsetWidth / (container_box.offsetHeight - 88);
 
     var ctx = canvasElement.getContext("2d");
     myScaterChart = new Chart(ctx, {
@@ -140,8 +134,8 @@
             // Create element on first render
             if (!tooltipEl) {
               tooltipEl = document.createElement("div");
-              tooltipEl.style.backgroundColor ="rgba(0,0,0,0.8)";
-              tooltipEl.style.borderRadius ="4px";
+              tooltipEl.style.backgroundColor = "rgba(0,0,0,0.8)";
+              tooltipEl.style.borderRadius = "4px";
               tooltipEl.id = "chartjs-tooltip";
               tooltipEl.innerHTML = "<table></table>";
               document.body.appendChild(tooltipEl);
@@ -173,15 +167,12 @@
               var averageAge = tooltipModel.dataPoints[0].label;
 
               let title_data;
-              if(dataindex==0){
-                title_data=title_data_red;
-              }else if(dataindex==1){
-                title_data=title_data_yellow;
-
-              }else{
-                title_data=title_data_green;
-
-
+              if (dataindex == 0) {
+                title_data = title_data_red;
+              } else if (dataindex == 1) {
+                title_data = title_data_yellow;
+              } else {
+                title_data = title_data_green;
               }
               var innerHtml = "<thead>";
               innerHtml +=
@@ -195,10 +186,12 @@
 
               innerHtml +=
                 "<tr><th> <div style='width:80px; display:inline-block; opacity:0.4; font-weight:300'>Average Age</div> <div style='font-weight:400; display:inline-block; width:40px; text-align:right; font-size:15px'>" +
-                averageAge+"</div></th></tr>";
+                averageAge +
+                "</div></th></tr>";
               innerHtml +=
                 "<tr><th> <div style='width:80px; display:inline-block; opacity:0.4; font-weight:300'>Fatality Rate</div> <div style='font-weight:400; display:inline-block; width:40px; text-align:right; font-size:15px'>" +
-                round(fatality, 1) +"%</div></th></tr>";
+                round(fatality, 1) +
+                "%</div></th></tr>";
 
               innerHtml += "</tbody>";
 
@@ -255,18 +248,9 @@
     });
   }
 
-
   function round(value, precision) {
     var multiplier = Math.pow(10, precision || 0);
     return Math.round(value * multiplier) / multiplier;
-}
-  function FormataStringData(data) {
-    var dia = data.split("/")[1];
-    var mes = data.split("/")[0];
-    var ano = data.split("/")[2];
-
-    return ("0" + dia).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + ano;
-    // Utilizo o .slice(-2) para garantir o formato com 2 digitos.
   }
 </script>
 
@@ -283,10 +267,10 @@
     transition-duration: 0.4s;
     vertical-align: top;
   }
-  label{
+  label {
     margin: 0;
   }
-  .container-header{
+  .container-header {
     padding-bottom: 10px;
   }
 </style>
@@ -298,7 +282,7 @@
     <div class="container-header-contents">
 
       <h5 class="container-title">Fatality related to Average Age</h5>
-      <label style="display:block"> 50 countries with more Deaths</label>
+      <label style="display:block">50 countries with more Deaths</label>
     </div>
   </div>
   <div class="container-body">

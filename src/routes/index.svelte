@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte";
   import data from "jhucsse.covid";
   import { NovelCovid } from "novelcovid";
   import getCountryISO2 from "country-iso-3-to-2";
@@ -21,7 +20,7 @@
   var c = 0;
   let country_clicked,
     country_name_clicked = "World";
-  let res;
+  let res, news;
   let pop_total = 7772494610;
   var missing_country = [];
   var n_lines = 0;
@@ -417,6 +416,7 @@
     });
 
     getSpread();
+    getNews();
 
     await data
       .all()
@@ -477,23 +477,60 @@
         )[0]
       ) {
         if (nc.countryInfo.iso2 == "HK" || nc.countryInfo.iso2 == "MO") {
-          let c = data.confirmed.locations.filter(
-            e => "CN" === e.country_code
-          )[0];
-          c.latest += nc.cases;
-          c.history[toDate(nc.updated)] += nc.cases;
-          c.critical += nc.critical;
-          c.tests += nc.tests;
-          let d = data.deaths.locations.filter(e => "CN" === e.country_code)[0];
-          d.latest += nc.deaths;
-          d.history[toDate(nc.updated)] += nc.deaths;
-          let r = data.recovered.locations.filter(
-            e => "CN" === e.country_code
-          )[0];
-          r.latest += nc.recovered;
-          r.history[toDate(nc.updated)] += nc.recovered;
-        }
+          mergePro("CN");
+        } else if (
+          nc.countryInfo.iso2 == "RE" ||
+          nc.countryInfo.iso2 == "PM" ||
+          nc.countryInfo.iso2 == "BL" ||
+          nc.countryInfo.iso2 == "YT" ||
+          nc.countryInfo.iso2 == "MQ" ||
+          nc.countryInfo.iso2 == "NC" ||
+          nc.countryInfo.iso2 == "GP" ||
+          nc.countryInfo.iso2 == "GF" ||
+          nc.countryInfo.iso2 == "PF"
+        ) {
+          mergePro("FR");
+        } else if (
+          nc.countryInfo.iso2 == "JE" ||
+          nc.countryInfo.iso2 == "VG" ||
+          nc.countryInfo.iso2 == "AI" ||
+          nc.countryInfo.iso2 == "FK" ||
+          nc.countryInfo.iso2 == "IM" ||
+          nc.countryInfo.iso2 == "GI" ||
+          nc.countryInfo.iso2 == "TC" ||
+          nc.countryInfo.iso2 == "KY" ||
+          nc.countryInfo.iso2 == "MS" ||
+          nc.countryInfo.iso2 == "BM"
+        ) {
+          mergePro("GB");
+        } else if (nc.countryInfo.iso2 == "FO" || nc.countryInfo.iso2 == "GL") {
+          mergePro("DK");
+        } else if (
+          nc.countryInfo.iso2 == "AW" ||
+          nc.countryInfo.iso2 == "SX" ||
+          nc.countryInfo.iso2 == "MF" ||
+          nc.countryInfo.iso2 == "BQ" ||
+          nc.countryInfo.iso2 == "CW"
+        ) {
+          mergePro("NL");
+        } else if (nc.countryInfo.iso2 == "JE") {
+          mergePro("GB");
+        } else console.log(nc);
       }
+    }
+
+    function mergePro(pro) {
+      let c = data.confirmed.locations.filter(e => pro === e.country_code)[0];
+      c.latest += nc.cases;
+      c.history[toDate(nc.updated)] += nc.cases;
+      c.critical += nc.critical;
+      c.tests += nc.tests;
+      let d = data.deaths.locations.filter(e => pro === e.country_code)[0];
+      d.latest += nc.deaths;
+      d.history[toDate(nc.updated)] += nc.deaths;
+      let r = data.recovered.locations.filter(e => pro === e.country_code)[0];
+      r.latest += nc.recovered;
+      r.history[toDate(nc.updated)] += nc.recovered;
     }
 
     return data;
@@ -782,6 +819,18 @@
       counter = counter + 1;
     }
   }
+
+  async function getNews() {
+    //&sources=cnbc,nbc-news,cbs-news,time,independent,bbc-news,google-news-uk,google-news
+
+    //al-jazeera-english,associated-press,bbc-news,breitbart-news,independent,time
+
+    const response = await fetch(
+      "https://newsapi.org/v2/everything?q=coronavirus%20virus%20world%20covid%2019&language=en&sources=al-jazeera-english,associated-press,bbc-news,breitbart-news,independent,time&sortBy=publishedAt&apiKey=db91ea828da64f4fa54ee12fdf7ea095"
+    );
+    let data = await response.json();
+    news = data.articles;
+  }
 </script>
 
 <style>
@@ -887,6 +936,8 @@
       </div>
     </div>
   {/if}
-  <News />
+  {#if news !== undefined && news !== '' && news !== []}
+    <News data={news} />
+  {/if}
 
 </section>

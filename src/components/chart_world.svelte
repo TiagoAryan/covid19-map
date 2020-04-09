@@ -3,7 +3,6 @@
   import { chart_d } from "misc";
 
   export let data;
-  export let country;
 
   let res;
   let chart;
@@ -16,7 +15,7 @@
   let container_box;
   let ratio = 2.4;
 
-  $: country, fillChart();
+  $: fillChart();
 
   function sort(all) {
     let all_order = [];
@@ -88,7 +87,6 @@
   // CHART
   //---------------
   async function fillChart() {
-
     await onMount(() => {
       initChart();
     });
@@ -109,114 +107,74 @@
       return new Date(a) - new Date(b);
     });
 
-    if (country) {
-      data.confirmed.locations = sort(data.confirmed.locations);
-      data.deaths.locations = sort(data.deaths.locations);
-      data.recovered.locations = sort(data.recovered.locations);
+    for (var d of dates) range_dates.push(chart_d(d));
+    range_dates.push(chart_d(data.confirmed.last_updated));
+    deaths_data = sort_total(dates, data.deaths.locations);
+    deaths_data.push(data.latest.deaths);
+    recovered_data = sort_total(dates, data.recovered.locations);
+    recovered_data.push(data.latest.recovered);
+    active_data = sort_total_a(dates);
+    active_data.push(
+      data.latest.confirmed - data.latest.recovered - data.latest.deaths
+    );
 
-      var confirmed = data.confirmed.locations.filter(
-        e => country === e.country_code
-      )[0];
-      var recovered = data.recovered.locations.filter(
-        e => country === e.country_code
-      )[0];
-      var deaths = data.deaths.locations.filter(
-        e => country === e.country_code
-      )[0];
-
-      if (confirmed) {
-        var i = 0;
-        for (var d of dates) {
-          if (confirmed.history[d] != 0) {
-            range_dates.push(chart_d(d));
-            deaths_data.push(deaths.history[d]);
-            recovered_data.push(recovered.history[d]);
-            active_data.push(
-              confirmed.history[d] - deaths.history[d] - recovered.history[d]
-            );
-            if (k > 0) {
-              let growth = parseInt(
-                ((confirmed.history[d] - confirmed.history[previous_d]) * 100) /
-                  confirmed.history[previous_d]
-              );
-              growth_data.push(growth);
-              growth_per_day.push((confirmed.history[d] - confirmed.history[previous_d]) )
-            } else {
-              growth_data.push(0);
-              growth_per_day.push((confirmed.history[d] ) );
-
-            }
-            previous_d = d;
-            k++;
-          }
-
-          i++;
-        }
+    for (var d of dates) {
+      if (k > 0) {
+        let growth = parseInt(
+          ((active_data[k] - active_data[k - 1]) * 100) / active_data[k - 1]
+        );
+        growth_data.push(growth);
+      } else {
+        growth_data.push(0);
       }
-    } else {
-      for (var d of dates) range_dates.push(chart_d(d));
-      deaths_data = sort_total(dates, data.deaths.locations);
-      recovered_data = sort_total(dates, data.recovered.locations);
-      active_data = sort_total_a(dates);
-
-      for (var d of dates) {
-        if (k > 0) {
-          let growth = parseInt(
-            ((active_data[k] - active_data[k - 1]) * 100) / active_data[k - 1]
-          );
-          growth_data.push(growth);
-        } else {
-          growth_data.push(0);
-        }
-        previous_d = d;
-        k++;
-      }
+      previous_d = d;
+      k++;
     }
     if (chart_mode) {
-      chart.type="line";
-      chart.options.scales={
-            yAxes: [
-              {
-                type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                display: true,
-                position: "left",
-                id: "y-axis-1",
-                gridLines: {
-                  drawOnChartArea: false // only want the grid lines for one axis to show up
-                },
-                layout: {
-                  padding: {
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 20
-                  }
-                },
-                legend: {
-                  display: true,
-                  labels: {
-                    boxWidth: 20
-                  }
-                },
-                tooltips: {
-                  titleFontFamily: "Open Sans",
-                  titleFontSize: 15,
-                  bodyFontFamily: "Open Sans",
-                  bodyFontSize: 13
-                }
+      chart.type = "line";
+      chart.options.scales = {
+        yAxes: [
+          {
+            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+            display: true,
+            position: "left",
+            id: "y-axis-1",
+            gridLines: {
+              drawOnChartArea: false // only want the grid lines for one axis to show up
+            },
+            layout: {
+              padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 20
               }
-            ]
-          };
+            },
+            legend: {
+              display: true,
+              labels: {
+                boxWidth: 20
+              }
+            },
+            tooltips: {
+              titleFontFamily: "Open Sans",
+              titleFontSize: 15,
+              bodyFontFamily: "Open Sans",
+              bodyFontSize: 13
+            }
+          }
+        ]
+      };
       chart.data = {
         labels: range_dates,
         datasets: [
           {
-            label: "Deaths",
+            label: "Recovered",
             defaultFontFamily: "Open Sans",
-            borderColor: "#FF4E34",
-            backgroundColor: "#FF4E3426",
+            borderColor: "#40C0A5",
+            backgroundColor: "#40C0A526",
             fill: false,
-            data: deaths_data,
+            data: recovered_data,
             yAxisID: "y-axis-1",
             pointBackgroundColor: "#1E1E21",
             pointBorderWidth: 2,
@@ -243,12 +201,12 @@
             pointHoverBorderWidth: 3
           },
           {
-            label: "Recovered",
+            label: "Deaths",
             defaultFontFamily: "Open Sans",
-            borderColor: "#40C0A5",
-            backgroundColor: "#40C0A526",
+            borderColor: "#FF4E34",
+            backgroundColor: "#FF4E3426",
             fill: false,
-            data: recovered_data,
+            data: deaths_data,
             yAxisID: "y-axis-1",
             pointBackgroundColor: "#1E1E21",
             pointBorderWidth: 2,
@@ -261,54 +219,54 @@
         ]
       };
     } else {
-      chart.type="bar";
-      chart.options.scales={
-            yAxes: [
-              {
-                type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                display: true,
-                position: "left",
-                id: "y-axis-1",
-                gridLines: {
-                  drawOnChartArea: false // only want the grid lines for one axis to show up
-                },
-                layout: {
-                  padding: {
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 20
-                  }
-                },
-                legend: {
-                  display: true,
-                  labels: {
-                    boxWidth: 20
-                  }
-                },
-                tooltips: {
-                  titleFontFamily: "Open Sans",
-                  titleFontSize: 15,
-                  bodyFontFamily: "Open Sans",
-                  bodyFontSize: 13
-                }
-              },
-               {
-                type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                display: true,
-                position: "right",
-                id: "y-axis-2",
-                gridLines: {
-                  drawOnChartArea: false // only want the grid lines for one axis to show up
-                }
-               }
-            ]
-          };
+      chart.type = "bar";
+      chart.options.scales = {
+        yAxes: [
+          {
+            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+            display: true,
+            position: "left",
+            id: "y-axis-1",
+            gridLines: {
+              drawOnChartArea: false // only want the grid lines for one axis to show up
+            },
+            layout: {
+              padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 20
+              }
+            },
+            legend: {
+              display: true,
+              labels: {
+                boxWidth: 20
+              }
+            },
+            tooltips: {
+              titleFontFamily: "Open Sans",
+              titleFontSize: 15,
+              bodyFontFamily: "Open Sans",
+              bodyFontSize: 13
+            }
+          },
+          {
+            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+            display: true,
+            position: "right",
+            id: "y-axis-2",
+            gridLines: {
+              drawOnChartArea: false // only want the grid lines for one axis to show up
+            }
+          }
+        ]
+      };
       chart.data = {
         labels: range_dates,
         datasets: [
           {
-            type: 'line',
+            type: "line",
             label: "Growth %",
             defaultFontFamily: "Open Sans",
             borderColor: "#40C0A5",
@@ -324,9 +282,9 @@
             pointHoverRadius: 4,
             pointHoverBorderWidth: 2
           },
-          
+
           {
-            type: 'bar',
+            type: "bar",
             label: "New Cases per Day",
             defaultFontFamily: "Open Sans",
             borderColor: "#FFC831",
@@ -347,8 +305,8 @@
   }
 
   function initChart() {
-    ratio= container_box.offsetWidth/(container_box.offsetHeight - 88);
-    
+    ratio = container_box.offsetWidth / (container_box.offsetHeight - 88);
+
     if (chart === undefined) {
       var ctx = canvasElement.getContext("2d");
       chart = new Chart(ctx, {
@@ -415,14 +373,6 @@
     }
   }
 
-  function FormataStringData(data) {
-    var dia = data.split("/")[1];
-    var mes = data.split("/")[0];
-    var ano = data.split("/")[2];
-
-    return dia + "/" + ("0" + mes).slice(-2) + "/" + ano;
-  }
-
   function changeChart(e) {
     if (chart_mode) {
       chart_mode = false;
@@ -453,17 +403,12 @@
     transition-duration: 0.4s;
     vertical-align: top;
   }
-  .container-chart.country{
-    height: calc(100vh - 348px);
-
-  }
-  .container-chart.world{
+  .container-chart.world {
     height: calc(50% - 12px);
-
   }
 </style>
 
-<div class="container-basic container-chart {country ? "country": "world"}" bind:this={container_box}>
+<div class="container-basic container-chart world" bind:this={container_box}>
 
   <div class="container-header">
 

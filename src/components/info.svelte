@@ -80,7 +80,7 @@
       pop_total = confirmed;
     } else {
       setpop = true;
-      if (country) pop_total = findPop(population.default, "code", country);
+      if (country) pop_total = getPop("code", country);
       else pop_total = 7772494610;
     }
   }
@@ -139,9 +139,9 @@
 
       <div class="container-data-details">
         <div class="col-block">
-          <i class="dot dot_red" />
-          <label>Deaths</label>
-          <div class="data">{s(deaths)}</div>
+          <i class="dot dot_green" />
+          <label>Recovered</label>
+          <div class="data">{s(recovered)}</div>
         </div>
         <div class="col-block">
           <i class="dot dot_yellow" />
@@ -149,9 +149,9 @@
           <div class="data">{s(confirmed - deaths - recovered)}</div>
         </div>
         <div class="col-block">
-          <i class="dot dot_green" />
-          <label>Recovered</label>
-          <div class="data">{s(recovered)}</div>
+          <i class="dot dot_red" />
+          <label>Deaths</label>
+          <div class="data">{s(deaths)}</div>
         </div>
         <div class="col-block-btn">
           <div class="button" on:click={() => change()}>
@@ -162,10 +162,10 @@
       </div>
       <div class="progress">
         <div
-          class="progress-bar bg-danger"
+          class="progress-bar"
           role="progressbar"
-          style="width: {deaths ? (deaths * 100) / pop_total : 0}%"
-          aria-valuenow={deaths ? (deaths * 100) / pop_total : 0}
+          style="width: {recovered ? (recovered * 100) / pop_total : 0}%"
+          aria-valuenow={recovered ? (recovered * 100) / pop_total : 0}
           aria-valuemin="0"
           aria-valuemax="100" />
         <div
@@ -176,10 +176,10 @@
           aria-valuemin="0"
           aria-valuemax="100" />
         <div
-          class="progress-bar"
+          class="progress-bar bg-danger"
           role="progressbar"
-          style="width: {recovered ? (recovered * 100) / pop_total : 0}%"
-          aria-valuenow={recovered ? (recovered * 100) / pop_total : 0}
+          style="width: {deaths ? (deaths * 100) / pop_total : 0}%"
+          aria-valuenow={deaths ? (deaths * 100) / pop_total : 0}
           aria-valuemin="0"
           aria-valuemax="100" />
       </div>

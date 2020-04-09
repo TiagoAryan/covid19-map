@@ -1,72 +1,65 @@
 <script>
-
+  import moment from "moment";
+  export let data;
 </script>
+
 <style>
-.block-news{
-  position: fixed;
-  left: 12px;
-  bottom:12px;
-  width: 310px;
-  z-index: 10;
-}
-.container-body{
-  position: relative;
-  display: block;
-  width: 100%;
-
-}
-.container-basic{
-  width: 310px;
-  position: relative;
-  display: block;
-}
-.news{
-  display: inline-block;
-  width: 75%;
-  vertical-align: top;
-
-}
-.date{
-    width: 10%;
-  display: inline-block;
-  vertical-align: top;
-  float:right;
-
-}
-.flag{
-  height: auto;
-  display: inline-block;
-  vertical-align: top;
-  width: 10%;
-
-}
-h4{
-  font-weight: 300;
-  margin: 0px 0px 10px 0px;
-}
-p{
-  font-weight: 300;
-  line-height: 1.1rem;
-}
-@media (max-width: 768px) {
-  .block-news{
-    display: none;
+  .block-news {
+    position: fixed;
+    left: 12px;
+    bottom: 12px;
+    width: 310px;
+    z-index: 10;
   }
-}
+  .container-body {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+  .container-basic {
+    margin: 4px 0;
+    width: 310px;
+    position: relative;
+    display: block;
+  }
+  .news {
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+  }
+  tt {
+    display: inline-block;
+    width: 100%;
+
+    font-size: 0.7rem;
+  }
+  h4 {
+    display: inline-block;
+    width: 85%;
+    font-weight: 300;
+    margin: 0px 0px 10px 0px;
+  }
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+  @media (max-width: 768px) {
+    .block-news {
+      display: none;
+    }
+  }
 </style>
+
 <div class="block-news">
-<h4>News</h4>
-<div class="container-basic">
-  <div class="container-body">
-    <div class="flag">
-      <img src="data:image/png;base64,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" alt="flag" />
-    </div>
-    <div class="news">
-   <strong>Portugal </strong> just closed its land borders.
-    </div>
-    <div class="date">
-    <label> 22:28</label>
-  </div>
-  </div>
-</div>
+  <h4>News</h4>
+  {#each data.slice(0, 3) as item, i}
+    <a href="/news" rel="prefetch">
+      <div class="container-basic">
+        <div class="container-body">
+          <tt>{item.source.name} - {moment(item.publishedAt).fromNow()}</tt>
+          <div class="news">{item.title}</div>
+        </div>
+      </div>
+    </a>
+  {/each}
 </div>

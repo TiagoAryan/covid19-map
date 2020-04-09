@@ -153,24 +153,6 @@
           i++;
         }
       }
-    } else {
-      for (var d of dates) range_dates.push(chart_d(d));
-      deaths_data = sort_total(dates, data.deaths.locations);
-      recovered_data = sort_total(dates, data.recovered.locations);
-      active_data = sort_total_a(dates);
-
-      for (var d of dates) {
-        if (k > 0) {
-          let growth = parseInt(
-            ((active_data[k] - active_data[k - 1]) * 100) / active_data[k - 1]
-          );
-          growth_data.push(growth);
-        } else {
-          growth_data.push(0);
-        }
-        previous_d = d;
-        k++;
-      }
     }
     if (chart_mode) {
       chart.type = "line";
@@ -211,12 +193,12 @@
         labels: range_dates,
         datasets: [
           {
-            label: "Deaths",
+            label: "Recovered",
             defaultFontFamily: "Open Sans",
-            borderColor: "#FF4E34",
-            backgroundColor: "#FF4E3426",
+            borderColor: "#40C0A5",
+            backgroundColor: "#40C0A526",
             fill: false,
-            data: deaths_data,
+            data: recovered_data,
             yAxisID: "y-axis-1",
             pointBackgroundColor: "#1E1E21",
             pointBorderWidth: 2,
@@ -243,12 +225,12 @@
             pointHoverBorderWidth: 3
           },
           {
-            label: "Recovered",
+            label: "Deaths",
             defaultFontFamily: "Open Sans",
-            borderColor: "#40C0A5",
-            backgroundColor: "#40C0A526",
+            borderColor: "#FF4E34",
+            backgroundColor: "#FF4E3426",
             fill: false,
-            data: recovered_data,
+            data: deaths_data,
             yAxisID: "y-axis-1",
             pointBackgroundColor: "#1E1E21",
             pointBorderWidth: 2,
@@ -413,14 +395,6 @@
         }
       });
     }
-  }
-
-  function FormataStringData(data) {
-    var dia = data.split("/")[1];
-    var mes = data.split("/")[0];
-    var ano = data.split("/")[2];
-
-    return dia + "/" + ("0" + mes).slice(-2) + "/" + ano;
   }
 
   function changeChart(e) {
