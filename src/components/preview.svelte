@@ -71,8 +71,6 @@
       let confirmed_data = sort_total(confirmed, data.confirmed.locations);
       let recovered_data = sort_total(recovered, data.recovered.locations);
 
-      console.log(confirmed_data);
-
       deaths1 = deaths - deaths_data[length - 2];
       deaths7 = deaths - deaths_data[length - 8];
       deaths30 = deaths - deaths_data[length - 31];

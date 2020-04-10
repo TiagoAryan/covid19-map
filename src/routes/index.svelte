@@ -533,7 +533,7 @@
           mergePro("NL");
         } else if (nc.countryInfo.iso2 == "JE") {
           mergePro("GB");
-        } else console.log(nc);
+        }
       }
     }
 
@@ -780,12 +780,12 @@
         "line-dasharray": [3, 6]
       }
     });
-    var degrees = Math.atan2((from[0] - to[0]), (from[1] - to[1])) * 180 / Math.PI;
+    var degrees =
+      (Math.atan2(from[0] - to[0], from[1] - to[1]) * 180) / Math.PI;
 
-    if (degrees < 0.0){
-          degrees += 360.0;
+    if (degrees < 0.0) {
+      degrees += 360.0;
     }
-    console.log(degrees);
 
     gl._glMap.addLayer({
       id: "point_" + k,

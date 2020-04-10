@@ -4,21 +4,18 @@
   export let data;
   export let country;
 
-  let days, fatality, pop_total, points, critical, critical_per;
+  let days, fatality, pop_total, points, critical, tests, critical_per;
 
   $: country, getContent();
 
   function getContent() {
     if (data.confirmed.locations.filter(e => country === e.country_code)[0]) {
-      console.log(data);
       if (country == "CN") days = 66;
       else if (country == "TH" || country == "NP") days = 9;
       else if (country == "JP") days = 6;
       else if (country == "US") days = 3;
       else if (country == "KR") days = 2;
       else days = 0;
-
-      
 
       let d = data.confirmed.locations.filter(
         e => country === e.country_code
@@ -36,16 +33,14 @@
       let recovered = data.recovered.locations.filter(
         e => country === e.country_code
       )[0].latest;
-
-
       critical = data.confirmed.locations.filter(
         e => country === e.country_code
       )[0].critical;
+      tests = data.confirmed.locations.filter(
+        e => country === e.country_code
+      )[0].tests;
 
-      critical_per=critical /(confirmed-deaths-recovered)*100;
-      console.log(critical);
-      console.log(critical_per);
-
+      critical_per = (critical / (confirmed - deaths - recovered)) * 100;
 
       fatality = (deaths / confirmed) * 100;
 
@@ -131,8 +126,16 @@
         <h4>{days} Days</h4>
       </div>
       <div class="col-block">
+        <label>Tests</label>
+        <h4>{tests}</h4>
+      </div>
+      <div class="col-block">
         <label>In Critical State</label>
-        <div class="label-big {critical_per>7 ? "label-red" : ""} {critical_per>3.5 && critical_per<=7 ? "label-yellow" : ""} {critical_per<5 ? "label-green" : ""} ">
+        <div
+          class="label-big {critical_per > 7 ? 'label-red' : ''}
+          {critical_per > 3.5 && critical_per <= 7 ? 'label-yellow' : ''}
+          {critical_per < 5 ? 'label-green' : ''}
+          ">
           <h4>{critical}</h4>
         </div>
       </div>
