@@ -380,7 +380,7 @@
     <div class="container-header-contents">
 
       <h5 class="container-title">{box_title}</h5>
-      <div style="float:right" class="button" on:click={() => changeChart()}>
+      <div style="float:right" class="button secondary" on:click={() => changeChart()}>
         <i class="fas fa-{btn_icon}" />
         <p>{btn_text}</p>
       </div>

@@ -7,6 +7,7 @@
   export let country;
   export let name;
 
+
   let box_title = "Total";
   let btn_text = "Total";
   var list_mode;
@@ -34,7 +35,6 @@
   let cland, csea, cair;
 
   $: setpop = false;
-
   $: country, getContent();
 
   function getContent() {
@@ -232,6 +232,7 @@
     width: 100%;
     left: 0;
     vertical-align: top;
+    padding-bottom: 0px
   }
   .borders {
     display: inline;

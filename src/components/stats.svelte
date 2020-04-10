@@ -132,7 +132,9 @@
           {tests /pop_total*1000 > 5 && tests /pop_total*1000 <= 10 ? 'label-yellow' : ''}
           {tests /pop_total*1000 < 5 ? 'label-red' : ''}
           ">
-          <h4>{tests/1000>0 ? parseInt(tests/1000)+"k" : tests } </h4>
+          <h4>{ parseInt(tests/1000000)>0 ? parseInt(tests/1000000)+"M" : "" }
+          {parseInt(tests/1000)>0 && parseInt(tests/1000000)<=0 ? parseInt(tests/1000)+"k" : "" } 
+          {parseInt(tests/1000)<=0 ? tests : "" }</h4>
 
         </div>
       </div>

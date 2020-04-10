@@ -58,7 +58,7 @@
         borderWidth: 2,
         pointHitRadius: 3,
         pointRadius: 2,
-        pointHoverRadius: 12,
+        pointHoverRadius: 8,
         pointHoverBorderWidth: 3
       };
     }
@@ -91,11 +91,11 @@
             }
           },
           tooltips: {
-            mode: "index"
+            mode: "point"
           },
           aspectRatio: ratio,
+
           responsive: true,
-          hoverMode: "index",
           stacked: false,
           spanGaps: true,
           showLines: true,
@@ -340,10 +340,10 @@
     vertical-align: top;
   }
   .container-chart.country {
-    height: calc(100vh - 348px);
+    height: calc(100vh - 344px);
   }
   .container-chart.world {
-    height: calc(100% - 414px);
+    height: calc(100% - 354px);
   }
   .container-header label {
     margin: 0;
@@ -354,7 +354,7 @@
   }
   @media (max-width: 1280px) {
     .container-chart.world {
-      height: calc(100% - 363px);
+      height: calc(100% - 354px);
     }
   }
 </style>

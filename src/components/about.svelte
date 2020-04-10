@@ -122,9 +122,9 @@
       <label> Last Updated</label>
       <p> 12/04/2020</p>
       <label> Sources</label>
-      <a href="https://github.com/ExpDev07/coronavirus-tracker-api" target="_blank"> https://github.com/ExpDev07/coronavirus-tracker-api</a>
+      <a href="https://github.com/ExpDev07/coronavirus-tracker-api" target="_blank"> ExpDev07 - coronavirus-tracker-api</a>
       <label> Sources</label>
-      <a href="https://github.com/NovelCOVID/API" target="_blank"> https://github.com/NovelCOVID/API</a>
+      <a href="https://github.com/NovelCOVID/API" target="_blank"> NovelCOVID API</a>
       <label>Credits</label>
       <p> <a href="">Tiago Aryan</a> & <a href="">Beatriz Diogo</a> </p>
     </div>
