@@ -893,7 +893,7 @@
 
   {#if res !== undefined && res !== '' && res !== []}
     <div class="container-date">
-      <div class="date">Day {days} | {showdate}</div>
+      <div class="date"><strong> Day {days} </strong> | {showdate}</div>
       <div class="navigate-time">
         <!-- <div class="button secondary adj-left">
       <i class="fas fa-chevron-left" />
