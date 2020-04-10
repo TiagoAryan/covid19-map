@@ -40,7 +40,6 @@ h5 {
   background-color: #f8f9fa1f;
   margin-right: 8px;
   font-weight: 400;
-  letter-spacing: 1px;
 }
 div {
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
@@ -140,6 +139,7 @@ label {
   font-weight: 400;
   color:rgba(255, 255, 255, 0.8);
   padding: 1px;
+  text-align: center;
 }
 .bg-danger {
   background-color: rgba(255, 78, 52, 0.2) !important;
@@ -186,10 +186,10 @@ button,
   height: 32px;
   padding: 8px 16px;
 
-  -webkit-transition-duration: 0.2s;
-  -moz-transition-duration: 0.2s;
-  -o-transition-duration: 0.2s;
-  transition-duration: 0.2s;
+  -webkit-transition:all 0.2s ease;
+  -moz-transition:all 0.2s ease;
+  -o-transition:all 0.2s ease;
+  transition:all 0.2s ease;
 }
 .button p,
 button p {
@@ -206,17 +206,20 @@ button:hover,
 
 button.secondary,
 .button.secondary {
-  background-color: rgba(91, 93, 102, 0.8);
+  background-color: rgba(91, 93, 102, 0.6);
+  color:rgba(255, 255, 255, 0.8);
 }
 button.true,
 .button.true {
   opacity: 0.6;
-  background-color: rgba(91, 93, 102, 0.8);
+  background-color: rgba(91, 93, 102, 0.6);
   color: rgba(0, 0, 0, 0.4);
 }
 button.secondary:hover,
 .button.secondary:hover {
   background-color: rgba(91, 93, 102, 1);
+  color:rgba(255, 255, 255, 1);
+
 }
 button.adj-left,
 .button.adj-left {
@@ -263,7 +266,6 @@ button:hover,
   line-height: 0.4rem;
   font-size: 1rem;
   margin: 0;
-  letter-spacing: 1px;
   margin-left: 24px;
 }
 .col-block label {
