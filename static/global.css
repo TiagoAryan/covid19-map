@@ -335,6 +335,61 @@ button:hover,
   opacity: 1;
 }
 
+.dropdown {
+  min-width: 165px;
+  display: inline-block;
+  float: right;
+  position: relative;
+}
+.dropdown .trigger {
+  padding: 6px 10px;
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  opacity: 0.6;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  border-radius: 3px;
+}
+.dropdown .trigger:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+.options {
+  overflow: hidden;
+  position: absolute;
+  top: 40px;
+  z-index: 1;
+  display: block;
+  width: 100%;
+
+  border-radius: 3px;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.options.hidden {
+  height: 0px;
+  opacity: 0;
+}
+.options.show {
+  opacity: 1;
+}
+.option {
+  padding: 8px 16px;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+.option:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
 .leaflet-control-zoom a:hover {
   background-color: rgba(91, 93, 102, 1)!important;
   border-bottom: 0;
