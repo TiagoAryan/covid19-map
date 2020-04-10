@@ -17,57 +17,17 @@
 
   $: fillChart();
 
-  function sort(all) {
-    let all_order = [];
-    let all_order2 = [];
-
-    all.reduce(function(res, value) {
-      if (!res[value.country]) {
-        res[value.country] = {
-          country: value.country,
-          country_code: value.country_code,
-          latest: 0,
-          history: {}
-        };
-        all_order.push(res[value.country]);
-      }
-      res[value.country].latest += value.latest;
-      let H_total = res[value.country].history;
-
-      for (var [key, h] of Object.entries(value.history))
-        H_total[key] = (H_total[key] || 0) + value.history[key];
-
-      res[value.country].history = H_total;
-      return res;
-    }, {});
-
-    Object.keys(all_order)
-      .sort(function(a, b) {
-        var parts_a = a.split("/");
-        var parts_b = b.split("/");
-
-        var a_date = new Date(parts_a[2], parts_a[1] - 1, parts_a[0]);
-        var b_date = new Date(parts_b[2], parts_b[1] - 1, parts_b[0]);
-        return new Date(b_date) - new Date(a_date);
-      })
-      .forEach(function(key) {
-        all_order2[key] = all_order[key];
-      });
-
-    return all_order2.sort((a, b) =>
-      a.country > b.country ? 1 : b.country > a.country ? -1 : 0
-    );
-  }
-
   function sort_total(dates, all) {
     var total = [];
     for (var d of dates) {
       var tot = 0;
-      for (var item of all) tot += item.history[d];
+      for (var item of all)
+        if (item.history[d] !== undefined) tot += item.history[d];
       total.push(tot);
     }
     return total;
   }
+
   function sort_total_a(dates, all) {
     var total = [];
     for (var d of dates) {
@@ -90,6 +50,8 @@
     await onMount(() => {
       initChart();
     });
+
+    var confirmed_data = [];
     var active_data = [];
     var recovered_data = [];
     var deaths_data = [];
@@ -99,7 +61,6 @@
     var growth_per_day = [];
     let k = 0;
     let count;
-    var previous_d = 0;
     var dates = Object.keys(data.confirmed.locations[0].history).sort(function(
       a,
       b
@@ -109,10 +70,12 @@
 
     for (var d of dates) range_dates.push(chart_d(d));
     range_dates.push(chart_d(data.confirmed.last_updated));
+    confirmed_data = sort_total(dates, data.confirmed.locations);
+    confirmed_data[confirmed_data.length - 1] = data.confirmed.deaths;
     deaths_data = sort_total(dates, data.deaths.locations);
-    deaths_data.push(data.latest.deaths);
+    deaths_data[deaths_data.length - 1] = data.latest.deaths;
     recovered_data = sort_total(dates, data.recovered.locations);
-    recovered_data.push(data.latest.recovered);
+    recovered_data[recovered_data.length - 1] = data.latest.recovered;
     active_data = sort_total_a(dates);
     active_data.push(
       data.latest.confirmed - data.latest.recovered - data.latest.deaths
@@ -120,14 +83,16 @@
 
     for (var d of dates) {
       if (k > 0) {
-        let growth = parseInt(
-          ((active_data[k] - active_data[k - 1]) * 100) / active_data[k - 1]
-        );
+        let growth = (
+          ((active_data[k] - active_data[k - 1]) * 100) /
+          active_data[k - 1]
+        ).toFixed(0);
         growth_data.push(growth);
+        growth_per_day.push(confirmed_data[k] - confirmed_data[k - 1]);
       } else {
         growth_data.push(0);
+        growth_per_day.push(confirmed_data[k]);
       }
-      previous_d = d;
       k++;
     }
     if (chart_mode) {

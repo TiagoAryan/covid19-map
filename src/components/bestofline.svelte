@@ -30,9 +30,24 @@
       color = "";
       icon = "#";
     }
-    if (list_mode == "last") {
+
+    if (list_mode == "today") {
       title = s(item.latest);
       number = s(item.latest - Object.values(item.history)[length - 2]);
+    } else if (list_mode == "last7") {
+      title =
+        s(item.latest) +
+        " (" +
+        (((item.latest - item.last7) * 100) / item.last7).toFixed(0) +
+        "% )";
+      number = s(item.last7);
+    } else if (list_mode == "last30") {
+      title =
+        s(item.latest) +
+        " (" +
+        (((item.latest - item.last30) * 100) / item.last30).toFixed(0) +
+        "% )";
+      number = s(item.last30);
     } else if (list_mode == "growth") {
       title =
         s(item.latest) +

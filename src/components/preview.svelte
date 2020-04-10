@@ -11,8 +11,17 @@
   let border = 0,
     pop_total = 0,
     deaths = 0,
+    deaths1 = 0,
+    deaths7 = 0,
+    deaths30 = 0,
     confirmed = 0,
-    recovered = 0;
+    confirmed1 = 0,
+    confirmed7 = 0,
+    confirmed30 = 0,
+    recovered = 0,
+    recovered1 = 0,
+    recovered7 = 0,
+    recovered30 = 0;
   let cland, csea, cair;
 
   $: setpop = false;
@@ -21,16 +30,30 @@
 
   function getContent() {
     if (country) {
+      let length = Object.keys(data.confirmed.locations[0].history).length;
       if (data.deaths.locations.filter(e => country === e.country_code)[0]) {
-        deaths = data.deaths.locations.filter(
+        let d = data.deaths.locations.filter(
           e => country === e.country_code
-        )[0].latest;
-        confirmed = data.confirmed.locations.filter(
+        )[0];
+        deaths = d.latest;
+        deaths1 = deaths - Object.values(d.history)[length - 2];
+        deaths7 = deaths - Object.values(d.history)[length - 8];
+        deaths30 = deaths - Object.values(d.history)[length - 31];
+
+        let c = data.confirmed.locations.filter(
           e => country === e.country_code
-        )[0].latest;
-        recovered = data.recovered.locations.filter(
+        )[0];
+        confirmed = c.latest;
+        confirmed1 = confirmed - Object.values(c.history)[length - 2];
+        confirmed7 = confirmed - Object.values(c.history)[length - 8];
+        confirmed30 = confirmed - Object.values(c.history)[length - 31];
+        let r = data.recovered.locations.filter(
           e => country === e.country_code
-        )[0].latest;
+        )[0];
+        recovered = r.latest;
+        recovered1 = recovered - Object.values(r.history)[length - 2];
+        recovered7 = recovered - Object.values(r.history)[length - 8];
+        recovered30 = recovered - Object.values(r.history)[length - 31];
 
         if (setpop) {
           pop_total = getPop("code", country);
@@ -43,12 +66,48 @@
       deaths = data.latest.deaths;
       confirmed = data.latest.confirmed;
       recovered = data.latest.recovered;
+
+      let deaths_data = sort_total(deaths, data.deaths.locations);
+      let confirmed_data = sort_total(confirmed, data.confirmed.locations);
+      let recovered_data = sort_total(recovered, data.recovered.locations);
+
+      console.log(confirmed_data);
+
+      deaths1 = deaths - deaths_data[length - 2];
+      deaths7 = deaths - deaths_data[length - 8];
+      deaths30 = deaths - deaths_data[length - 31];
+
+      confirmed1 = confirmed - confirmed_data[length - 2];
+      confirmed7 = confirmed - confirmed_data[length - 8];
+      confirmed30 = confirmed - confirmed_data[length - 31];
+
+      recovered1 = recovered - recovered_data[length - 2];
+      recovered7 = recovered - recovered_data[length - 8];
+      recovered30 = recovered - recovered_data[length - 31];
+
       if (setpop) {
         pop_total = 7772494610;
       } else {
         pop_total = confirmed;
       }
     }
+  }
+
+  function sort_total(last, all) {
+    var dates = Object.keys(all[0].history).sort(function(a, b) {
+      return new Date(a) - new Date(b);
+    });
+    var total = [];
+    for (var d of dates) {
+      var tot = 0;
+      for (var item of all)
+        if (item.history[d] !== undefined) tot += item.history[d];
+
+      total.push(tot);
+    }
+
+    total[total.length - 1] = last;
+    return total;
   }
 
   async function getBorders() {
@@ -93,6 +152,7 @@
       else pop_total = 7772494610;
     }
   }
+
   function cchange() {
     dispatch("cchange");
   }
@@ -104,7 +164,6 @@
     display: inline-block;
     margin: 0;
     margin-bottom: 12px;
-    height: 190px;
     width: 100%;
     left: 0;
     vertical-align: top;
@@ -132,7 +191,7 @@
   }
   @media (max-width: 1280px) {
     .container-total {
-      height: 170px;
+      height: auto;
     }
   }
   @media (max-width: 768px) {
@@ -174,8 +233,10 @@
       </div>
     </div>
   </div>
-  <div class="container-body">
-
+  <div
+    class="container-body"
+    style="border-bottom: 1px solid rgba(151, 151, 151, 0.3); width: 100%;
+    padding-bottom: 28px; margin-bottom: 16px;">
     <div class="container-data-details">
       <div class="col-block">
         <i class="dot dot_green" />
@@ -206,24 +267,67 @@
         style="width: {recovered ? (recovered * 100) / pop_total : 0}%"
         aria-valuenow={recovered ? (recovered * 100) / pop_total : 0}
         aria-valuemin="0"
-        aria-valuemax="100" />
+        aria-valuemax="100">
+        {(recovered ? (recovered * 100) / pop_total : 0).toFixed(0)}%
+      </div>
       <div
         class="progress-bar bg-warning"
         role="progressbar"
         style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}%"
         aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}
         aria-valuemin="0"
-        aria-valuemax="100" />
+        aria-valuemax="100">
+        {(confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0).toFixed(0)}%
+      </div>
       <div
         class="progress-bar bg-danger"
         role="progressbar"
         style="width: {deaths ? (deaths * 100) / pop_total : 0}%"
         aria-valuenow={deaths ? (deaths * 100) / pop_total : 0}
         aria-valuemin="0"
-        aria-valuemax="100" />
+        aria-valuemax="100">
+        {(deaths ? (deaths * 100) / pop_total : 0).toFixed(0)}%
+      </div>
     </div>
     <label class="progress_label">
       {s(pop_total)} {setpop ? 'Population' : 'Cases'}
     </label>
+  </div>
+
+  <div class="container-body">
+    <div class="container-data-details">
+      <div class="table-responsive-lg">
+        <table class="table table-sm table-dark">
+          <thead>
+            <tr>
+              <th scope="col" />
+              <th scope="col">Cases</th>
+              <th scope="col">Recovered</th>
+              <th scope="col">Deaths</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Today</th>
+              <td>{s(confirmed1)}</td>
+              <td>{s(recovered1)}</td>
+              <td>{s(deaths1)}</td>
+            </tr>
+            <tr>
+              <th scope="row">Last 7 Days</th>
+              <td>{s(confirmed7)}</td>
+              <td>{s(recovered7)}</td>
+              <td>{s(deaths7)}</td>
+            </tr>
+            <tr>
+              <th scope="row">Last 30 Days</th>
+              <td>{s(confirmed30)}</td>
+              <td>{s(recovered30)}</td>
+              <td>{s(deaths30)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

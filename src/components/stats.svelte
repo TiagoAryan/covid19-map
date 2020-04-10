@@ -10,6 +10,7 @@
 
   function getContent() {
     if (data.confirmed.locations.filter(e => country === e.country_code)[0]) {
+      console.log(data);
       if (country == "CN") days = 66;
       else if (country == "TH" || country == "NP") days = 9;
       else if (country == "JP") days = 6;
@@ -119,14 +120,21 @@
       </div>
       <div class="col-block">
         <label>Fatality</label>
-        <div class="label-big {fatality>10 ? "label-red" : ""} {fatality>5 && fatality<=10 ? "label-yellow" : ""} {fatality<5 ? "label-green" : ""} ">
+        <div
+          class="label-big {fatality > 10 ? 'label-red' : ''}
+          {fatality > 5 && fatality <= 10 ? 'label-yellow' : ''}
+          {fatality < 5 ? 'label-green' : ''}
+          ">
 
           <h4>{fatality.toFixed(1)}%</h4>
         </div>
       </div>
       <div class="col-block">
         <label>Current Situation</label>
-        <div class="label-big {points>7 ? "label-green" : ""} {points>=3 && points<=7 ? "label-yellow" : ""} {points<3 ? "label-red" : ""}">
+        <div
+          class="label-big {points > 7 ? 'label-green' : ''}
+          {points >= 3 && points <= 7 ? 'label-yellow' : ''}
+          {points < 3 ? 'label-red' : ''}">
 
           <h4 title="progress of the situation in the last 7 days">
             {points.toFixed(0)} / 10

@@ -105,7 +105,6 @@
   <div class="container_details">
     {#if !country}
       <div class="box-half">
-
         <ChartW data={dados} />
         <ChartPoints data={dados} />
       </div>
@@ -113,13 +112,12 @@
 
     <div
       class="box-half box-half-right {country ? 'container_details_box-half-right' : ''}">
+      <Preview data={dados} {country} {name} on:cchange />
       {#if country}
-        <Preview data={dados} {country} {name} on:cchange />
         <Stats data={dados} {country} />
         <Chart data={dados} {country} />
       {/if}
       {#if !country}
-        <Preview data={dados} {country} {name} on:cchange />
         <Countries data={dados} {bounds} />
         <Chart100 data={dados} />
       {/if}

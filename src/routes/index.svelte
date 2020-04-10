@@ -415,7 +415,7 @@
       gl._glMap.addImage("plane", image);
     });
 
-    getSpread();
+    await getSpread();
     getNews();
 
     await data
@@ -437,6 +437,16 @@
   async function mergeNewData(data) {
     let all = await new NovelCovid().all();
     let nov = await new NovelCovid().countries();
+
+    data.confirmed.locations = data.confirmed.locations.filter(
+      e => "XX" !== e.country_code
+    );
+    data.deaths.locations = data.deaths.locations.filter(
+      e => "XX" !== e.country_code
+    );
+    data.recovered.locations = data.recovered.locations.filter(
+      e => "XX" !== e.country_code
+    );
 
     data.latest.confirmed = all.cases;
     data.latest.deaths = all.deaths;
@@ -467,6 +477,14 @@
         )[0];
         r.latest = nc.recovered;
         r.history[toDate(nc.updated)] = nc.recovered;
+
+        length = Object.keys(data.confirmed.locations[0].history).length;
+        c.last7 = c.latest - Object.values(c.history)[length - 8];
+        c.last30 = c.latest - Object.values(c.history)[length - 31];
+        d.last7 = d.latest - Object.values(d.history)[length - 8];
+        d.last30 = d.latest - Object.values(d.history)[length - 31];
+        r.last7 = r.latest - Object.values(r.history)[length - 8];
+        r.last30 = r.latest - Object.values(r.history)[length - 31];
       }
     }
 

@@ -7,7 +7,7 @@
 
   let res;
   let chart;
-  res = data;
+  res = JSON.parse(JSON.stringify(data));
   let chart_mode = true;
   let canvasElement;
   let box_title = "Infected Count";
@@ -60,30 +60,6 @@
     );
   }
 
-  function sort_total(dates, all) {
-    var total = [];
-    for (var d of dates) {
-      var tot = 0;
-      for (var item of all) tot += item.history[d];
-      total.push(tot);
-    }
-    return total;
-  }
-  function sort_total_a(dates, all) {
-    var total = [];
-    for (var d of dates) {
-      var tot = 0;
-      for (var i = 0; i < data.confirmed.locations.length; i++) {
-        tot +=
-          data.confirmed.locations[i].history[d] -
-          data.deaths.locations[i].history[d] -
-          data.recovered.locations[i].history[d];
-      }
-      total.push(tot);
-    }
-    return total;
-  }
-
   //---------------
   // CHART
   //---------------
@@ -101,7 +77,7 @@
     let k = 0;
     let count;
     var previous_d = 0;
-    var dates = Object.keys(data.confirmed.locations[0].history).sort(function(
+    var dates = Object.keys(res.confirmed.locations[0].history).sort(function(
       a,
       b
     ) {
@@ -109,17 +85,17 @@
     });
 
     if (country) {
-      data.confirmed.locations = sort(data.confirmed.locations);
-      data.deaths.locations = sort(data.deaths.locations);
-      data.recovered.locations = sort(data.recovered.locations);
+      res.confirmed.locations = sort(res.confirmed.locations);
+      res.deaths.locations = sort(res.deaths.locations);
+      res.recovered.locations = sort(res.recovered.locations);
 
-      var confirmed = data.confirmed.locations.filter(
+      var confirmed = res.confirmed.locations.filter(
         e => country === e.country_code
       )[0];
-      var recovered = data.recovered.locations.filter(
+      var recovered = res.recovered.locations.filter(
         e => country === e.country_code
       )[0];
-      var deaths = data.deaths.locations.filter(
+      var deaths = res.deaths.locations.filter(
         e => country === e.country_code
       )[0];
 
