@@ -83,7 +83,7 @@
     vertical-align: top;
   }
   .col-block {
-    width: 24%;
+    width: 19%;
   }
   h4 {
     margin: 0px;
@@ -122,12 +122,19 @@
 
     <div class="container-data-details">
       <div class="col-block">
-        <label>Days since first infected</label>
+        <label>Days Infected</label>
         <h4>{days} Days</h4>
       </div>
       <div class="col-block">
         <label>Tests</label>
-        <h4>{tests}</h4>
+         <div
+          class="label-big {tests /pop_total*1000 > 10 ? 'label-green' : ''}
+          {tests /pop_total*1000 > 5 && tests /pop_total*1000 <= 10 ? 'label-yellow' : ''}
+          {tests /pop_total*1000 < 5 ? 'label-red' : ''}
+          ">
+          <h4>{tests/1000>0 ? parseInt(tests/1000)+"k" : tests } </h4>
+
+        </div>
       </div>
       <div class="col-block">
         <label>In Critical State</label>
