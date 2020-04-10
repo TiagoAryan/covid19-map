@@ -27,10 +27,10 @@
     width: 100%;
     vertical-align: top;
   }
-  tt {
+  label {
     display: inline-block;
     width: 100%;
-
+    margin-bottom: 4px;
     font-size: 0.7rem;
   }
   h4 {
