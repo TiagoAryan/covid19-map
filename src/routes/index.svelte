@@ -30,6 +30,7 @@
   let showdate = "22 / 01 / 2020";
   let bounds;
   let show = "";
+  let view_news= false;
   let show_details = false;
   let inPlay = true;
 
@@ -313,6 +314,8 @@
     //Listener function taking an event object
     function onMapClick(e) {
       show = "";
+      view_news=false;
+      
       show_info = "show";
       var click_pos = L.latLng(e.latlng.lat, e.latlng.lng);
       var bound = L.latLngBounds(L.geoJson(country).getBounds());
@@ -428,7 +431,7 @@
 
         res = await mergeNewData(result);
 
-        play();
+        //play();
       })
       .catch(function(error) {
         console.error(error);
@@ -557,6 +560,10 @@
 
   function fitMap(args) {
     show_details = !show_details;
+    if(view_news){
+      view_news =!view_news
+    }
+
     if (args.detail.country != "World") {
       var country_json = L.geoJson(
         Object.entries(countries_bounds).filter(
@@ -586,6 +593,12 @@
   function cchange() {
     show_details = !show_details;
   }
+  function nchange() {
+    if(view_news){
+      view_news = !view_news;
+    }
+  }
+
 
   function sort(all) {
     let all_order = [];
@@ -637,8 +650,8 @@
     if (!show) show = scope;
     else if (show != scope) show = scope;
     else show = "";
-  }
 
+  }
   async function getSpread() {
     const response = await fetch("./ncov.json");
     let data = await response.json();
@@ -957,7 +970,7 @@
     </div>
   {/if}
   {#if news !== undefined && news !== '' && news !== []}
-    <News data={news} />
+    <News data={news} {view_news} on:nchange={() => nchange()} />
   {/if}
     <About />
 

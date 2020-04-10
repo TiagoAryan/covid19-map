@@ -1,19 +1,21 @@
 <script>
   import moment from "moment";
   export let data;
-  let view_news="hidden";
+  export let view_news;
+  $: view_news;
+
   let btn_style= "";
   let btn_text= "Show News";
   let btn_icon= "fa-eye";
 
   function toggleNews() {
-    if (view_news == "hidden") {
-      view_news = "show";
+      view_news = !view_news;
+
+    if (!view_news ) {
       btn_style="secondary";
       btn_text= "Hide News";
       btn_icon= "fa-eye-slash";
     } else {
-      view_news = "hidden";
       btn_style="";
       btn_text= "Show News";
       btn_icon= "fa-eye";
@@ -25,7 +27,7 @@
   .block-news {
     position: fixed;
     left: 12px;
-    bottom: 12px;
+    bottom: 72px;
     width: 310px;
     z-index: 10;
 
@@ -35,13 +37,35 @@
     transition-duration: 0.4s;
     
   }
-  .block-news.hidden{
-    bottom: -340px;
-
+  .block-news a{
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
   }
-  .block-news.show{
-    bottom: 12px;
-
+  .block-news.false a{
+    transform: translateX(-330px);
+  }
+  .block-news.true a{
+    transform: translateX(0px);
+  }
+  .block-news a:nth-of-type(1){
+     -webkit-transition-duration: 0.6s;
+    -moz-transition-duration: 0.6s;
+    -o-transition-duration: 0.6s;
+    transition-duration: 0.6s;
+  }
+  .block-news a:nth-of-type(2){
+     -webkit-transition-duration: 0.4s;
+    -moz-transition-duration: 0.4s;
+    -o-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+  }
+  .block-news a:nth-of-type(3){
+     -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
   }
   .button{
     margin-left:12px;
@@ -78,6 +102,22 @@
     color: inherit;
     text-decoration: inherit;
   }
+  
+  .container-icon{
+    bottom:12px;
+    display: inline-block;
+    position: fixed;
+    width: auto;
+    left: 12px;
+    margin:0;
+  }
+  .container-icon i{
+    margin-right: 6px;
+    display: inline-block;
+  }
+  .container-icon p{
+    display: inline-block;
+  }
   @media (max-width: 768px) {
     .block-news {
       display: none;
@@ -85,16 +125,18 @@
   }
 </style>
 
+      <div
+        class="container-basic container-icon"
+        on:click={() => toggleNews()}>
+        <i class="fas fa-newspaper"></i><p>News</p>
+</div>
 <div class="block-news {view_news}">
-  <h4>News</h4> <div class="button {btn_style}"  on:click={() => toggleNews()}><i class="far {btn_icon}"></i> {btn_text}</div>
   {#each data.slice(0, 3) as item, i}
-    <a href="/news" rel="prefetch">
-      <div class="container-basic">
+    <a href="/news" rel="prefetch" class="container-basic">
         <div class="container-body">
           <label>{item.source.name} - {moment(item.publishedAt).fromNow()}</label>
           <div class="news">{item.title}</div>
         </div>
-      </div>
     </a>
   {/each}
 </div>

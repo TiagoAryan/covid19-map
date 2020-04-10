@@ -120,6 +120,7 @@
     top:12px;
     left:12px;
     z-index: 100;
+        height: 18px;
   }
   .button i{
     margin-right: 4px;

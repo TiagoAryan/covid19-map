@@ -6,6 +6,7 @@
   let btn_text= "About";
   let btn_icon= "fa-eye";
 
+
   function toggleNews() {
     if (view_news == "hidden") {
       view_news = "show";
@@ -77,6 +78,20 @@
     font-weight: 300;
     margin: 0px 0px 10px 0px;
   }
+  .container-body label{
+    width:30%;
+    text-align:left;
+    display: inline-block;
+    vertical-align: top;
+  }
+  .container-body p{
+    width:65%;
+    text-align:right;
+    display: inline-block;
+    margin:0;
+    font-size: 0.8rem;
+    color:whitesmoke;
+  }
   @media (max-width: 768px) {
     .block-about {
       display: none;
@@ -89,9 +104,14 @@
   
   <div class="container-basic">
     <div class="container-body">
-      <h4> ingormation</h4>
-      <p> ingormation</p>
-      <label> ingormation</label>
+      <label> Last Updated</label>
+      <p> 12/04/2020</p>
+      <label> Sources</label>
+      <p> 12/04/2020</p>
+      <label> Sources</label>
+      <p> 12/04/2020</p>
+      <label>Credits</label>
+      <p> <a href="">Tiago Aryan</a> & <a href="">Beatriz Diogo</a> </p>
     </div>
   </div>
 </div>
