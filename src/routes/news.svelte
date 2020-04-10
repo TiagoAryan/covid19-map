@@ -30,8 +30,9 @@
 
 <style>
   .block-news {
-    width: 70%;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 20px auto;
   }
   .pane-loading {
     position: fixed !important;
@@ -48,6 +49,13 @@
     transition-duration: 0.4s;
     opacity: 1;
   }
+  .pane-loading p {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    font-size: 2.6rem;
+    font-weight: 300;
+    color: whitesmoke;
+  }
   .container-body {
     position: relative;
     display: block;
@@ -60,15 +68,15 @@
   }
   .news {
     display: inline-block;
-    width: 84%;
+    width: 78%;
     vertical-align: top;
   }
   .img {
     height: auto;
     display: inline-block;
     vertical-align: top;
-    width: 15%;
-    padding: 5px;
+    width: 17%;
+    margin-right: 12px;
   }
   img {
     width: 100%;
@@ -86,15 +94,12 @@
     color: inherit;
     text-decoration: inherit;
   }
-  tt {
-    display: inline-block;
-    width: 100%;
-
+  label {
     font-size: 0.7rem;
   }
   @media (max-width: 768px) {
     .block-news {
-      width: 98%;
+      width: 96%;
     }
     .container-body {
       padding: 0px 8px;
@@ -107,15 +112,30 @@
       padding: 0px;
     }
   }
+  section{
+    padding: 4rem 0px;
+  }
+  .button{
+    position: fixed;
+    top:12px;
+    left:12px;
+    z-index: 100;
+  }
+  .button i{
+    margin-right: 4px;
+  }
 </style>
 
 <svelte:head>
   <title>Covid 19 News</title>
 </svelte:head>
+<section>
 
 {#if data}
   <div class="block-news">
-    <h3>News</h3>
+    <a href="/" class="button secondary"> <i class="fas fa-chevron-left"></i>Go Back to Map</a>
+
+    <h3>Current World Situation</h3> 
     <a href="/">
       <div class="container-basic" style=" padding: 40px 0">
         <div class="container-body">
@@ -166,23 +186,28 @@
         </div>
       </div>
     </a>
-    {#each data.articles as item, i}
-      <a href={item.url} target="_blank" class="more">
-        <div class="container-basic">
-          <div class="container-body">
-            <div class="img">
-              <img src={item.urlToImage} alt="img" />
-            </div>
-            <div class="news">
-              <tt>{item.source.name} - {moment(item.publishedAt).fromNow()}</tt>
-              <h5>{item.title}</h5>
-              <p>{item.description}</p>
+    </div>
+  <div class="block-news">
+  
+    <h3>News</h3>
+
+      {#each data.articles as item, i}
+        <a href={item.url} target="_blank" class="more">
+          <div class="container-basic">
+            <div class="container-body">
+              <div class="img">
+                <img src={item.urlToImage} alt="img" />
+              </div>
+              <div class="news">
+                <label>{item.source.name} - {moment(item.publishedAt).fromNow()}</label>
+                <h5>{item.title}</h5>
+                <p>{item.description}</p>
+              </div>
             </div>
           </div>
-        </div>
-      </a>
-    {/each}
-  </div>
+        </a>
+      {/each}
+    </div>
 {:else}
   <div class="pane-loading">
     <p>Getting Data</p>
@@ -198,3 +223,4 @@
     </div>
   </div>
 {/if}
+</section>

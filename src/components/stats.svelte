@@ -4,7 +4,7 @@
   export let data;
   export let country;
 
-  let days, fatality, pop_total, points;
+  let days, fatality, pop_total, points, critical, critical_per;
 
   $: country, getContent();
 
@@ -17,6 +17,8 @@
       else if (country == "US") days = 3;
       else if (country == "KR") days = 2;
       else days = 0;
+
+      
 
       let d = data.confirmed.locations.filter(
         e => country === e.country_code
@@ -34,6 +36,16 @@
       let recovered = data.recovered.locations.filter(
         e => country === e.country_code
       )[0].latest;
+
+
+      critical = data.confirmed.locations.filter(
+        e => country === e.country_code
+      )[0].critical;
+
+      critical_per=critical /(confirmed-deaths-recovered)*100;
+      console.log(critical);
+      console.log(critical_per);
+
 
       fatality = (deaths / confirmed) * 100;
 
@@ -76,7 +88,7 @@
     vertical-align: top;
   }
   .col-block {
-    width: 32%;
+    width: 24%;
   }
   h4 {
     margin: 0px;
@@ -117,6 +129,12 @@
       <div class="col-block">
         <label>Days since first infected</label>
         <h4>{days} Days</h4>
+      </div>
+      <div class="col-block">
+        <label>In Critical State</label>
+        <div class="label-big {critical_per>7 ? "label-red" : ""} {critical_per>3.5 && critical_per<=7 ? "label-yellow" : ""} {critical_per<5 ? "label-green" : ""} ">
+          <h4>{critical}</h4>
+        </div>
       </div>
       <div class="col-block">
         <label>Fatality</label>
