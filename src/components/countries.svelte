@@ -6,12 +6,21 @@
 
   export let data;
   export let bounds;
+  let pop_total = 0,
+    deaths = 0,
+    confirmed = 0,
+    recovered = 0,
+    fatality=0,
+    critical_per=0,
+    critical=0,
+    tests=0;
 
   let res;
+  let confirmed_data, deaths_data, recovered_data;
   var c_infected = [];
   var c_healthy = [];
   let canvasElement;
-    let container_box;
+  let container_box;
   let ratio = 1;
 
   let chart;
@@ -22,28 +31,41 @@
 
 
   $: fillChart();
-  all.reduce(function(res, value) {
-      if (!res[value.country]) {
-        res[value.country] = {
-          country: value.country,
-          country_code: value.country_code
-        };
-        all_order.push(res[value.country]);
-      }
-      return res;
-    }, {});
+ 
 
-    for (var country of Object.entries(bounds)) {
-      if (
-        res.confirmed.locations.find(
-          e => e.country_code === getCountryISO2(country[1].id)
-        ) == undefined
-      )
-        c_healthy.push([country[0], getCountryISO2(country[1].id)]);
-      else c_infected.push([country[0], getCountryISO2(country[1].id)]);
-    }
-    
 async function fillChart() {
+    all.reduce(function(res, value) {
+        if (!res[value.country]) {
+          res[value.country] = {
+            country: value.country,
+            country_code: value.country_code
+          };
+          all_order.push(res[value.country]);
+        }
+        return res;
+      }, {});
+
+      for (var country of Object.entries(bounds)) {
+        if (
+          res.confirmed.locations.find(
+            e => e.country_code === getCountryISO2(country[1].id)
+          ) == undefined
+        )
+          c_healthy.push([country[0], getCountryISO2(country[1].id)]);
+        else c_infected.push([country[0], getCountryISO2(country[1].id)]);
+    }
+    console.log(res);
+          
+    deaths = res.latest.deaths;
+    confirmed = res.latest.confirmed;
+    recovered = res.latest.recovered;
+    critical = res.latest.critical;
+    tests = res.latest.tests;
+
+    pop_total = confirmed;
+
+    critical_per = (critical / (confirmed - deaths - recovered)) * 100;
+    fatality = (deaths / confirmed) * 100;
     await onMount(() => {
       initChart();
     });
@@ -60,34 +82,11 @@ async function fillChart() {
 				}],
 				labels: ["Healthy", "Infected"]
       };
-      /*
-      chart.data = {
-        labels: ["Healthy", "Infected"],
-        datasets: [
-          {
-            label: "Healthy",
-            defaultFontFamily: "Open Sans",
-            borderColor:[ "#40C0A5", "#FFC831"],
-            backgroundColor: ["#40C0A526","#FFC83126"],
-            fill: false,
-            data: [c_infected.length, c_healthy.length],
-            yAxisID: "y-axis-1",
-            pointBackgroundColor: "#1E1E21",
-            pointBorderWidth: 2,
-            borderWidth: 2,
-            pointHitRadius: 5,
-            pointRadius: 3,
-            pointHoverRadius: 12,
-            pointHoverBorderWidth: 3
-          }
-        ]
-      };
-      */
       chart.update();
   }
   
   function initChart() {
-    ratio = container_box.offsetWidth / (container_box.offsetHeight );
+    ratio = container_box.offsetWidth / (container_box.offsetHeight);
     if (chart === undefined) {
       var ctx = canvasElement.getContext("2d");
       chart = new Chart(ctx, {
@@ -122,22 +121,6 @@ async function fillChart() {
     }
   }
 
-  function changeChart(e) {
-    if (chart_mode) {
-      chart_mode = false;
-      fillChart();
-      btn_text = "Infected Count";
-      box_title = "Growth Evolution";
-      btn_icon = "user-friends";
-    } else {
-      chart_mode = true;
-      fillChart();
-      box_title = "Infected Count";
-      btn_text = "Growth Evolution";
-      btn_icon = "chart-line";
-    }
-    //fillChart(chart, data);
-  }
 </script>
 
 <style>
@@ -148,25 +131,7 @@ async function fillChart() {
     -o-transition-duration: 0.4s;
     transition-duration: 0.4s;
   }
-  .container-list label {
-    width: 40px;
-  }
-  .container-list .flag {
-    width: 28px;
-  }
-  .flag {
-    transform: scale(0.9);
-    opacity: 0.9;
-
-    -webkit-transition-duration: 0.2s;
-    -moz-transition-duration: 0.2s;
-    -o-transition-duration: 0.2s;
-    transition-duration: 0.2s;
-  }
-  .flag:hover {
-    transform: scale(1.1);
-    opacity: 1;
-  }
+  
   .container-basic {
     width: 100%;
     height: calc(100% - 202px);
@@ -179,28 +144,31 @@ async function fillChart() {
     width: 49%;
     vertical-align: top;
     height: 100%;
+    position: relative;
   }
   .container-body {
     overflow: scroll;
     height: 100%;
-    padding: 8px 24px;
+    padding: 0px 24px;
   }
   .container-basic {
-    height: 170px;
+    height: 140px;
     margin-bottom: 6px;
   }
   .container-chart, .container-info{
-    width: 64%;
+    width: 55%;
     display: inline-block;
     height: 100%;
     vertical-align: top;
   }
   .container-chart{
-    width: 35%;
+    width: 40%;
+    padding:0px;
+    height: calc(100% - 50px);
   }
   .label{
     width: 100%;
-    margin-bottom:12px;
+    margin-bottom:0px;
     display: block;
   }
   .percentage{
@@ -214,16 +182,54 @@ async function fillChart() {
     margin-left:12px;
 
   }
-  .container-info p{
-    margin: 0px
+  .container-chart-label{
+    margin-bottom: 0px
   }
   .dot{
     transform: translateY(5px);
+  }
+  .col-block {
+    width: 16%;
+    padding-top: 20px
+  }
+
+  h4 {
+    margin: 0px;
+  }
+  .label-big h4 {
+    display: inline-block;
+    margin: 0;
+    font-weight: 600;
+  }
+  .label-big {
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inherit;
+  }
+  .label-yellow {
+    color: #ffc831;
+    background-color: rgba(255, 200, 49, 0.2);
+  }
+  .label-red {
+    color: #ff4e34;
+    background-color: rgba(255, 78, 52, 0.2);
+  }
+  .label-green {
+    color: #40c0a5;
+    background-color: rgba(64, 192, 165, 0.2);
+  }
+  .col-block label {
+    display: block;
+    margin-bottom: 4px;
   }
   @media (max-width: 1280px) {
     .container-basic {
       height: 140px;
     }
+  }
+  .container-title{
+    margin-bottom:12px;
+    display:block;
   }
 </style>
 
@@ -231,24 +237,59 @@ async function fillChart() {
   Loading...
 {:else}
   <div class="container-basic container-countries ">
-      <div class="container-body">
-        <div class="container-chart" bind:this={container_box}>
-          <canvas id="myChart" bind:this={canvasElement} />
-       </div>
-        <div class="container-info">
-          <div class="label">
-            <i class="dot dot_yellow" />
-            <p class="container-title">Infected Countries</p>
-            <div class="percentage">{parseInt(c_infected.length/(c_infected.length+c_healthy.length)*100)}%</div>
-            <h5 style="float:right">{c_infected.length}</h5>
-          </div>
-          <div class="label">
-            <i class="dot dot_green" />
-            <p class="container-title">Healthy Countries</p>
-            <div class="percentage">{parseInt(c_healthy.length/(c_infected.length+c_healthy.length)*100)}%</div>
-            <h5 style="float:right">{c_healthy.length}</h5>
-          </div>
+    <div class="container-list-group">
+        <div class="container-body">
+          <h5 class="container-title">World Overview</h5>
 
+          <div class="container-chart" bind:this={container_box}>
+            <canvas id="myChart" bind:this={canvasElement} />
+          </div>
+          <div class="container-info">
+            <div class="label">
+              <i class="dot dot_yellow" />
+              <label class="container-chart-label">Country Infected</label>
+            </div>
+            <div class="label">
+              <i class="dot dot_green" />
+              <label class="container-chart-label">Country Healthy </label>
+            </div>
+
+          </div>
+        </div>
+    </div>
+    <div class="col-block">
+      <label>Tests</label>
+         <div
+          class="label-big {tests /pop_total*1000 > 10 ? 'label-green' : ''}
+          {tests /pop_total*1000 > 5 && tests /pop_total*1000 <= 10 ? 'label-yellow' : ''}
+          {tests /pop_total*1000 < 5 ? 'label-red' : ''}
+          ">
+          <h4>{ parseInt(tests/1000000)>0 ? parseInt(tests/1000000)+"M" : "" }
+          {parseInt(tests/1000)>0 && parseInt(tests/1000000)<=0 ? parseInt(tests/1000)+"k" : "" } 
+          {parseInt(tests/1000)<=0 ? tests : "" }</h4>
+
+        </div>
+      </div>
+      
+      <div class="col-block">
+        <label>In Critical State</label>
+        <div
+          class="label-big {critical_per > 7 ? 'label-red' : ''}
+          {critical_per > 3.5 && critical_per <= 7 ? 'label-yellow' : ''}
+          {critical_per < 5 ? 'label-green' : ''}
+          ">
+          <h4>{critical}</h4>
+        </div>
+      </div>
+      <div class="col-block">
+        <label>Fatality</label>
+        <div
+          class="label-big {fatality > 10 ? 'label-red' : ''}
+          {fatality > 5 && fatality <= 10 ? 'label-yellow' : ''}
+          {fatality < 5 ? 'label-green' : ''}
+          ">
+
+          <h4>{fatality.toFixed(1)}%</h4>
         </div>
       </div>
   </div>

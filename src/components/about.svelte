@@ -1,24 +1,30 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import moment from "moment";
   export let data;
+  export let view_about;
+  $: view_about;
 
-  let view_news = "hidden";
+  const dispatch = createEventDispatcher();
+
   let btn_style = "";
   let btn_text = "About";
   let btn_icon = "fa-eye";
 
   function toggleAbout() {
-    if (view_news == "hidden") {
-      view_news = "show";
+    if (!view_about) {
       btn_style = "secondary";
       btn_text = "Hide";
       btn_icon = "fa-eye-slash";
     } else {
-      view_news = "hidden";
       btn_style = "";
       btn_text = "About";
       btn_icon = "fa-eye";
     }
+  }
+
+  function achange() {
+    dispatch("achange");
   }
 </script>
 
@@ -26,7 +32,7 @@
   .block-about {
     position: fixed;
     right: 12px;
-    bottom: 12px;
+    bottom: 112px;
     width: 310px;
     height: 140px;
     z-index: 10;
@@ -37,11 +43,11 @@
     -o-transition-duration: 0.4s;
     transition-duration: 0.4s;
   }
-  .block-about.hidden {
-    bottom: -100px;
+  .block-about.false {
+    transform: translateX(330px);
   }
-  .block-about.show {
-    bottom: 12px;
+  .block-about.true {
+    transform: translateX(0px);
   }
   .button {
     margin-left: 12px;
@@ -83,6 +89,18 @@
     font-size: 0.8rem;
     color: whitesmoke;
   }
+  .icon {
+    bottom: 20px;
+    display: inline-block;
+    position: fixed;
+    width: auto;
+    right: 12px;
+    margin: 0;
+    cursor: pointer;
+  }
+  .container-icon i {
+    display: inline-block;
+  }
   @media (max-width: 768px) {
     .block-about {
       display: none;
@@ -90,15 +108,9 @@
   }
 </style>
 
-<div class="block-about {view_news}">
-  <div
-    class="button secondary"
-    on:click={() => toggleAbout()}
-    title="Last Update {moment(data.confirmed.last_updated).fromNow()}">
-    <i class="far {btn_icon}" />
-    {btn_text}
-  </div>
+<i class="icon fas fa-info-circle" on:click={achange} />
 
+<div class="block-about {view_about}">
   <div class="container-basic">
     <div class="container-body">
       <label>Covid 19 Information Map</label>
@@ -133,11 +145,18 @@
           github:TiagoAryan/covid19-map
         </a>
       </p>
-      <label>Credits</label>
+      <label>
+        Made with
+        <i class="fas fa-heart" />
+        by
+      </label>
       <p>
         <a href="">Tiago Aryan</a>
-        <i class="fas fa-heart" />
+        &
         <a href="">Beatriz Diogo</a>
+      </p>
+      <p>
+        <a href="/about" target="_blank">More About</a>
       </p>
     </div>
   </div>

@@ -150,7 +150,7 @@
   }
   figure {
     position: static;
-    display: inline-block;
+    display: block;
     bottom: auto;
     left: auto;
     z-index: 1;

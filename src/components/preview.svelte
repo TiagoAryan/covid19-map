@@ -7,25 +7,34 @@
   export let country;
   export let name;
 
+
+  let box_title = "Total";
+  let btn_text = "Total";
+  var list_mode;
+  var show_options = "hidden";
+
+
   let res, borders;
   let border = 0,
     pop_total = 0,
     deaths = 0,
+    deathst = 0,
     deaths1 = 0,
     deaths7 = 0,
     deaths30 = 0,
     confirmed = 0,
+    confirmedt = 0,
     confirmed1 = 0,
     confirmed7 = 0,
     confirmed30 = 0,
     recovered = 0,
+    recoveredt = 0,
     recovered1 = 0,
     recovered7 = 0,
     recovered30 = 0;
   let cland, csea, cair;
 
   $: setpop = false;
-
   $: country, getContent();
 
   function getContent() {
@@ -36,6 +45,7 @@
           e => country === e.country_code
         )[0];
         deaths = d.latest;
+        deathst = d.latest;
         deaths1 = deaths - Object.values(d.history)[length - 2];
         deaths7 = deaths - Object.values(d.history)[length - 8];
         deaths30 = deaths - Object.values(d.history)[length - 31];
@@ -44,6 +54,7 @@
           e => country === e.country_code
         )[0];
         confirmed = c.latest;
+        confirmedt = c.latest;
         confirmed1 = confirmed - Object.values(c.history)[length - 2];
         confirmed7 = confirmed - Object.values(c.history)[length - 8];
         confirmed30 = confirmed - Object.values(c.history)[length - 31];
@@ -51,6 +62,7 @@
           e => country === e.country_code
         )[0];
         recovered = r.latest;
+        recoveredt = r.latest;
         recovered1 = recovered - Object.values(r.history)[length - 2];
         recovered7 = recovered - Object.values(r.history)[length - 8];
         recovered30 = recovered - Object.values(r.history)[length - 31];
@@ -66,6 +78,12 @@
       deaths = data.latest.deaths;
       confirmed = data.latest.confirmed;
       recovered = data.latest.recovered;
+
+      deathst = data.latest.deaths;
+      confirmedt = data.latest.confirmed;
+      recoveredt = data.latest.recovered;
+
+      
 
       let deaths_data = sort_total(deaths, data.deaths.locations);
       let confirmed_data = sort_total(confirmed, data.confirmed.locations);
@@ -154,6 +172,55 @@
   function cchange() {
     dispatch("cchange");
   }
+  function toggleOptions() {
+    if (show_options == "hidden") {
+      show_options = "show";
+    } else {
+      show_options = "hidden";
+    }
+  }
+  function changeListDisplay(mode) {
+    if (mode == "total") {
+      list_mode = "total";
+      box_title = "Total";
+      btn_text = "Total";
+      deaths = deathst;
+      confirmed = confirmedt;
+      recovered = recoveredt;
+      pop_total = confirmedt;
+    } else if (mode == "today") {
+      list_mode = "today";
+      box_title = "Today";
+      btn_text = "Today";
+      deaths = deaths1;
+      confirmed = confirmed1;
+      recovered = recovered1;
+      pop_total = confirmed1;
+
+    }else if (mode == "last7") {
+      list_mode = "last7";
+      box_title = "Last 7 Days";
+      btn_text = "Last 7 Day";
+      deaths = deaths7;
+      confirmed = confirmed7;
+      recovered = recovered7;
+      pop_total = confirmed7;
+
+    } else if (mode == "last30") {
+      list_mode = "last30";
+      box_title = "Last 30 Days";
+      btn_text = "Last 30 Days";
+      deaths = deaths30;
+      confirmed = confirmed30;
+      recovered = recovered30;
+      pop_total = confirmed30;
+
+    }
+    show_options = "hidden";
+
+    run();
+  }
+
 </script>
 
 <style>
@@ -165,6 +232,7 @@
     width: 100%;
     left: 0;
     vertical-align: top;
+    padding-bottom: 0px
   }
   .borders {
     display: inline;
@@ -233,7 +301,7 @@
   </div>
   <div
     class="container-body"
-    style="border-bottom: 1px solid rgba(151, 151, 151, 0.3); width: 100%;
+    style=" width: 100%;
     padding-bottom: 28px; margin-bottom: 16px;">
     <div class="container-data-details">
       <div class="col-block">
@@ -252,9 +320,31 @@
         <div class="data">{s(deaths)}</div>
       </div>
       <div class="col-block-btn">
-        <div class="button" on:click={() => change()}>
-          <i class="fas fa-user-friends" />
-          All
+       <div class="dropdown">
+        <div class="trigger" on:click={() => toggleOptions()}>
+          <i class="fas fa-filter" style="margin-right: 4px;" />
+          {btn_text}
+          <i class="fas fa-chevron-down" style="float: right; margin: 4% 0;" />
+        </div>
+          <div class="options {show_options}">
+            <div class="option" on:click={() => changeListDisplay('total')}>
+              <i class="fas fa-battery-full" />
+              Total
+            </div>
+            <div class="option" on:click={() => changeListDisplay('today')}>
+              <i class="fas fa-chart-bar" />
+              Today
+            </div>
+            <div class="option" on:click={() => changeListDisplay('last7')}>
+              <i class="fas fa-chart-bar" />
+              Last 7 Days
+            </div>
+            <div class="option" on:click={() => changeListDisplay('last30')}>
+              <i class="fas fa-chart-bar" />
+              Last 30 Days
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -290,42 +380,5 @@
     <label class="progress_label">
       {s(pop_total)} {setpop ? 'Population' : 'Cases'}
     </label>
-  </div>
-
-  <div class="container-body">
-    <div class="container-data-details">
-      <div class="table-responsive-lg">
-        <table class="table table-sm table-dark">
-          <thead>
-            <tr>
-              <th scope="col" />
-              <th scope="col">Cases</th>
-              <th scope="col">Recovered</th>
-              <th scope="col">Deaths</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">Today</th>
-              <td>{s(confirmed1)}</td>
-              <td>{s(recovered1)}</td>
-              <td>{s(deaths1)}</td>
-            </tr>
-            <tr>
-              <th scope="row">Last 7 Days</th>
-              <td>{s(confirmed7)}</td>
-              <td>{s(recovered7)}</td>
-              <td>{s(deaths7)}</td>
-            </tr>
-            <tr>
-              <th scope="row">Last 30 Days</th>
-              <td>{s(confirmed30)}</td>
-              <td>{s(recovered30)}</td>
-              <td>{s(deaths30)}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
   </div>
 </div>

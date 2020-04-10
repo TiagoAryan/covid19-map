@@ -40,7 +40,6 @@ h5 {
   background-color: #f8f9fa1f;
   margin-right: 8px;
   font-weight: 400;
-  letter-spacing: 1px;
 }
 div {
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
@@ -136,6 +135,11 @@ label {
   margin: 0;
   float: left;
   border-radius: 20px 0px 0px 20px;
+  font-size: 0.6rem;
+  font-weight: 400;
+  color:rgba(255, 255, 255, 0.8);
+  padding: 1px;
+  text-align: center;
 }
 .bg-danger {
   background-color: rgba(255, 78, 52, 0.2) !important;
@@ -182,10 +186,10 @@ button,
   height: 32px;
   padding: 8px 16px;
 
-  -webkit-transition-duration: 0.2s;
-  -moz-transition-duration: 0.2s;
-  -o-transition-duration: 0.2s;
-  transition-duration: 0.2s;
+  -webkit-transition:all 0.2s ease;
+  -moz-transition:all 0.2s ease;
+  -o-transition:all 0.2s ease;
+  transition:all 0.2s ease;
 }
 .button p,
 button p {
@@ -202,17 +206,20 @@ button:hover,
 
 button.secondary,
 .button.secondary {
-  background-color: rgba(91, 93, 102, 0.8);
+  background-color: rgba(91, 93, 102, 0.6);
+  color:rgba(255, 255, 255, 0.8);
 }
 button.true,
 .button.true {
   opacity: 0.6;
-  background-color: rgba(91, 93, 102, 0.8);
+  background-color: rgba(91, 93, 102, 0.6);
   color: rgba(0, 0, 0, 0.4);
 }
 button.secondary:hover,
 .button.secondary:hover {
   background-color: rgba(91, 93, 102, 1);
+  color:rgba(255, 255, 255, 1);
+
 }
 button.adj-left,
 .button.adj-left {
@@ -259,7 +266,6 @@ button:hover,
   line-height: 0.4rem;
   font-size: 1rem;
   margin: 0;
-  letter-spacing: 1px;
   margin-left: 24px;
 }
 .col-block label {
@@ -335,6 +341,64 @@ button:hover,
   opacity: 1;
 }
 
+.dropdown {
+  min-width: 165px;
+  display: inline-block;
+  float: right;
+  position: relative;
+}
+.dropdown .trigger {
+  padding: 4px 12px;
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  opacity: 0.6;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  border-radius: 3px;
+}
+.dropdown .trigger:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+.dropdown i{
+  font-size: 0.9rem;
+}
+.options {
+  overflow: hidden;
+  position: absolute;
+  top: 40px;
+  z-index: 1;
+  display: block;
+  width: 100%;
+
+  border-radius: 3px;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.options.hidden {
+  height: 0px;
+  opacity: 0;
+}
+.options.show {
+  opacity: 1;
+}
+.option {
+  padding: 8px 16px;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+.option:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
 .leaflet-control-zoom a:hover {
   background-color: rgba(91, 93, 102, 1)!important;
   border-bottom: 0;

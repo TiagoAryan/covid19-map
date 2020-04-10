@@ -30,14 +30,16 @@
   let showdate = "22 / 01 / 2020";
   let bounds;
   let show = "";
-  let view_news = false;
-  let show_details = false;
+  let view_news = false,
+    view_about = false,
+    show_details = false;
   let inPlay = true;
 
   let show_info = "show";
 
   $: show_details;
   $: view_news;
+  $: view_about;
 
   function play() {
     let length = Object.keys(res.confirmed.locations[0].history).length;
@@ -316,6 +318,7 @@
     function onMapClick(e) {
       show = "";
       view_news = false;
+      view_about = false;
 
       show_info = "show";
       var click_pos = L.latLng(e.latlng.lat, e.latlng.lng);
@@ -432,7 +435,7 @@
 
         res = await mergeNewData(result);
 
-        //play();
+        play();
       })
       .catch(function(error) {
         console.error(error);
@@ -562,6 +565,7 @@
   function fitMap(args) {
     show_details = !show_details;
     if (view_news) view_news = false;
+    if (view_about) view_about = false;
 
     if (args.detail.country != "World") {
       var country_json = L.geoJson(
@@ -594,6 +598,9 @@
   }
   function nchange() {
     view_news = !view_news;
+  }
+  function achange() {
+    view_about = !view_about;
   }
 
   function sort(all) {
@@ -951,7 +958,7 @@
       name={country_name_clicked}
       {show_details}
       on:cchange={() => cchange()} />
-    <About data={res} />
+    <About data={res} {view_about} on:achange={() => achange()} />
   {:else}
     <div class="pane-loading">
       <p>Getting Data</p>
