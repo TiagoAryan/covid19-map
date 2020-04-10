@@ -31,6 +31,7 @@
   let bounds;
   let show = "";
   let view_news= false;
+  let view_about=false;
   let show_details = false;
   let inPlay = true;
 
@@ -315,6 +316,7 @@
     function onMapClick(e) {
       show = "";
       view_news=false;
+      view_about= false;
       
       show_info = "show";
       var click_pos = L.latLng(e.latlng.lat, e.latlng.lng);
@@ -563,6 +565,9 @@
     if(view_news){
       view_news =!view_news
     }
+    if(view_about){
+      view_about =!view_about
+    }
 
     if (args.detail.country != "World") {
       var country_json = L.geoJson(
@@ -598,6 +603,12 @@
       view_news = !view_news;
     }
   }
+  function achange() {
+    if(view_about){
+      view_about = !view_about;
+    }
+  }
+  
 
 
   function sort(all) {
@@ -972,6 +983,6 @@
   {#if news !== undefined && news !== '' && news !== []}
     <News data={news} {view_news} on:nchange={() => nchange()} />
   {/if}
-    <About />
+    <About {view_about}/>
 
 </section>
