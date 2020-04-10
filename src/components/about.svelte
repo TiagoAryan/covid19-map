@@ -3,31 +3,33 @@
   export let data;
   let view_news="hidden";
   let btn_style= "";
-  let btn_text= "Show News";
+  let btn_text= "About";
   let btn_icon= "fa-eye";
 
   function toggleNews() {
     if (view_news == "hidden") {
       view_news = "show";
       btn_style="secondary";
-      btn_text= "Hide News";
+      btn_text= "Hide";
       btn_icon= "fa-eye-slash";
     } else {
       view_news = "hidden";
       btn_style="";
-      btn_text= "Show News";
+      btn_text= "About";
       btn_icon= "fa-eye";
     }
   }
 </script>
 
 <style>
-  .block-news {
+  .block-about {
     position: fixed;
-    left: 12px;
+    right: 12px;
     bottom: 12px;
     width: 310px;
+    height: 140px;
     z-index: 10;
+    text-align: right;
 
     -webkit-transition-duration: 0.4s;
     -moz-transition-duration: 0.4s;
@@ -35,16 +37,17 @@
     transition-duration: 0.4s;
     
   }
-  .block-news.hidden{
-    bottom: -340px;
+  .block-about.hidden{
+    bottom: -100px;
 
   }
-  .block-news.show{
+  .block-about.show{
     bottom: 12px;
 
   }
   .button{
     margin-left:12px;
+    margin-bottom:4px;
   }
   .container-body {
     position: relative;
@@ -57,7 +60,7 @@
     position: relative;
     display: block;
   }
-  .news {
+  .about {
     display: inline-block;
     width: 100%;
     vertical-align: top;
@@ -74,27 +77,21 @@
     font-weight: 300;
     margin: 0px 0px 10px 0px;
   }
-  a {
-    color: inherit;
-    text-decoration: inherit;
-  }
   @media (max-width: 768px) {
-    .block-news {
+    .block-about {
       display: none;
     }
   }
 </style>
 
-<div class="block-news {view_news}">
-  <h4>News</h4> <div class="button {btn_style}"  on:click={() => toggleNews()}><i class="far {btn_icon}"></i> {btn_text}</div>
-  {#each data.slice(0, 3) as item, i}
-    <a href="/news" rel="prefetch">
-      <div class="container-basic">
-        <div class="container-body">
-          <label>{item.source.name} - {moment(item.publishedAt).fromNow()}</label>
-          <div class="news">{item.title}</div>
-        </div>
-      </div>
-    </a>
-  {/each}
+<div class="block-about {view_news}">
+  <div class="button secondary"  on:click={() => toggleNews()}><i class="far {btn_icon}"></i> {btn_text}</div>
+  
+  <div class="container-basic">
+    <div class="container-body">
+      <h4> ingormation</h4>
+      <p> ingormation</p>
+      <label> ingormation</label>
+    </div>
+  </div>
 </div>

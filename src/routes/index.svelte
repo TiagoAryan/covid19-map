@@ -8,6 +8,7 @@
   import Chart from "../components/chart.svelte";
   import Details from "../components/details.svelte";
   import News from "../components/news.svelte";
+  import About from "../components/about.svelte";
   import { toDate } from "misc";
 
   let days = 66;
@@ -958,5 +959,6 @@
   {#if news !== undefined && news !== '' && news !== []}
     <News data={news} />
   {/if}
+    <About />
 
 </section>

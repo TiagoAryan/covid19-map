@@ -202,17 +202,17 @@ button:hover,
 
 button.secondary,
 .button.secondary {
-  background-color: rgba(235, 238, 255, 0.2);
+  background-color: rgba(91, 93, 102, 0.8);
 }
 button.true,
 .button.true {
   opacity: 0.6;
-  background-color: rgba(235, 238, 255, 0.2);
+  background-color: rgba(91, 93, 102, 0.8);
   color: rgba(0, 0, 0, 0.4);
 }
 button.secondary:hover,
 .button.secondary:hover {
-  background-color: rgba(235, 238, 255, 0.3);
+  background-color: rgba(91, 93, 102, 1);
 }
 button.adj-left,
 .button.adj-left {
