@@ -8,11 +8,9 @@
   export let name;
   export let show_details;
 
-  let pop_total, deaths, confirmed, recovered;
+  let deaths, confirmed, recovered;
 
   $: show_details;
-
-  $: setpop = false;
 
   $: country, getContent();
 
@@ -28,31 +26,15 @@
         recovered = data.recovered.locations.filter(
           e => country === e.country_code
         )[0].latest;
-
-        if (setpop) {
-          pop_total = getPop("code", country);
-        } else {
-          pop_total = confirmed;
-        }
       } else {
         deaths = 0;
         confirmed = 0;
         recovered = 0;
-        if (setpop) {
-          pop_total = getPop("code", country);
-        } else {
-          pop_total = 0;
-        }
       }
     } else {
       deaths = data.latest.deaths;
       confirmed = data.latest.confirmed;
       recovered = data.latest.recovered;
-      if (setpop) {
-        pop_total = 7772494610;
-      } else {
-        pop_total = confirmed;
-      }
     }
   }
 
@@ -72,17 +54,6 @@
       }
     }
     return null;
-  }
-
-  function change() {
-    if (setpop) {
-      setpop = false;
-      pop_total = confirmed;
-    } else {
-      setpop = true;
-      if (country) pop_total = getPop("code", country);
-      else pop_total = 7772494610;
-    }
   }
 
   function fitMap() {
@@ -128,10 +99,7 @@
         <img src={flag(name)} alt="flag" />
       </div>
       <h5 class="container-title">{name}</h5>
-      <div style="float:right" class="button" on:click={fitMap}>
-        <i class="fas fa-user-friends" />
-        Details
-      </div>
+      <div style="float:right" class="button" on:click={fitMap}>Details</div>
     </div>
   </div>
   {#if confirmed}
@@ -153,39 +121,31 @@
           <label>Deaths</label>
           <div class="data">{s(deaths)}</div>
         </div>
-        <div class="col-block-btn">
-          <div class="button" on:click={() => change()}>
-            <i class="fas fa-user-friends" />
-            All
-          </div>
-        </div>
       </div>
       <div class="progress">
         <div
           class="progress-bar"
           role="progressbar"
-          style="width: {recovered ? (recovered * 100) / pop_total : 0}%"
-          aria-valuenow={recovered ? (recovered * 100) / pop_total : 0}
+          style="width: {recovered ? (recovered * 100) / confirmed : 0}%"
+          aria-valuenow={recovered ? (recovered * 100) / confirmed : 0}
           aria-valuemin="0"
           aria-valuemax="100" />
         <div
           class="progress-bar bg-warning"
           role="progressbar"
-          style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}%"
-          aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}
+          style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0}%"
+          aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0}
           aria-valuemin="0"
           aria-valuemax="100" />
         <div
           class="progress-bar bg-danger"
           role="progressbar"
-          style="width: {deaths ? (deaths * 100) / pop_total : 0}%"
-          aria-valuenow={deaths ? (deaths * 100) / pop_total : 0}
+          style="width: {deaths ? (deaths * 100) / confirmed : 0}%"
+          aria-valuenow={deaths ? (deaths * 100) / confirmed : 0}
           aria-valuemin="0"
           aria-valuemax="100" />
       </div>
-      <label class="progress_label">
-        {s(pop_total)} {setpop ? 'Population' : 'Cases'}
-      </label>
+      <label class="progress_label">{s(confirmed)} Cases</label>
     </div>
   {:else}
     <div class="container-body body-healthy">

@@ -30,13 +30,14 @@
   let showdate = "22 / 01 / 2020";
   let bounds;
   let show = "";
-  let view_news= false;
+  let view_news = false;
   let show_details = false;
   let inPlay = true;
 
   let show_info = "show";
 
   $: show_details;
+  $: view_news;
 
   function play() {
     let length = Object.keys(res.confirmed.locations[0].history).length;
@@ -314,8 +315,8 @@
     //Listener function taking an event object
     function onMapClick(e) {
       show = "";
-      view_news=false;
-      
+      view_news = false;
+
       show_info = "show";
       var click_pos = L.latLng(e.latlng.lat, e.latlng.lng);
       var bound = L.latLngBounds(L.geoJson(country).getBounds());
@@ -560,9 +561,7 @@
 
   function fitMap(args) {
     show_details = !show_details;
-    if(view_news){
-      view_news =!view_news
-    }
+    if (view_news) view_news = false;
 
     if (args.detail.country != "World") {
       var country_json = L.geoJson(
@@ -594,11 +593,8 @@
     show_details = !show_details;
   }
   function nchange() {
-    if(view_news){
-      view_news = !view_news;
-    }
+    view_news = !view_news;
   }
-
 
   function sort(all) {
     let all_order = [];
@@ -650,7 +646,6 @@
     if (!show) show = scope;
     else if (show != scope) show = scope;
     else show = "";
-
   }
   async function getSpread() {
     const response = await fetch("./ncov.json");
@@ -794,7 +789,6 @@
         "line-dasharray": [3, 6]
       }
     });
-    
 
     gl._glMap.addLayer({
       id: "point_" + k,
@@ -802,10 +796,10 @@
       type: "symbol",
       layout: {
         "icon-image": "plane",
-        'icon-rotate': ['get', 'bearing'],
-        'icon-rotation-alignment': 'map',
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': true
+        "icon-rotate": ["get", "bearing"],
+        "icon-rotation-alignment": "map",
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true
       }
     });
     // Start the animation.
@@ -907,7 +901,10 @@
 
   {#if res !== undefined && res !== '' && res !== []}
     <div class="container-date">
-      <div class="date"><strong> Day {days} </strong> | {showdate}</div>
+      <div class="date">
+        <strong>Day {days}</strong>
+        | {showdate}
+      </div>
       <div class="navigate-time">
         <!-- <div class="button secondary adj-left">
       <i class="fas fa-chevron-left" />
@@ -954,6 +951,7 @@
       name={country_name_clicked}
       {show_details}
       on:cchange={() => cchange()} />
+    <About data={res} />
   {:else}
     <div class="pane-loading">
       <p>Getting Data</p>
@@ -972,6 +970,5 @@
   {#if news !== undefined && news !== '' && news !== []}
     <News data={news} {view_news} on:nchange={() => nchange()} />
   {/if}
-    <About />
 
 </section>
