@@ -780,12 +780,7 @@
         "line-dasharray": [3, 6]
       }
     });
-    var degrees =
-      (Math.atan2(from[0] - to[0], from[1] - to[1]) * 180) / Math.PI;
-
-    if (degrees < 0.0) {
-      degrees += 360.0;
-    }
+    
 
     gl._glMap.addLayer({
       id: "point_" + k,
@@ -793,10 +788,10 @@
       type: "symbol",
       layout: {
         "icon-image": "plane",
-        "icon-rotate": -50,
-        "icon-rotation-alignment": "map",
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": true
+        'icon-rotate': ['get', 'bearing'],
+        'icon-rotation-alignment': 'map',
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true
       }
     });
     // Start the animation.
