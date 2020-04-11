@@ -129,7 +129,9 @@
     max-height: 420px;
     overflow: scroll;
   }
-
+.container-header{
+  padding-bottom: 4px;
+}
   #bestof_confirmed {
     top: 100px;
   }

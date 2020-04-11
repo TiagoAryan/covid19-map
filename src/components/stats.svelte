@@ -43,6 +43,7 @@
       critical_per = (critical / (confirmed - deaths - recovered)) * 100;
 
       fatality = (deaths / confirmed) * 100;
+      pop_total = getPop("code", country);
     }
   }
 </script>
@@ -60,9 +61,14 @@
   }
   .container-data-details {
     text-align: center;
+    padding-top: 8px;
   }
   .col-block {
     width: 24%;
+    text-align: left;
+    padding: 0px 4%;
+    vertical-align: top;
+
   }
   h4 {
     margin: 0px;
@@ -92,7 +98,17 @@
   .col-block label {
     display: block;
     margin-bottom: 4px;
+    line-height: 0.8rem;
   }
+  
+  @media (max-width: 768px) {
+    .col-block {
+    width: 24%;
+    padding: 0px 0%;
+
+  }
+  }
+ 
 </style>
 
 <div class="container-basic container-stats">
