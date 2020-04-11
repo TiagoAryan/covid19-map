@@ -10,6 +10,7 @@
   import News from "../components/news.svelte";
   import About from "../components/about.svelte";
   import { toDate } from "misc";
+  import { getPop } from "misc";
 
   let days = 66;
   var map, gl;
@@ -132,20 +133,25 @@
         if (number_people > 0) {
           var number_people_rec = data_rec.locations[k].history[date];
           var number_people_dea = data_dea.locations[k].history[date];
+        
+          var pop_total = getPop("code", data.locations[k].country_code);
+          var fatality_per = number_people_dea/number_people*100;
+          var recovered_per = number_people_rec/number_people*100;
 
           var country_json = L.geoJson(country_in_map);
-          if (number_people_rec < number_people_dea) {
-            //red
-            country_json.getLayers()[0].options.fillColor = "#ff4e34";
-            country_json.getLayers()[0].options.color = "#ff4e34";
-          } else if (number_people_rec < number_people - number_people_rec) {
-            //yellow
-            country_json.getLayers()[0].options.fillColor = "#FFC831";
-            country_json.getLayers()[0].options.color = "#FFC831";
-          } else {
+           if (recovered_per > 40) {
             //green
             country_json.getLayers()[0].options.fillColor = "#40C0A5";
             country_json.getLayers()[0].options.color = "#40C0A5";
+          }else if (fatality_per > 10) {
+            //red
+            country_json.getLayers()[0].options.fillColor = "#ff4e34";
+            country_json.getLayers()[0].options.color = "#ff4e34";
+          } else {
+            //yellow
+            
+            country_json.getLayers()[0].options.fillColor = "#FFC831";
+            country_json.getLayers()[0].options.color = "#FFC831";
           }
 
           country_json.getLayers()[0].options.fillOpacity = "0.05";
@@ -184,16 +190,18 @@
       else data = res.recovered;
 
       for (var k = 0; k < data.locations.length; k++) {
-        var country_name = data.locations[k].country;
-        var country_code = data.locations[k].country_code;
-        var country_in_map = countries_bounds[country_name];
+        let country_name = data.locations[k].country;
+        let country_code = data.locations[k].country_code;
+        let country_in_map = countries_bounds[country_name];
+
+       
 
         //if map is not found in bounds.js by name find it by country code
         if (country_in_map === undefined) {
           for (var country of Object.entries(countries_bounds)) {
             var id_c = country[1].id;
             if (getCountryISO2(id_c) == country_code) {
-              var country_in_map = country[1];
+              country_in_map = country[1];
               break;
             }
           }
@@ -203,7 +211,7 @@
           var number_people_prev = 0;
           var number_people =
             data.locations[k].history[date] - number_people_prev;
-          var num_circles = parseInt(number_people / 300);
+          var num_circles = parseInt(number_people / 400);
           i = 0;
 
           //initialize circle for each location
