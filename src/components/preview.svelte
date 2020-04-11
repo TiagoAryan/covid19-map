@@ -273,11 +273,7 @@
     float: right;
     margin: 0 8px;
   }
-  .col-points .label-big h4 {
-    display: inline-block;
-    margin: 0;
-    font-weight: 500;
-  }
+
   .label-big {
     font-weight: 900;
     font-size: 9pt;
@@ -290,6 +286,8 @@
   }
   .label-big i {
     margin-right: 4px;
+    border: 0px;
+    padding: 0px;
   }
   .label-yellow {
     color: #ffc831;
@@ -304,14 +302,41 @@
     border: 1px solid #40c0a5;
   }
 
+  .fa-chevron-down {
+    float: right;
+    margin: 4% 0;
+    margin-right: 4px;
+  }
   @media (max-width: 1280px) {
     .container-total {
       height: auto;
+    }
+    .fa-chevron-down {
+      float: right;
+      margin: 4% 0;
+      margin-right: 0px;
     }
   }
   @media (max-width: 768px) {
     .container-total {
       height: auto;
+    }
+    .fa-chevron-down {
+      margin: 5px 2px;
+    }
+  }
+  @media (max-width: 480px) {
+    .button_close {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+    }
+    .borders {
+      margin-left: 60px;
+      display: block;
+    }
+    .fa-chevron-down {
+      margin: 5px 0px;
     }
   }
 </style>
@@ -341,25 +366,26 @@
               style="border-color: {cair}; color:{cair}" />
           {/if}
         {/if}
+        {#if country}
+          <div
+            title="Progress of the situation in the last 7 days"
+            class="label-big {points > 7 ? 'label-green' : ''}
+            {points > 3 && points <= 7 ? 'label-yellow' : ''}
+            {points <= 3 ? 'label-red' : ''}">
+
+            <i
+              class="far {points > 7 ? 'fa-smile' : ''}
+              {points > 3 && points <= 7 ? 'fa-meh' : ''}
+              {points <= 3 ? 'fa-frown' : ''}" />
+            {parseInt(points)} / 10
+          </div>
+        {/if}
       </div>
       <div class="button secondary button_close" on:click={cchange}>
         <i class="fas fa-times" />
         Close
       </div>
-      {#if country}
-        <div
-          title="Progress of the situation in the last 7 days"
-          class="label-big {points > 7 ? 'label-green' : ''}
-          {points > 3 && points <= 7 ? 'label-yellow' : ''}
-          {points <= 3 ? 'label-red' : ''}">
 
-          <i
-            class="far {points > 7 ? 'fa-smile' : ''}
-            {points > 3 && points <= 7 ? 'fa-meh' : ''}
-            {points <= 3 ? 'fa-frown' : ''}" />
-          {parseInt(points)} / 10
-        </div>
-      {/if}
     </div>
   </div>
 
@@ -386,11 +412,9 @@
         <div class="col-block-btn">
           <div class="dropdown">
             <div class="trigger" on:click={() => toggleOptions()}>
-              <i class="fas fa-filter" style="margin-right: 4px;" />
-              {btn_text}
-              <i
-                class="fas fa-chevron-down"
-                style="float: right; margin: 4% 0;" />
+              <i class="fas fa-filter" />
+              <p>{btn_text}</p>
+              <i class="fas fa-chevron-down" />
             </div>
             <div class="options {show_options}">
               <div class="option" on:click={() => changeListDisplay('total')}>

@@ -316,6 +316,24 @@
     height: calc(100% - 363px);
   }
 }
+@media (max-width: 768px) {
+    .container-chart.country {
+      height: 70vh;
+    }
+    .container-chart.world {
+      height: 70vh;
+    }
+        
+  }
+
+  @media (max-width: 480px) {
+    .container-chart.country {
+      height: 60vh;
+    }
+    .container-chart.world {
+      height: 60vh;
+    }
+  }
 </style>
 
 <div
@@ -326,7 +344,7 @@
 
     <div class="container-header-contents">
 
-      <h5 class="container-title">Number of infected per million People</h5>
+      <h5 class="container-title">Infected per million People</h5>
       
     </div>
   </div>

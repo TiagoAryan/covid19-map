@@ -449,7 +449,7 @@
 
         res = await mergeNewData(result);
 
-        play();
+        //play();
       })
       .catch(function(error) {
         console.error(error);

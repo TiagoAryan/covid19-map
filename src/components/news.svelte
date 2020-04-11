@@ -182,6 +182,7 @@
     }
     .full-block-news {
       width: 98%;
+      padding: 12px;
     }
     .container-body {
       padding: 0px 8px;
@@ -191,13 +192,14 @@
     }
     figure,
     img {
-      width: 80px;
-      height: 80px;
+      width: 100%;
+      height: 120px;
     }
     .full-block-news .more:first-of-type figure,
     .full-block-news .more:first-of-type img {
       width: 100%;
-      height: 200px;
+      height: 120px;
+      object-fit: cover;
     }
     .full-block-news .more:first-of-type .full-news {
       width: 100%;
@@ -206,11 +208,27 @@
       top: 284px;
       left: 10px;
       width: 50px;
+      margin: 0px;
+    }
+    .container-icon i{
+      margin: 0px;
+
+    }
+
+    .button p{
+      display:none;
     }
   }
   time::before {
     content: "\0000a0\002022\0000a0";
   }
+
+@media (max-width: 480px) {
+  .container-icon {
+      top: 262px;
+      width: 42px;
+    }
+}
 </style>
 
 <div

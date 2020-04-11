@@ -99,6 +99,27 @@
   .list_red label i {
     color: #ff4e34;
   }
+  @media (max-width: 768px) {
+    .container-bestof{
+      left: 70px;
+      height: 440px;
+      width: calc(100% - 78px);
+      max-width: 320px;
+
+    }
+    li {
+    padding: 3px 18px;
+  }
+  }
+  @media (max-width: 480px) {
+    .container-bestof {
+       left: 60px;
+      height: 380px;
+      width: calc(100% - 68px);
+
+    }
+
+  }
 </style>
 
 <li class={color}>

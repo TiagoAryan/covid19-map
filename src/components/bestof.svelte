@@ -148,6 +148,47 @@
   .container-header label {
     display: block;
   }
+  .fa-chevron-down{
+    float: right; 
+    margin: 4% 0;
+  }
+  .fa-filter{
+    margin-right:4px;
+  }
+  @media (max-width: 768px) {
+    .container-bestof{
+      left: 70px;
+      height: 440px;
+      width: calc(100% - 78px);
+      max-width: 320px;
+    }
+    .fa-chevron-down{
+    float: right; 
+    margin: 15% 0;
+  }
+  .fa-filter{
+    margin-right:4px;
+  }
+    
+   
+  }
+  @media (max-width: 480px) {
+    .container-bestof {
+       left: 60px;
+      height: 380px;
+      width: calc(100% - 68px);
+
+    }
+    #bestof_recovered {
+      top: 154px;
+    }
+    #bestof_deaths {
+      top: 208px;
+    }
+     .fa-filter{
+      margin-right:0px;
+    }
+  }
 </style>
 
 <div
@@ -159,9 +200,9 @@
       <h5 class="container-title">Most {show}</h5>
       <div class="dropdown">
         <div class="trigger" on:click={() => toggleOptions()}>
-          <i class="fas fa-filter" style="margin-right: 4px;" />
-          {btn_text}
-          <i class="fas fa-chevron-down" style="float: right; margin: 4% 0;" />
+          <i class="fas fa-filter"  />
+          <p>{btn_text}</p>
+          <i class="fas fa-chevron-down" />
         </div>
         <div class="options {show_options}">
           <div class="option" on:click={() => changeListDisplay('total')}>

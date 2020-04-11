@@ -103,10 +103,25 @@
   
   @media (max-width: 768px) {
     .col-block {
-    width: 24%;
+    width: 18%;
     padding: 0px 0%;
 
   }
+  }
+  @media (max-width: 480px) {
+    .col-block {
+      width: 32%;
+      padding: 0px 0%;
+
+    }
+    .col-block:nth-of-type(1){
+      width: 100%;
+      margin-bottom: 12px;
+
+    }
+    .container-stats{
+      height: auto;
+    }
   }
  
 </style>
