@@ -9,15 +9,14 @@
   import Details from "../components/details.svelte";
   import News from "../components/news.svelte";
   import About from "../components/about.svelte";
-  import { toDate } from "misc";
-  import { getPop } from "misc";
+  import { toDate, isMobile, getPop } from "misc";
 
   let days = 66;
   var map, gl;
   var selected_country, selected_country_id;
   var colors = ["#FFC831", "#FF4E34", "#40C0A5"];
   var circle_size = 8000;
-  var play_speed = 1;
+  var play_speed = 300;
   var circle = [];
   var c = 0;
   let country_clicked,
@@ -80,6 +79,7 @@
         ("0" + (date.getMonth() + 1)).slice(-2) +
         " / " +
         date.getFullYear();
+
       InfectedCountries(res, dates[ii]);
       placeAllCircles(res, dates[ii]);
 
@@ -133,23 +133,23 @@
         if (number_people > 0) {
           var number_people_rec = data_rec.locations[k].history[date];
           var number_people_dea = data_dea.locations[k].history[date];
-        
+
           var pop_total = getPop("code", data.locations[k].country_code);
-          var fatality_per = number_people_dea/number_people*100;
-          var recovered_per = number_people_rec/number_people*100;
+          var fatality_per = (number_people_dea / number_people) * 100;
+          var recovered_per = (number_people_rec / number_people) * 100;
 
           var country_json = L.geoJson(country_in_map);
-           if (recovered_per > 40) {
+          if (recovered_per > 40) {
             //green
             country_json.getLayers()[0].options.fillColor = "#40C0A5";
             country_json.getLayers()[0].options.color = "#40C0A5";
-          }else if (fatality_per > 10) {
+          } else if (fatality_per > 10) {
             //red
             country_json.getLayers()[0].options.fillColor = "#ff4e34";
             country_json.getLayers()[0].options.color = "#ff4e34";
           } else {
             //yellow
-            
+
             country_json.getLayers()[0].options.fillColor = "#FFC831";
             country_json.getLayers()[0].options.color = "#FFC831";
           }
@@ -194,8 +194,6 @@
         let country_code = data.locations[k].country_code;
         let country_in_map = countries_bounds[country_name];
 
-       
-
         //if map is not found in bounds.js by name find it by country code
         if (country_in_map === undefined) {
           for (var country of Object.entries(countries_bounds)) {
@@ -211,7 +209,7 @@
           var number_people_prev = 0;
           var number_people =
             data.locations[k].history[date] - number_people_prev;
-          var num_circles = parseInt(number_people / 400);
+          var num_circles = parseInt(number_people / 500);
           i = 0;
 
           //initialize circle for each location
@@ -304,10 +302,17 @@
 
   async function init() {
     bounds = countries_bounds;
-    map = L.map("map", {
-      minZoom: 2.5,
-      maxZoom: 8
-    }).setView([20, 0], 2.5);
+    if (isMobile())
+      map = L.map("map", {
+        minZoom: 2,
+        maxZoom: 8
+      }).fitWorld();
+    else
+      map = L.map("map", {
+        minZoom: 2.5,
+        maxZoom: 8
+      }).setView([20, 0], 2.5);
+
     var popup = new L.Popup();
 
     gl = L.mapboxGL({

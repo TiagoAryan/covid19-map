@@ -1,6 +1,8 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import moment from "moment";
+  import { isMobile } from "misc";
+
   export let data;
   export let view_news;
 
@@ -42,10 +44,10 @@
     z-index: 10;
     left: 12px;
 
-    -webkit-transition:all 0.2s ease;
-    -moz-transition:all 0.2s ease;
-    -o-transition:all 0.2s ease;
-    transition:all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
   }
   .full-block-news {
     width: 100%;
@@ -179,7 +181,7 @@
       display: none;
     }
     .full-block-news {
-      width: 96%;
+      width: 98%;
     }
     .container-body {
       padding: 0px 8px;
@@ -200,15 +202,26 @@
     .full-block-news .more:first-of-type .full-news {
       width: 100%;
     }
+    .container-icon {
+      top: 284px;
+      left: 10px;
+      width: 50px;
+    }
   }
   time::before {
     content: "\0000a0\002022\0000a0";
   }
 </style>
 
-<div class="container-basic container-icon" on:click={nchange}>
-  <i class="fas fa-{btn_icon}" />
-  <p>News</p>
+<div
+  class="container-basic container-icon"
+  on:click={isMobile() ? () => toggleFullNews() : nchange}>
+  {#if !isMobile()}
+    <i class="fas fa-{btn_icon}" />
+    <p>News</p>
+  {:else}
+    <i class="fas fa-newspaper" />
+  {/if}
 </div>
 <div class="block-news {view_news ? '' : 'hidden'}">
   {#each data.slice(0, 3) as item, i}

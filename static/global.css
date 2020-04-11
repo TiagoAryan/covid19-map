@@ -137,7 +137,7 @@ label {
   border-radius: 20px 0px 0px 20px;
   font-size: 0.6rem;
   font-weight: 400;
-  color:rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.8);
   padding: 1px;
   text-align: center;
 }
@@ -186,10 +186,10 @@ button,
   height: 32px;
   padding: 8px 16px;
 
-  -webkit-transition:all 0.2s ease;
-  -moz-transition:all 0.2s ease;
-  -o-transition:all 0.2s ease;
-  transition:all 0.2s ease;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 .button p,
 button p {
@@ -207,7 +207,7 @@ button:hover,
 button.secondary,
 .button.secondary {
   background-color: rgba(91, 93, 102, 0.6);
-  color:rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.8);
 }
 button.true,
 .button.true {
@@ -218,8 +218,7 @@ button.true,
 button.secondary:hover,
 .button.secondary:hover {
   background-color: rgba(91, 93, 102, 1);
-  color:rgba(255, 255, 255, 1);
-
+  color: rgba(255, 255, 255, 1);
 }
 button.adj-left,
 .button.adj-left {
@@ -325,7 +324,7 @@ button:hover,
 .leaflet-control-zoom a {
   width: 36px !important;
   height: 36px !important;
-  background-color: rgba(91, 93, 102, 0.8)!important;
+  background-color: rgba(91, 93, 102, 0.8) !important;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3) !important;
   padding: 2px;
   color: white;
@@ -363,7 +362,7 @@ button:hover,
   cursor: pointer;
   opacity: 1;
 }
-.dropdown i{
+.dropdown i {
   font-size: 0.9rem;
 }
 .options {
@@ -400,13 +399,12 @@ button:hover,
   cursor: pointer;
 }
 .leaflet-control-zoom a:hover {
-  background-color: rgba(91, 93, 102, 1)!important;
+  background-color: rgba(91, 93, 102, 1) !important;
   border-bottom: 0;
   color: white;
 }
 .leaflet-container .leaflet-control-attribution {
   background: rgba(91, 93, 102, 0.8);
-
 }
 .leaflet-container a {
   color: #828282;
@@ -537,9 +535,9 @@ button:hover,
   }
   .container-bottom {
     display: block;
-    left: 12px;
+    left: 2px;
     margin: 0px auto;
-    width: calc(100% - 24px);
+    width: 99%;
   }
   .progress {
     height: 12px;

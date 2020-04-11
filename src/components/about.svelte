@@ -31,20 +31,20 @@
 <style>
   .block-about {
     position: fixed;
-    right: 12px;
+    right: 10px;
     bottom: 42px;
-    width: 310px;
-    height: 250px;
+    width: 350px;
+    height: 175px;
     z-index: 10;
     text-align: right;
 
-    -webkit-transition:all 0.4s ease-in-out;
-    -moz-transition:all 0.4s ease-in-out;
-    -o-transition:all 0.4s ease-in-out;
-    transition:all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
   }
   .block-about.false {
-    transform: translateX(330px);
+    transform: translateX(360px);
   }
   .block-about.true {
     transform: translateX(0px);
@@ -60,7 +60,7 @@
   }
   .container-basic {
     margin: 4px 0;
-    width: 310px;
+    width: 350px;
     position: relative;
     display: block;
   }
@@ -81,14 +81,15 @@
     display: inline-block;
     vertical-align: top;
   }
-  .container-body p ,.container-body time{
+  .container-body p,
+  .container-body time {
     width: 68%;
     text-align: right;
     display: inline-block;
     margin: 0;
     font-size: 0.8rem;
     color: whitesmoke;
-    line-height:0.7rem;
+    line-height: 0.7rem;
     vertical-align: top;
   }
   .icon {
@@ -103,41 +104,43 @@
   .container-icon i {
     display: inline-block;
   }
-  .container-row{
+  .container-row {
     text-align: left;
   }
-  h5{
+  h5 {
     text-align: left;
     margin-bottom: 12px;
   }
-  .container-body p.fit{
+  .container-body p.fit {
     width: 97%;
   }
-  a{
-    color:rgba(255, 255, 255, 0.8);
+  a {
+    color: rgba(255, 255, 255, 0.8);
     font-weight: 400;
     text-decoration: underline;
-    -webkit-transition:all 0.4s ease-in-out;
-    -moz-transition:all 0.4s ease-in-out;
-    -o-transition:all 0.4s ease-in-out;
-    transition:all 0.4s ease-in-out;
-
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
   }
-  a:hover{
-    color:rgba(255, 255, 255, 1);
+  a:hover {
+    color: rgba(255, 255, 255, 1);
     cursor: pointer;
   }
-  a.button{
-    text-decoration:none;
+  a.button {
+    text-decoration: none;
     float: right;
-    margin-top:4px
-
+    margin-top: 4px;
   }
-  
+
   @media (max-width: 768px) {
     .block-about {
       display: none;
     }
+  }
+  .ico {
+    font-size: 1rem;
+    padding: 5px;
   }
 </style>
 
@@ -146,7 +149,7 @@
 <div class="block-about {view_about}">
   <div class="container-basic">
     <div class="container-body">
-        <h5>Covid 19 Information Map</h5>
+      <h5>Covid 19 Information Map</h5>
 
       <div class="container-row">
         <label>Last Updated</label>
@@ -155,55 +158,52 @@
         </time>
       </div>
       <div class="container-row">
-      
-      <label>Data Sources</label>
-      <p>
-        <a
-          href="https://github.com/ExpDev07/coronavirus-tracker-api"
-          target="_blank">
-          github:ExpDev07/coronavirus-tracker-api
-        </a>
-      </p>
-      <p class="fit">
-        <a href="https://github.com/NovelCOVID/API" target="_blank">
-          github:NovelCOVID/API
-        </a>
-      </p>
-      <p class="fit">
-        <a href="https://nextstrain.org/ncov" target="_blank">
-          nextstrain.org/ncov
-        </a>
-      </p>
 
-      <p class="fit">
-        <a href="https://newsapi.org/" target="_blank">News API</a>
-      </p>
+        <label>Data Sources</label>
+        <p>
+          <a
+            href="https://github.com/ExpDev07/coronavirus-tracker-api"
+            target="_blank">
+            github:ExpDev07/coronavirus-tracker-api
+          </a>
+        </p>
+        <p class="fit">
+          <a href="https://github.com/NovelCOVID/API" target="_blank">
+            github:NovelCOVID/API
+          </a>
+        </p>
       </div>
       <div class="container-row">
-      <label>Code at</label>
-      <p>
-        <a href="https://github.com/TiagoAryan/covid19-map" target="_blank">
-          github:TiagoAryan/covid19-map
-        </a>
-      </p>
+        <label>
+          Made with
+          <i class="fas fa-heart" />
+          by
+        </label>
+        <p>
+          <a href="">Tiago Aryan</a>
+          &
+          <a href="">Beatriz Diogo</a>
+        </p>
       </div>
       <div class="container-row">
-      <label>
-        Made with
-        <i class="fas fa-heart" />
-        by
-      </label>
-      <p>
-        <a href="">Tiago Aryan</a>
-        &
-        <a href="">Beatriz Diogo</a>
-      </p>
+        <p class="fit">
+          <a
+            title="Source Code"
+            href="https://github.com/TiagoAryan/covid19-map"
+            target="_blank">
+            <i class="ico fab fa-github" />
+          </a>
+          <a
+            title="Buy me a Coffee"
+            href="https://www.buymeacoffee.com/tiagoaryan"
+            target="_blank">
+            <i class="ico fas fa-coffee" />
+          </a>
+          <a class="button secondary" href="/about" target="_blank">
+            More About
+          </a>
+        </p>
       </div>
-      <div class="container-row">
-      <p class="fit">
-        <a class="button secondary" href="/about" target="_blank">More About</a>
-      </p>
-    </div>
     </div>
   </div>
 </div>

@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte";
   import { NovelCovid } from "novelcovid";
   import moment from "moment";
   import { s } from "misc";

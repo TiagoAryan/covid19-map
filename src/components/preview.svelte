@@ -9,36 +9,20 @@
 
   let box_title = "Current Situation";
   let btn_text = "Current";
+  let infected = "Active";
   var list_mode;
   var show_options = "hidden";
 
   let res, borders;
   let border = 0,
     active = 0,
-    activet = 0,
-    active1 = 0,
-    active7 = 0,
-    active30 = 0,
     deaths = 0,
-    deathst = 0,
-    deaths1 = 0,
-    deaths7 = 0,
-    deaths30 = 0,
     confirmed = 0,
-    confirmedt = 0,
-    confirmed1 = 0,
-    confirmed7 = 0,
-    confirmed30 = 0,
     recovered = 0,
-    recoveredt = 0,
-    recovered1 = 0,
-    recovered7 = 0,
-    recovered30 = 0,
     points = 0;
   let cland, csea, cair;
 
-  $: setpop = false;
-  $: country, getContent();
+  $: country, list_mode, getContent();
 
   function getContent() {
     if (country) {
@@ -47,95 +31,92 @@
         let d = data.deaths.locations.filter(
           e => country === e.country_code
         )[0];
-        deaths = d.latest;
-        deathst = d.latest;
-        deaths1 =
-          deaths - Object.values(d.history)[length - 2] > 0
-            ? deaths - Object.values(d.history)[length - 2]
-            : 0;
-        deaths7 =
-          deaths - Object.values(d.history)[length - 8] > 0
-            ? deaths - Object.values(d.history)[length - 8]
-            : 0;
-        deaths30 =
-          deaths - Object.values(d.history)[length - 31] > 0
-            ? deaths - Object.values(d.history)[length - 31]
-            : 0;
-
         let r = data.recovered.locations.filter(
           e => country === e.country_code
         )[0];
-        recovered = r.latest;
-        recoveredt = r.latest;
-        recovered1 =
-          recovered - Object.values(r.history)[length - 2] > 0
-            ? recovered - Object.values(r.history)[length - 2]
-            : 0;
-        recovered7 =
-          recovered - Object.values(r.history)[length - 8] > 0
-            ? recovered - Object.values(r.history)[length - 8]
-            : 0;
-        recovered30 =
-          recovered - Object.values(r.history)[length - 31] > 0
-            ? recovered - Object.values(r.history)[length - 31]
-            : 0;
-
         let c = data.confirmed.locations.filter(
           e => country === e.country_code
         )[0];
-        confirmed = c.latest;
-        active = c.latest - deaths - recovered;
-        confirmedt = confirmed;
-        activet = active;
-        active1 =
-          confirmed - Object.values(c.history)[length - 2] > 0
-            ? confirmed - Object.values(c.history)[length - 2]
-            : 0;
-        active7 =
-          confirmed - Object.values(c.history)[length - 8] > 0
-            ? confirmed - Object.values(c.history)[length - 8]
-            : 0;
-        active30 =
-          confirmed - Object.values(c.history)[length - 31] > 0
-            ? confirmed - Object.values(c.history)[length - 31]
-            : 0;
-        confirmed1 = active1 + deaths1 + recovered1;
-        confirmed7 = active7 + deaths7 + recovered7;
-        confirmed30 = active30 + deaths30 + recovered30;
+
+        if (list_mode == "today") {
+          deaths =
+            d.latest - Object.values(d.history)[length - 2] > 0
+              ? d.latest - Object.values(d.history)[length - 2]
+              : 0;
+          recovered =
+            r.latest - Object.values(r.history)[length - 2] > 0
+              ? r.latest - Object.values(r.history)[length - 2]
+              : 0;
+          active =
+            c.latest - Object.values(c.history)[length - 2] > 0
+              ? c.latest - Object.values(c.history)[length - 2]
+              : 0;
+
+          confirmed = active + deaths + recovered;
+        } else if (list_mode == "last7") {
+          deaths =
+            d.latest - Object.values(d.history)[length - 8] > 0
+              ? d.latest - Object.values(d.history)[length - 8]
+              : 0;
+          recovered =
+            r.latest - Object.values(r.history)[length - 8] > 0
+              ? r.latest - Object.values(r.history)[length - 8]
+              : 0;
+          active =
+            c.latest - Object.values(c.history)[length - 8] > 0
+              ? c.latest - Object.values(c.history)[length - 8]
+              : 0;
+          confirmed = active + deaths + recovered;
+        } else if (list_mode == "last30") {
+          deaths =
+            d.latest - Object.values(d.history)[length - 31] > 0
+              ? d.latest - Object.values(d.history)[length - 31]
+              : 0;
+          recovered =
+            r.latest - Object.values(r.history)[length - 31] > 0
+              ? r.latest - Object.values(r.history)[length - 31]
+              : 0;
+          active =
+            c.latest - Object.values(c.history)[length - 31] > 0
+              ? c.latest - Object.values(c.history)[length - 31]
+              : 0;
+          confirmed = active + deaths + recovered;
+        } else {
+          deaths = d.latest;
+          recovered = r.latest;
+          confirmed = c.latest;
+          active = confirmed - deaths - recovered;
+        }
 
         getBorders();
-        getSituation();
+        getSituation(d.latest, c.latest);
       }
     } else {
-      deaths = data.latest.deaths;
-      recovered = data.latest.recovered;
-      confirmed = data.latest.confirmed;
-      active = data.latest.confirmed - deaths - recovered;
-
-      deathst = deaths;
-      recoveredt = recovered;
-      confirmedt = confirmed;
-      activet = active;
-
       let deaths_data = sort_total(deaths, data.deaths.locations);
       let confirmed_data = sort_total(confirmed, data.confirmed.locations);
       let recovered_data = sort_total(recovered, data.recovered.locations);
 
-      deaths1 = deaths - deaths_data[length - 2];
-      deaths7 = deaths - deaths_data[length - 8];
-      deaths30 = deaths - deaths_data[length - 31];
-
-      recovered1 = recovered - recovered_data[length - 2];
-      recovered7 = recovered - recovered_data[length - 8];
-      recovered30 = recovered - recovered_data[length - 31];
-
-      active1 = confirmed - confirmed_data[length - 2];
-      active7 = confirmed - confirmed_data[length - 8];
-      active30 = confirmed - confirmed_data[length - 31];
-
-      confirmed1 = active1 + deaths1 + recovered1;
-      confirmed7 = active7 + deaths7 + recovered7;
-      confirmed30 = active30 + deaths30 + recovered30;
+      if (list_mode == "today") {
+        deaths = data.latest.deaths - deaths_data[length - 2];
+        recovered = data.latest.recovered - recovered_data[length - 2];
+        active = data.latest.confirmed - confirmed_data[length - 2];
+        confirmed = active + deaths + recovered;
+      } else if (list_mode == "last7") {
+        deaths = data.latest.deaths - deaths_data[length - 8];
+        recovered = data.latest.recovered - recovered_data[length - 8];
+        active = data.latest.confirmed - confirmed_data[length - 8];
+        confirmed = active + deaths + recovered;
+      } else if (list_mode == "last30") {
+        deaths = data.latest.deaths - deaths_data[length - 31];
+        recovered = data.latest.recovered - recovered_data[length - 31];
+        active = data.latest.confirmed - confirmed_data[length - 13];
+        confirmed = active + deaths + recovered;
+      } else {
+        deaths = data.latest.deaths;
+        recovered = data.latest.recovered;
+        confirmed = data.latest.confirmed;
+        active = confirmed - deaths - recovered;
+      }
     }
   }
 
@@ -179,8 +160,8 @@
     } else border = 0;
   }
 
-  function getSituation() {
-    let fatality = (deaths / confirmed) * 100;
+  function getSituation(d, c) {
+    let fatality = (d / c) * 100;
 
     let length = Object.keys(data.confirmed.locations[0].history).length;
 
@@ -231,34 +212,22 @@
       list_mode = "total";
       box_title = "Current Situation";
       btn_text = "Current";
-      deaths = deathst;
-      active = activet;
-      confirmed = confirmedt;
-      recovered = recoveredt;
+      infected = "Active";
     } else if (mode == "today") {
       list_mode = "today";
       box_title = "Today";
       btn_text = "Today";
-      active = active1;
-      deaths = deaths1;
-      confirmed = confirmed1;
-      recovered = recovered1;
+      infected = "Infected";
     } else if (mode == "last7") {
       list_mode = "last7";
       box_title = "Last 7 Days";
       btn_text = "Last 7 Day";
-      active = active7;
-      deaths = deaths7;
-      confirmed = confirmed7;
-      recovered = recovered7;
+      infected = "Infected";
     } else if (mode == "last30") {
       list_mode = "last30";
       box_title = "Last 30 Days";
       btn_text = "Last 30 Days";
-      active = active30;
-      deaths = deaths30;
-      confirmed = confirmed30;
-      recovered = recovered30;
+      infected = "Infected";
     }
     show_options = "hidden";
   }
@@ -371,7 +340,7 @@
             {points >= 3 && points <= 7 ? 'label-yellow' : ''}
             {points < 3 ? 'label-red' : ''}">
 
-            <h4 title="progress of the situation in the last 7 days">
+            <h4 title="Progress of the situation in the last 7 days">
               {parseInt(points)} / 10
             </h4>
           </div>
@@ -390,7 +359,7 @@
       </div>
       <div class="col-block">
         <i class="dot dot_yellow" />
-        <label>Active</label>
+        <label>{infected}</label>
         <div class="data">{s(active)}</div>
       </div>
       <div class="col-block">

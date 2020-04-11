@@ -1,7 +1,6 @@
 <script>
   import getCountryISO2 from "country-iso-3-to-2";
   import { flag } from "misc";
-  import SvelteTooltip from "svelte-tooltip";
   import { onMount } from "svelte";
 
   export let data;
