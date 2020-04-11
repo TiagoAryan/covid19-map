@@ -32,16 +32,16 @@
   .block-about {
     position: fixed;
     right: 12px;
-    bottom: 112px;
+    bottom: 42px;
     width: 310px;
-    height: 140px;
+    height: 250px;
     z-index: 10;
     text-align: right;
 
-    -webkit-transition-duration: 0.4s;
-    -moz-transition-duration: 0.4s;
-    -o-transition-duration: 0.4s;
-    transition-duration: 0.4s;
+    -webkit-transition:all 0.4s ease-in-out;
+    -moz-transition:all 0.4s ease-in-out;
+    -o-transition:all 0.4s ease-in-out;
+    transition:all 0.4s ease-in-out;
   }
   .block-about.false {
     transform: translateX(330px);
@@ -81,13 +81,15 @@
     display: inline-block;
     vertical-align: top;
   }
-  .container-body p {
-    width: 65%;
+  .container-body p ,.container-body time{
+    width: 68%;
     text-align: right;
     display: inline-block;
     margin: 0;
     font-size: 0.8rem;
     color: whitesmoke;
+    line-height:0.7rem;
+    vertical-align: top;
   }
   .icon {
     bottom: 20px;
@@ -101,6 +103,37 @@
   .container-icon i {
     display: inline-block;
   }
+  .container-row{
+    text-align: left;
+  }
+  h5{
+    text-align: left;
+    margin-bottom: 12px;
+  }
+  .container-body p.fit{
+    width: 97%;
+  }
+  a{
+    color:rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+    text-decoration: underline;
+    -webkit-transition:all 0.4s ease-in-out;
+    -moz-transition:all 0.4s ease-in-out;
+    -o-transition:all 0.4s ease-in-out;
+    transition:all 0.4s ease-in-out;
+
+  }
+  a:hover{
+    color:rgba(255, 255, 255, 1);
+    cursor: pointer;
+  }
+  a.button{
+    text-decoration:none;
+    float: right;
+    margin-top:4px
+
+  }
+  
   @media (max-width: 768px) {
     .block-about {
       display: none;
@@ -113,10 +146,16 @@
 <div class="block-about {view_about}">
   <div class="container-basic">
     <div class="container-body">
-      <label>Covid 19 Information Map</label>
-      <time datetime={data.confirmed.last_updated}>
-        Last Updated {moment(data.confirmed.last_updated).fromNow()}
-      </time>
+        <h5>Covid 19 Information Map</h5>
+
+      <div class="container-row">
+        <label>Last Updated</label>
+        <time datetime={data.confirmed.last_updated}>
+          {moment(data.confirmed.last_updated).fromNow()}
+        </time>
+      </div>
+      <div class="container-row">
+      
       <label>Data Sources</label>
       <p>
         <a
@@ -125,26 +164,30 @@
           github:ExpDev07/coronavirus-tracker-api
         </a>
       </p>
-      <p>
+      <p class="fit">
         <a href="https://github.com/NovelCOVID/API" target="_blank">
           github:NovelCOVID/API
         </a>
       </p>
-      <p>
+      <p class="fit">
         <a href="https://nextstrain.org/ncov" target="_blank">
           nextstrain.org/ncov
         </a>
       </p>
 
-      <p>
+      <p class="fit">
         <a href="https://newsapi.org/" target="_blank">News API</a>
       </p>
+      </div>
+      <div class="container-row">
       <label>Code at</label>
       <p>
         <a href="https://github.com/TiagoAryan/covid19-map" target="_blank">
           github:TiagoAryan/covid19-map
         </a>
       </p>
+      </div>
+      <div class="container-row">
       <label>
         Made with
         <i class="fas fa-heart" />
@@ -155,9 +198,12 @@
         &
         <a href="">Beatriz Diogo</a>
       </p>
-      <p>
-        <a href="/about" target="_blank">More About</a>
+      </div>
+      <div class="container-row">
+      <p class="fit">
+        <a class="button secondary" href="/about" target="_blank">More About</a>
       </p>
+    </div>
     </div>
   </div>
 </div>
