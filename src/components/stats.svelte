@@ -43,30 +43,6 @@
       critical_per = (critical / (confirmed - deaths - recovered)) * 100;
 
       fatality = (deaths / confirmed) * 100;
-
-      let length = Object.keys(data.confirmed.locations[0].history).length;
-
-      let pc7 = Object.values(
-        data.confirmed.locations.filter(e => country === e.country_code)[0]
-          .history
-      )[length - 8];
-      let pc0 = Object.values(
-        data.confirmed.locations.filter(e => country === e.country_code)[0]
-          .history
-      )[length - 1];
-
-      pop_total = getPop("code", country);
-
-      let inf = ((pc0 / pop_total) * 100 * 100 * 2) / 7;
-      if (inf > 2) inf = 2;
-
-      let gro = ((100 - (pc7 / pc0) * 100) * 4) / 50;
-      if (gro > 4) gro = 4;
-
-      let fat = (fatality * 4) / 13;
-      if (fat > 4) fat = 4;
-
-      points = 10 - (inf + gro + fat);
     }
   }
 </script>
@@ -82,8 +58,11 @@
     left: 0;
     vertical-align: top;
   }
+  .container-data-details {
+    text-align: center;
+  }
   .col-block {
-    width: 19%;
+    width: 24%;
   }
   h4 {
     margin: 0px;
@@ -127,14 +106,16 @@
       </div>
       <div class="col-block">
         <label>Tests</label>
-         <div
-          class="label-big {tests /pop_total*1000 > 10 ? 'label-green' : ''}
-          {tests /pop_total*1000 > 5 && tests /pop_total*1000 <= 10 ? 'label-yellow' : ''}
-          {tests /pop_total*1000 < 5 ? 'label-red' : ''}
+        <div
+          class="label-big {(tests / pop_total) * 1000 > 10 ? 'label-green' : ''}
+          {(tests / pop_total) * 1000 > 5 && (tests / pop_total) * 1000 <= 10 ? 'label-yellow' : ''}
+          {(tests / pop_total) * 1000 < 5 ? 'label-red' : ''}
           ">
-          <h4>{ parseInt(tests/1000000)>0 ? parseInt(tests/1000000)+"M" : "" }
-          {parseInt(tests/1000)>0 && parseInt(tests/1000000)<=0 ? parseInt(tests/1000)+"k" : "" } 
-          {parseInt(tests/1000)<=0 ? tests : "" }</h4>
+          <h4>
+            {parseInt(tests / 1000000) > 0 ? parseInt(tests / 1000000) + 'M' : ''}
+            {parseInt(tests / 1000) > 0 && parseInt(tests / 1000000) <= 0 ? parseInt(tests / 1000) + 'k' : ''}
+            {parseInt(tests / 1000) <= 0 ? tests : ''}
+          </h4>
 
         </div>
       </div>
@@ -158,19 +139,6 @@
 
           <h4>{fatality.toFixed(1)}%</h4>
         </div>
-      </div>
-      <div class="col-block">
-        <label>Current Situation</label>
-        <div
-          class="label-big {points > 7 ? 'label-green' : ''}
-          {points >= 3 && points <= 7 ? 'label-yellow' : ''}
-          {points < 3 ? 'label-red' : ''}">
-
-          <h4 title="progress of the situation in the last 7 days">
-            {points.toFixed(0)} / 10
-          </h4>
-        </div>
-
       </div>
     </div>
   </div>

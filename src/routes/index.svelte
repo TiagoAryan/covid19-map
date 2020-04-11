@@ -410,6 +410,7 @@
         }
       }
       if (clicked_in_country == 0) {
+        show_details = false;
         map.removeLayer(selected_country);
         country_clicked = "";
         country_name_clicked = "World";
@@ -487,12 +488,30 @@
         r.history[toDate(nc.updated)] = nc.recovered;
 
         length = Object.keys(data.confirmed.locations[0].history).length;
-        c.last7 = c.latest - Object.values(c.history)[length - 8];
-        c.last30 = c.latest - Object.values(c.history)[length - 31];
-        d.last7 = d.latest - Object.values(d.history)[length - 8];
-        d.last30 = d.latest - Object.values(d.history)[length - 31];
-        r.last7 = r.latest - Object.values(r.history)[length - 8];
-        r.last30 = r.latest - Object.values(r.history)[length - 31];
+        c.last7 =
+          c.latest - Object.values(c.history)[length - 8] > 0
+            ? c.latest - Object.values(c.history)[length - 8]
+            : 0;
+        c.last30 =
+          c.latest - Object.values(c.history)[length - 31] > 0
+            ? c.latest - Object.values(c.history)[length - 31]
+            : 0;
+        d.last7 =
+          d.latest - Object.values(d.history)[length - 8] > 0
+            ? d.latest - Object.values(d.history)[length - 8]
+            : 0;
+        d.last30 =
+          d.latest - Object.values(d.history)[length - 31] > 0
+            ? d.latest - Object.values(d.history)[length - 31]
+            : 0;
+        r.last7 =
+          r.latest - Object.values(r.history)[length - 8] > 0
+            ? r.latest - Object.values(r.history)[length - 8]
+            : 0;
+        r.last30 =
+          r.latest - Object.values(r.history)[length - 31] > 0
+            ? r.latest - Object.values(r.history)[length - 31]
+            : 0;
       }
     }
 
@@ -654,6 +673,7 @@
     else if (show != scope) show = scope;
     else show = "";
   }
+
   async function getSpread() {
     const response = await fetch("./ncov.json");
     let data = await response.json();

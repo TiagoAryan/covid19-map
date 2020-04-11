@@ -1,22 +1,24 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { s, getPop, flag } from "misc";
+  import { s, flag, getPop } from "misc";
   const dispatch = createEventDispatcher();
 
   export let data;
   export let country;
   export let name;
 
-
-  let box_title = "Total";
-  let btn_text = "Total";
+  let box_title = "Current Situation";
+  let btn_text = "Current";
   var list_mode;
   var show_options = "hidden";
 
-
   let res, borders;
   let border = 0,
-    pop_total = 0,
+    active = 0,
+    activet = 0,
+    active1 = 0,
+    active7 = 0,
+    active30 = 0,
     deaths = 0,
     deathst = 0,
     deaths1 = 0,
@@ -31,7 +33,8 @@
     recoveredt = 0,
     recovered1 = 0,
     recovered7 = 0,
-    recovered30 = 0;
+    recovered30 = 0,
+    points = 0;
   let cland, csea, cair;
 
   $: setpop = false;
@@ -46,44 +49,73 @@
         )[0];
         deaths = d.latest;
         deathst = d.latest;
-        deaths1 = deaths - Object.values(d.history)[length - 2];
-        deaths7 = deaths - Object.values(d.history)[length - 8];
-        deaths30 = deaths - Object.values(d.history)[length - 31];
+        deaths1 =
+          deaths - Object.values(d.history)[length - 2] > 0
+            ? deaths - Object.values(d.history)[length - 2]
+            : 0;
+        deaths7 =
+          deaths - Object.values(d.history)[length - 8] > 0
+            ? deaths - Object.values(d.history)[length - 8]
+            : 0;
+        deaths30 =
+          deaths - Object.values(d.history)[length - 31] > 0
+            ? deaths - Object.values(d.history)[length - 31]
+            : 0;
 
-        let c = data.confirmed.locations.filter(
-          e => country === e.country_code
-        )[0];
-        confirmed = c.latest;
-        confirmedt = c.latest;
-        confirmed1 = confirmed - Object.values(c.history)[length - 2];
-        confirmed7 = confirmed - Object.values(c.history)[length - 8];
-        confirmed30 = confirmed - Object.values(c.history)[length - 31];
         let r = data.recovered.locations.filter(
           e => country === e.country_code
         )[0];
         recovered = r.latest;
         recoveredt = r.latest;
-        recovered1 = recovered - Object.values(r.history)[length - 2];
-        recovered7 = recovered - Object.values(r.history)[length - 8];
-        recovered30 = recovered - Object.values(r.history)[length - 31];
+        recovered1 =
+          recovered - Object.values(r.history)[length - 2] > 0
+            ? recovered - Object.values(r.history)[length - 2]
+            : 0;
+        recovered7 =
+          recovered - Object.values(r.history)[length - 8] > 0
+            ? recovered - Object.values(r.history)[length - 8]
+            : 0;
+        recovered30 =
+          recovered - Object.values(r.history)[length - 31] > 0
+            ? recovered - Object.values(r.history)[length - 31]
+            : 0;
 
-        if (setpop) {
-          pop_total = getPop("code", country);
-        } else {
-          pop_total = confirmed;
-        }
+        let c = data.confirmed.locations.filter(
+          e => country === e.country_code
+        )[0];
+        confirmed = c.latest;
+        active = c.latest - deaths - recovered;
+        confirmedt = confirmed;
+        activet = active;
+        active1 =
+          confirmed - Object.values(c.history)[length - 2] > 0
+            ? confirmed - Object.values(c.history)[length - 2]
+            : 0;
+        active7 =
+          confirmed - Object.values(c.history)[length - 8] > 0
+            ? confirmed - Object.values(c.history)[length - 8]
+            : 0;
+        active30 =
+          confirmed - Object.values(c.history)[length - 31] > 0
+            ? confirmed - Object.values(c.history)[length - 31]
+            : 0;
+        confirmed1 = active1 + deaths1 + recovered1;
+        confirmed7 = active7 + deaths7 + recovered7;
+        confirmed30 = active30 + deaths30 + recovered30;
+
         getBorders();
+        getSituation();
       }
     } else {
       deaths = data.latest.deaths;
-      confirmed = data.latest.confirmed;
       recovered = data.latest.recovered;
+      confirmed = data.latest.confirmed;
+      active = data.latest.confirmed - deaths - recovered;
 
-      deathst = data.latest.deaths;
-      confirmedt = data.latest.confirmed;
-      recoveredt = data.latest.recovered;
-
-      
+      deathst = deaths;
+      recoveredt = recovered;
+      confirmedt = confirmed;
+      activet = active;
 
       let deaths_data = sort_total(deaths, data.deaths.locations);
       let confirmed_data = sort_total(confirmed, data.confirmed.locations);
@@ -93,19 +125,17 @@
       deaths7 = deaths - deaths_data[length - 8];
       deaths30 = deaths - deaths_data[length - 31];
 
-      confirmed1 = confirmed - confirmed_data[length - 2];
-      confirmed7 = confirmed - confirmed_data[length - 8];
-      confirmed30 = confirmed - confirmed_data[length - 31];
-
       recovered1 = recovered - recovered_data[length - 2];
       recovered7 = recovered - recovered_data[length - 8];
       recovered30 = recovered - recovered_data[length - 31];
 
-      if (setpop) {
-        pop_total = 7772494610;
-      } else {
-        pop_total = confirmed;
-      }
+      active1 = confirmed - confirmed_data[length - 2];
+      active7 = confirmed - confirmed_data[length - 8];
+      active30 = confirmed - confirmed_data[length - 31];
+
+      confirmed1 = active1 + deaths1 + recovered1;
+      confirmed7 = active7 + deaths7 + recovered7;
+      confirmed30 = active30 + deaths30 + recovered30;
     }
   }
 
@@ -149,6 +179,32 @@
     } else border = 0;
   }
 
+  function getSituation() {
+    let fatality = (deaths / confirmed) * 100;
+
+    let length = Object.keys(data.confirmed.locations[0].history).length;
+
+    let pc7 = Object.values(
+      data.confirmed.locations.filter(e => country === e.country_code)[0]
+        .history
+    )[length - 8];
+    let pc0 = Object.values(
+      data.confirmed.locations.filter(e => country === e.country_code)[0]
+        .history
+    )[length - 1];
+
+    let inf = ((pc0 / getPop("code", country)) * 100 * 100 * 2) / 7;
+    if (inf > 2) inf = 2;
+
+    let gro = ((100 - (pc7 / pc0) * 100) * 4) / 50;
+    if (gro > 4) gro = 4;
+
+    let fat = (fatality * 4) / 13;
+    if (fat > 4) fat = 4;
+
+    points = 10 - (inf + gro + fat);
+  }
+
   function findCode(items, attribute, value) {
     for (var i = 0; i < items.length; i++) {
       if (items[i][attribute] === value) {
@@ -158,20 +214,10 @@
     return null;
   }
 
-  function change() {
-    if (setpop) {
-      setpop = !setpop;
-      pop_total = confirmed;
-    } else {
-      setpop = !setpop;
-      if (country) pop_total = getPop("code", country);
-      else pop_total = 7772494610;
-    }
-  }
-
   function cchange() {
     dispatch("cchange");
   }
+
   function toggleOptions() {
     if (show_options == "hidden") {
       show_options = "show";
@@ -179,48 +225,43 @@
       show_options = "hidden";
     }
   }
+
   function changeListDisplay(mode) {
     if (mode == "total") {
       list_mode = "total";
-      box_title = "Total";
-      btn_text = "Total";
+      box_title = "Current Situation";
+      btn_text = "Current";
       deaths = deathst;
+      active = activet;
       confirmed = confirmedt;
       recovered = recoveredt;
-      pop_total = confirmedt;
     } else if (mode == "today") {
       list_mode = "today";
       box_title = "Today";
       btn_text = "Today";
+      active = active1;
       deaths = deaths1;
       confirmed = confirmed1;
       recovered = recovered1;
-      pop_total = confirmed1;
-
-    }else if (mode == "last7") {
+    } else if (mode == "last7") {
       list_mode = "last7";
       box_title = "Last 7 Days";
       btn_text = "Last 7 Day";
+      active = active7;
       deaths = deaths7;
       confirmed = confirmed7;
       recovered = recovered7;
-      pop_total = confirmed7;
-
     } else if (mode == "last30") {
       list_mode = "last30";
       box_title = "Last 30 Days";
       btn_text = "Last 30 Days";
+      active = active30;
       deaths = deaths30;
       confirmed = confirmed30;
       recovered = recovered30;
-      pop_total = confirmed30;
-
     }
     show_options = "hidden";
-
-    run();
   }
-
 </script>
 
 <style>
@@ -232,7 +273,7 @@
     width: 100%;
     left: 0;
     vertical-align: top;
-    padding-bottom: 0px
+    padding-bottom: 0px;
   }
   .borders {
     display: inline;
@@ -264,6 +305,32 @@
     .container-total {
       height: auto;
     }
+  }
+  .col-points {
+    float: right;
+    margin: 0 8px;
+  }
+  .col-points .label-big h4 {
+    display: inline-block;
+    margin: 0;
+    font-weight: 500;
+  }
+  .label-big {
+    padding: 2px 10px;
+    border-radius: 6px;
+    display: inherit;
+  }
+  .label-yellow {
+    color: #ffc831;
+    background-color: rgba(255, 200, 49, 0.2);
+  }
+  .label-red {
+    color: #ff4e34;
+    background-color: rgba(255, 78, 52, 0.2);
+  }
+  .label-green {
+    color: #40c0a5;
+    background-color: rgba(64, 192, 165, 0.2);
   }
 </style>
 
@@ -297,12 +364,24 @@
         <i class="fas fa-times" />
         Close
       </div>
+      {#if country}
+        <div class="col-points">
+          <div
+            class="label-big {points > 7 ? 'label-green' : ''}
+            {points >= 3 && points <= 7 ? 'label-yellow' : ''}
+            {points < 3 ? 'label-red' : ''}">
+
+            <h4 title="progress of the situation in the last 7 days">
+              {parseInt(points)} / 10
+            </h4>
+          </div>
+        </div>
+      {/if}
     </div>
   </div>
   <div
     class="container-body"
-    style=" width: 100%;
-    padding-bottom: 28px; margin-bottom: 16px;">
+    style=" width: 100%; padding-bottom: 28px; margin-bottom: 16px;">
     <div class="container-data-details">
       <div class="col-block">
         <i class="dot dot_green" />
@@ -312,7 +391,7 @@
       <div class="col-block">
         <i class="dot dot_yellow" />
         <label>Active</label>
-        <div class="data">{s(confirmed - deaths - recovered)}</div>
+        <div class="data">{s(active)}</div>
       </div>
       <div class="col-block">
         <i class="dot dot_red" />
@@ -320,16 +399,18 @@
         <div class="data">{s(deaths)}</div>
       </div>
       <div class="col-block-btn">
-       <div class="dropdown">
-        <div class="trigger" on:click={() => toggleOptions()}>
-          <i class="fas fa-filter" style="margin-right: 4px;" />
-          {btn_text}
-          <i class="fas fa-chevron-down" style="float: right; margin: 4% 0;" />
-        </div>
+        <div class="dropdown">
+          <div class="trigger" on:click={() => toggleOptions()}>
+            <i class="fas fa-filter" style="margin-right: 4px;" />
+            {btn_text}
+            <i
+              class="fas fa-chevron-down"
+              style="float: right; margin: 4% 0;" />
+          </div>
           <div class="options {show_options}">
             <div class="option" on:click={() => changeListDisplay('total')}>
               <i class="fas fa-battery-full" />
-              Total
+              Current
             </div>
             <div class="option" on:click={() => changeListDisplay('today')}>
               <i class="fas fa-chart-bar" />
@@ -352,33 +433,31 @@
       <div
         class="progress-bar"
         role="progressbar"
-        style="width: {recovered ? (recovered * 100) / pop_total : 0}%"
-        aria-valuenow={recovered ? (recovered * 100) / pop_total : 0}
+        style="width: {recovered ? (recovered * 100) / confirmed : 0}%"
+        aria-valuenow={recovered ? (recovered * 100) / confirmed : 0}
         aria-valuemin="0"
         aria-valuemax="100">
-        {(recovered ? (recovered * 100) / pop_total : 0).toFixed(0)}%
+        {(recovered ? (recovered * 100) / confirmed : 0).toFixed(0)}%
       </div>
       <div
         class="progress-bar bg-warning"
         role="progressbar"
-        style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}%"
-        aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0}
+        style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0}%"
+        aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0}
         aria-valuemin="0"
         aria-valuemax="100">
-        {(confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / pop_total : 0).toFixed(0)}%
+        {(confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0).toFixed(0)}%
       </div>
       <div
         class="progress-bar bg-danger"
         role="progressbar"
-        style="width: {deaths ? (deaths * 100) / pop_total : 0}%"
-        aria-valuenow={deaths ? (deaths * 100) / pop_total : 0}
+        style="width: {deaths ? (deaths * 100) / confirmed : 0}%"
+        aria-valuenow={deaths ? (deaths * 100) / confirmed : 0}
         aria-valuemin="0"
         aria-valuemax="100">
-        {(deaths ? (deaths * 100) / pop_total : 0).toFixed(0)}%
+        {(deaths ? (deaths * 100) / confirmed : 0).toFixed(0)}%
       </div>
     </div>
-    <label class="progress_label">
-      {s(pop_total)} {setpop ? 'Population' : 'Cases'}
-    </label>
+    <label class="progress_label">{s(confirmed)} Cases</label>
   </div>
 </div>
