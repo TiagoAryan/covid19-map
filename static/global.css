@@ -103,14 +103,20 @@ label {
   transition-duration: 0.2s;
 }
 
-.container-icon i {
+.container-icon i ,  .container-icon svg{
   opacity: 0.6;
+}
+.container-icon svg{
+  fill:white;
+  display: block;
+  margin:0 auto;
+  width: 24px;
 }
 .container-icon:hover {
   cursor: pointer;
   background-color: #38383b;
 }
-.container-icon:hover i {
+.container-icon:hover i ,.container-icon:hover svg{
   opacity: 1;
 }
 .container-bottom {

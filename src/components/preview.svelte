@@ -265,16 +265,6 @@
   .container-title {
     margin-right: 12px;
   }
-  @media (max-width: 1280px) {
-    .container-total {
-      height: auto;
-    }
-  }
-  @media (max-width: 768px) {
-    .container-total {
-      height: auto;
-    }
-  }
   .col-points {
     float: right;
     margin: 0 8px;
@@ -285,21 +275,40 @@
     font-weight: 500;
   }
   .label-big {
-    padding: 2px 10px;
-    border-radius: 6px;
-    display: inherit;
+    font-weight: 900;
+    font-size: 9pt;
+    padding: 2px;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 1px 6px;
+    height: 22px;
+    display: inline-block;
+  }
+  .label-big i {
+    margin-right: 4px;
   }
   .label-yellow {
     color: #ffc831;
-    background-color: rgba(255, 200, 49, 0.2);
+    border: 1px solid #ffc831;
   }
   .label-red {
     color: #ff4e34;
-    background-color: rgba(255, 78, 52, 0.2);
+    border: 1px solid #ff4e34;
   }
   .label-green {
     color: #40c0a5;
-    background-color: rgba(64, 192, 165, 0.2);
+    border: 1px solid #40c0a5;
+  }
+
+  @media (max-width: 1280px) {
+    .container-total {
+      height: auto;
+    }
+  }
+  @media (max-width: 768px) {
+    .container-total {
+      height: auto;
+    }
   }
 </style>
 
@@ -334,16 +343,17 @@
         Close
       </div>
       {#if country}
-        <div class="col-points">
-          <div
-            class="label-big {points > 7 ? 'label-green' : ''}
-            {points >= 3 && points <= 7 ? 'label-yellow' : ''}
-            {points < 3 ? 'label-red' : ''}">
+        <div
+          title="Progress of the situation in the last 7 days"
+          class="label-big {points > 7 ? 'label-green' : ''}
+          {points > 3 && points <= 7 ? 'label-yellow' : ''}
+          {points <= 3 ? 'label-red' : ''}">
 
-            <h4 title="Progress of the situation in the last 7 days">
-              {parseInt(points)} / 10
-            </h4>
-          </div>
+          <i
+            class="far {points > 7 ? 'fa-smile' : ''}
+            {points > 3 && points <= 7 ? 'fa-meh' : ''}
+            {points <= 3 ? 'fa-frown' : ''}" />
+          {parseInt(points)} / 10
         </div>
       {/if}
     </div>
