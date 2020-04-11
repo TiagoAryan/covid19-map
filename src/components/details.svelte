@@ -91,10 +91,23 @@
     .box-half {
       width: 100%;
       margin-bottom: 12px;
-      height: 100vh;
+      height: auto;
     }
     .box-half-right {
       margin-left: 0px;
+    }
+    .container_details {
+        display: flex;
+      flex-flow: column;
+    }
+    .box-half:nth-of-type(2){
+      order:1;
+      margin-bottom: 0px;
+
+    }
+    .box-half:nth-of-type(1){
+      order:2;
+      margin-top: 0px;
     }
   }
 </style>

@@ -511,6 +511,11 @@ button:hover,
   top: 56px;
   left: 12px;
 }
+.trigger p{
+  display: inline-block;
+  margin: 0;
+  
+}
 @keyframes lds-roller {
   0% {
     transform: rotate(0deg);
@@ -546,8 +551,24 @@ button:hover,
     width: 99%;
   }
   .progress {
-    height: 12px;
+    height: 16px;
   }
+  .dropdown{
+    min-width: auto;
+  }
+  .options{
+    width: 160px;
+    right: 0;
+  }
+  .trigger p{
+    display: none;
+
+  }
+  .trigger .fa-chevron-down{
+    float: right; 
+    margin: 15% 0;
+  }
+  
 }
 @media (max-width: 480px) {
   html,
@@ -567,7 +588,7 @@ button:hover,
     height: 12px;
   }
   .progress-bar {
-    height: 12px;
+    height: 16px;
   }
   .container-basic {
     padding: 12px 0px 12px 0px;
@@ -589,5 +610,37 @@ button:hover,
     object-fit: contain;
     height: 16px;
     width: 28px;
+  }
+  .container-icon svg{
+    width: 18px;
+  }
+  .container-icon {
+    width: 42px;
+    height: 42px;
+  }
+  .options{
+    width: 140px;
+    right: 0;
+  }
+  .dot{
+    margin-right: 2px;
+  }
+  .col-block .data{
+    margin-left: 14px;
+    letter-spacing: -0.5px;
+  }
+  .col-block{
+    width: 27%;
+  }
+  .dropdown .trigger{
+    width: 36px;
+    padding: 2px 4px;
+  }
+  .dropdown i{
+    margin-right: 0px;
+    font-size: 0.8rem;
+  }
+  .options{
+    top:32px;
   }
 }

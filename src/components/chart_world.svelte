@@ -371,6 +371,24 @@
   .container-chart.world {
     height: calc(50% - 12px);
   }
+  @media (max-width: 768px) {
+    .container-chart.country {
+      height: 60vh;
+    }
+    .container-chart.world {
+      height: 60vh;
+    }
+        
+  }
+
+  @media (max-width: 480px) {
+    .container-chart.country {
+      height: 50vh;
+    }
+    .container-chart.world {
+      height: 50vh;
+    }
+  }
 </style>
 
 <div class="container-basic container-chart world" bind:this={container_box}>

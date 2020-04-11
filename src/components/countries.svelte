@@ -226,6 +226,34 @@
     margin-bottom: 12px;
     display: block;
   }
+  @media (max-width: 768px) {
+
+    .container-basic{
+      height: auto;
+    }
+    .container-chart{
+      height:80px;
+    }
+    .col-block{
+      width: 18%;
+      padding-top: 20px;
+      padding-left: 20px;
+    }
+  }
+  @media (max-width: 480px) {
+
+    .container-list-group {
+      width: 100%;
+    }
+    .col-block{
+      width: 31%;
+      padding-top: 20px;
+      padding-left: 20px;
+    }
+    .container-chart{
+      height:70px;
+    }
+  }
 </style>
 
 {#if !res}
