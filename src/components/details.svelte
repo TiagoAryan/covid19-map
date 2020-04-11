@@ -112,7 +112,7 @@
 
     <div
       class="box-half box-half-right {country ? 'container_details_box-half-right' : ''}">
-      <Preview data={dados} {country} {name} on:cchange />
+      <Preview data={dados} {country} {name} {show_details} on:cchange />
       {#if country}
         <Stats data={dados} {country} />
         <Chart data={dados} {country} />

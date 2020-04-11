@@ -71,15 +71,14 @@
     for (var d of dates) range_dates.push(chart_d(d));
     range_dates.push(chart_d(data.confirmed.last_updated));
     confirmed_data = sort_total(dates, data.confirmed.locations);
-    confirmed_data[confirmed_data.length - 1] = data.confirmed.deaths;
+    confirmed_data[confirmed_data.length - 1] = data.latest.confirmed;
     deaths_data = sort_total(dates, data.deaths.locations);
     deaths_data[deaths_data.length - 1] = data.latest.deaths;
     recovered_data = sort_total(dates, data.recovered.locations);
     recovered_data[recovered_data.length - 1] = data.latest.recovered;
     active_data = sort_total_a(dates);
-    active_data.push(
-      data.latest.confirmed - data.latest.recovered - data.latest.deaths
-    );
+    active_data[active_data.length - 1] =
+      data.latest.confirmed - data.latest.recovered - data.latest.deaths;
 
     for (var d of dates) {
       if (k > 0) {
@@ -95,6 +94,7 @@
       }
       k++;
     }
+
     if (chart_mode) {
       chart.type = "line";
       chart.options.scales = {
@@ -380,7 +380,10 @@
     <div class="container-header-contents">
 
       <h5 class="container-title">{box_title}</h5>
-      <div style="float:right" class="button secondary" on:click={() => changeChart()}>
+      <div
+        style="float:right"
+        class="button secondary"
+        on:click={() => changeChart()}>
         <i class="fas fa-{btn_icon}" />
         <p>{btn_text}</p>
       </div>

@@ -6,6 +6,7 @@
   export let data;
   export let country;
   export let name;
+  export let show_details;
 
   let box_title = "Current Situation";
   let btn_text = "Current";
@@ -90,8 +91,11 @@
 
         getBorders();
         getSituation(d.latest, c.latest);
+      } else {
+        if (show_details) cchange();
       }
     } else {
+      border = 0;
       let deaths_data = sort_total(deaths, data.deaths.locations);
       let confirmed_data = sort_total(confirmed, data.confirmed.locations);
       let recovered_data = sort_total(recovered, data.recovered.locations);
@@ -358,85 +362,94 @@
       {/if}
     </div>
   </div>
-  <div
-    class="container-body"
-    style=" width: 100%; padding-bottom: 28px; margin-bottom: 16px;">
-    <div class="container-data-details">
-      <div class="col-block">
-        <i class="dot dot_green" />
-        <label>Recovered</label>
-        <div class="data">{s(recovered)}</div>
-      </div>
-      <div class="col-block">
-        <i class="dot dot_yellow" />
-        <label>{infected}</label>
-        <div class="data">{s(active)}</div>
-      </div>
-      <div class="col-block">
-        <i class="dot dot_red" />
-        <label>Deaths</label>
-        <div class="data">{s(deaths)}</div>
-      </div>
-      <div class="col-block-btn">
-        <div class="dropdown">
-          <div class="trigger" on:click={() => toggleOptions()}>
-            <i class="fas fa-filter" style="margin-right: 4px;" />
-            {btn_text}
-            <i
-              class="fas fa-chevron-down"
-              style="float: right; margin: 4% 0;" />
-          </div>
-          <div class="options {show_options}">
-            <div class="option" on:click={() => changeListDisplay('total')}>
-              <i class="fas fa-battery-full" />
-              Current
-            </div>
-            <div class="option" on:click={() => changeListDisplay('today')}>
-              <i class="fas fa-chart-bar" />
-              Today
-            </div>
-            <div class="option" on:click={() => changeListDisplay('last7')}>
-              <i class="fas fa-chart-bar" />
-              Last 7 Days
-            </div>
-            <div class="option" on:click={() => changeListDisplay('last30')}>
-              <i class="fas fa-chart-bar" />
-              Last 30 Days
-            </div>
-          </div>
 
+  {#if confirmed}
+    <div
+      class="container-body"
+      style=" width: 100%; padding-bottom: 28px; margin-bottom: 16px;">
+      <div class="container-data-details">
+        <div class="col-block">
+          <i class="dot dot_green" />
+          <label>Recovered</label>
+          <div class="data">{s(recovered)}</div>
+        </div>
+        <div class="col-block">
+          <i class="dot dot_yellow" />
+          <label>{infected}</label>
+          <div class="data">{s(active)}</div>
+        </div>
+        <div class="col-block">
+          <i class="dot dot_red" />
+          <label>Deaths</label>
+          <div class="data">{s(deaths)}</div>
+        </div>
+        <div class="col-block-btn">
+          <div class="dropdown">
+            <div class="trigger" on:click={() => toggleOptions()}>
+              <i class="fas fa-filter" style="margin-right: 4px;" />
+              {btn_text}
+              <i
+                class="fas fa-chevron-down"
+                style="float: right; margin: 4% 0;" />
+            </div>
+            <div class="options {show_options}">
+              <div class="option" on:click={() => changeListDisplay('total')}>
+                <i class="fas fa-battery-full" />
+                Current
+              </div>
+              <div class="option" on:click={() => changeListDisplay('today')}>
+                <i class="fas fa-chart-bar" />
+                Today
+              </div>
+              <div class="option" on:click={() => changeListDisplay('last7')}>
+                <i class="fas fa-chart-bar" />
+                Last 7 Days
+              </div>
+              <div class="option" on:click={() => changeListDisplay('last30')}>
+                <i class="fas fa-chart-bar" />
+                Last 30 Days
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
+      <div class="progress">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          style="width: {recovered ? (recovered * 100) / confirmed : 0}%"
+          aria-valuenow={recovered ? (recovered * 100) / confirmed : 0}
+          aria-valuemin="0"
+          aria-valuemax="100">
+          {(recovered ? (recovered * 100) / confirmed : 0).toFixed(0)}%
+        </div>
+        <div
+          class="progress-bar bg-warning"
+          role="progressbar"
+          style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0}%"
+          aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0}
+          aria-valuemin="0"
+          aria-valuemax="100">
+          {(confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0).toFixed(0)}%
+        </div>
+        <div
+          class="progress-bar bg-danger"
+          role="progressbar"
+          style="width: {deaths ? (deaths * 100) / confirmed : 0}%"
+          aria-valuenow={deaths ? (deaths * 100) / confirmed : 0}
+          aria-valuemin="0"
+          aria-valuemax="100">
+          {(deaths ? (deaths * 100) / confirmed : 0).toFixed(0)}%
+        </div>
+      </div>
+      <label class="progress_label">{s(confirmed)} Cases</label>
     </div>
-    <div class="progress">
-      <div
-        class="progress-bar"
-        role="progressbar"
-        style="width: {recovered ? (recovered * 100) / confirmed : 0}%"
-        aria-valuenow={recovered ? (recovered * 100) / confirmed : 0}
-        aria-valuemin="0"
-        aria-valuemax="100">
-        {(recovered ? (recovered * 100) / confirmed : 0).toFixed(0)}%
-      </div>
-      <div
-        class="progress-bar bg-warning"
-        role="progressbar"
-        style="width: {confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0}%"
-        aria-valuenow={confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0}
-        aria-valuemin="0"
-        aria-valuemax="100">
-        {(confirmed - deaths - recovered ? ((confirmed - deaths - recovered) * 100) / confirmed : 0).toFixed(0)}%
-      </div>
-      <div
-        class="progress-bar bg-danger"
-        role="progressbar"
-        style="width: {deaths ? (deaths * 100) / confirmed : 0}%"
-        aria-valuenow={deaths ? (deaths * 100) / confirmed : 0}
-        aria-valuemin="0"
-        aria-valuemax="100">
-        {(deaths ? (deaths * 100) / confirmed : 0).toFixed(0)}%
-      </div>
+  {:else}
+    <div class="container-body body-healthy">
+      <i class="fas fa-heartbeat" />
+      <h5>This country has no cases of Covid-19</h5>
+      <i class="fas fa-heartbeat" />
     </div>
-    <label class="progress_label">{s(confirmed)} Cases</label>
-  </div>
+  {/if}
 </div>

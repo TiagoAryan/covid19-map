@@ -99,7 +99,9 @@
         <img src={flag(name)} alt="flag" />
       </div>
       <h5 class="container-title">{name}</h5>
-      <div style="float:right" class="button" on:click={fitMap}>Details</div>
+      {#if confirmed}
+        <div style="float:right" class="button" on:click={fitMap}>Details</div>
+      {/if}
     </div>
   </div>
   {#if confirmed}
