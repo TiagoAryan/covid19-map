@@ -4,7 +4,13 @@
   export let data;
   export let country;
 
-  let days, fatality, pop_total, points, critical, tests, critical_per;
+  let days,
+    fatality = 0,
+    pop_total,
+    points,
+    critical,
+    tests,
+    critical_per;
 
   $: country, getContent();
 
@@ -68,7 +74,6 @@
     text-align: left;
     padding: 0px 4%;
     vertical-align: top;
-
   }
   h4 {
     margin: 0px;
@@ -100,30 +105,26 @@
     margin-bottom: 4px;
     line-height: 0.8rem;
   }
-  
+
   @media (max-width: 768px) {
     .col-block {
-    width: 18%;
-    padding: 0px 0%;
-
-  }
+      width: 18%;
+      padding: 0px 0%;
+    }
   }
   @media (max-width: 480px) {
     .col-block {
       width: 32%;
       padding: 0px 0%;
-
     }
-    .col-block:nth-of-type(1){
+    .col-block:nth-of-type(1) {
       width: 100%;
       margin-bottom: 12px;
-
     }
-    .container-stats{
+    .container-stats {
       height: auto;
     }
   }
- 
 </style>
 
 <div class="container-basic container-stats">

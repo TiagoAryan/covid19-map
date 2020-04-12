@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import data from "jhucsse.covid";
   import { NovelCovid } from "novelcovid";
   import getCountryISO2 from "country-iso-3-to-2";
@@ -11,12 +12,15 @@
   import About from "../components/about.svelte";
   import { toDate, isMobile, getPop } from "misc";
 
+  import { cbounds } from "../components/bounds.js";
+
+  var countries_bounds;
   let days = 66;
   var map, gl;
   var selected_country, selected_country_id;
   var colors = ["#FFC831", "#FF4E34", "#40C0A5"];
   var circle_size = 8000;
-  var play_speed = 300;
+  var play_speed = 500;
   var circle = [];
   var c = 0;
   let country_clicked,
@@ -299,8 +303,12 @@
       }
     }
   }
+  onMount(() => {
+    init();
+  });
 
   async function init() {
+    countries_bounds = await cbounds();
     bounds = countries_bounds;
     if (isMobile())
       map = L.map("map", {
@@ -793,7 +801,7 @@
     };
     var lineDistance = turf.lineDistance(route.features[0], "kilometers");
     var arc = [];
-    var steps = 8;
+    var steps = 22;
 
     // Draw an arc between the `origin` & `destination` of the two points
     for (var i = 0; i < lineDistance; i += lineDistance / steps - 1) {
@@ -943,9 +951,6 @@
 </style>
 
 <svelte:head>
-  <script src="./js/bounds.js" on:load={init()}>
-
-  </script>
   <title>Covid 19 Info</title>
 </svelte:head>
 <section>
