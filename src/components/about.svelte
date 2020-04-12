@@ -132,15 +132,16 @@
     float: right;
     margin-top: 4px;
   }
-
-  @media (max-width: 768px) {
-    .block-about {
-      display: none;
-    }
-  }
   .ico {
     font-size: 1rem;
     padding: 5px;
+  }
+
+  @media (max-width: 768px) {
+    .block-about,
+    .icon {
+      display: none;
+    }
   }
 </style>
 
@@ -180,9 +181,9 @@
           by
         </label>
         <p>
-          <a href="">Tiago Aryan</a>
+          <a href="http://sparebullit.com/tiagoaryan">Tiago Aryan</a>
           &
-          <a href="">Beatriz Diogo</a>
+          <a href="http://sparebullit.com/btriz">Beatriz Diogo</a>
         </p>
       </div>
       <div class="container-row">

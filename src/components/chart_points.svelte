@@ -266,7 +266,7 @@
   label {
     margin: 0;
   }
-  .container-header label{
+  .container-header label {
     display: block;
   }
 
@@ -282,7 +282,7 @@
     <div class="container-header-contents">
 
       <h5 class="container-title">Fatality related to Average Age</h5>
-      <label >— 100 countries with more Deaths</label>
+      <label>— 100 countries with more Deaths</label>
     </div>
   </div>
   <div class="container-body">

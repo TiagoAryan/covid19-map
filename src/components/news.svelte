@@ -192,8 +192,8 @@
     }
     figure,
     img {
-      width: 100%;
-      height: 120px;
+      width: 80px;
+      height: 80px;
     }
     .full-block-news .more:first-of-type figure,
     .full-block-news .more:first-of-type img {
@@ -210,25 +210,24 @@
       width: 50px;
       margin: 0px;
     }
-    .container-icon i{
+    .container-icon i {
       margin: 0px;
-
     }
 
-    .button p{
-      display:none;
+    .button p {
+      display: none;
     }
   }
   time::before {
     content: "\0000a0\002022\0000a0";
   }
 
-@media (max-width: 480px) {
-  .container-icon {
+  @media (max-width: 480px) {
+    .container-icon {
       top: 262px;
       width: 42px;
     }
-}
+  }
 </style>
 
 <div

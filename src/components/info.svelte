@@ -88,6 +88,12 @@
     height: 28px;
     width: 46px;
   }
+
+  @media (max-width: 768px) {
+    .container-total {
+      padding-bottom: 33px;
+    }
+  }
 </style>
 
 <div

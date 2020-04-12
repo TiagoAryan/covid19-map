@@ -338,6 +338,9 @@
     .fa-chevron-down {
       margin: 5px 0px;
     }
+    .container-total {
+      margin-bottom: 3px;
+    }
   }
 </style>
 

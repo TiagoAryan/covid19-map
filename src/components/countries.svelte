@@ -227,31 +227,32 @@
     display: block;
   }
   @media (max-width: 768px) {
-
-    .container-basic{
+    .container-basic {
       height: auto;
     }
-    .container-chart{
-      height:80px;
+    .container-chart {
+      height: 80px;
     }
-    .col-block{
+    .col-block {
       width: 18%;
       padding-top: 20px;
       padding-left: 20px;
     }
+    .container-basic {
+      margin-bottom: 0px;
+    }
   }
   @media (max-width: 480px) {
-
     .container-list-group {
       width: 100%;
     }
-    .col-block{
+    .col-block {
       width: 31%;
       padding-top: 20px;
       padding-left: 20px;
     }
-    .container-chart{
-      height:70px;
+    .container-chart {
+      height: 70px;
     }
   }
 </style>

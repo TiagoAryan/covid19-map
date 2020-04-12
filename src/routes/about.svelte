@@ -178,9 +178,9 @@
             by
           </label>
           <p>
-            <a href="">Tiago Aryan</a>
+            <a href="http://sparebullit.com/tiagoaryan">Tiago Aryan</a>
             &
-            <a href="">Beatriz Diogo</a>
+            <a href="http://sparebullit.com/btriz">Beatriz Diogo</a>
           </p>
           <p class="fit">
             <a href="https://www.buymeacoffee.com/tiagoaryan" target="_blank">

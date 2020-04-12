@@ -209,7 +209,7 @@
           var number_people_prev = 0;
           var number_people =
             data.locations[k].history[date] - number_people_prev;
-          var num_circles = parseInt(number_people / 500);
+          var num_circles = parseInt(number_people / 1000);
           i = 0;
 
           //initialize circle for each location
@@ -304,9 +304,9 @@
     bounds = countries_bounds;
     if (isMobile())
       map = L.map("map", {
-        minZoom: 2,
+        minZoom: 2.5,
         maxZoom: 8
-      }).fitWorld();
+      }).setView([20, 0], 2);
     else
       map = L.map("map", {
         minZoom: 2.5,
@@ -428,7 +428,7 @@
         country_clicked = "";
         country_name_clicked = "World";
         selected_country_id = "";
-        map.setView([20, 0], 2.5);
+        if (!isMobile()) map.setView([20, 0], 2.5);
       }
     }
 
@@ -449,7 +449,7 @@
 
         res = await mergeNewData(result);
 
-        //play();
+        play();
       })
       .catch(function(error) {
         console.error(error);
@@ -599,19 +599,25 @@
     show = "";
     if (view_news) view_news = false;
     if (view_about) view_about = false;
-
-    if (args.detail.country != "World") {
-      var country_json = L.geoJson(
-        Object.entries(countries_bounds).filter(
-          e => args.detail.country == e[0]
-        )[0]
-      );
-      var bounds = country_json.getBounds();
-      var bounds_extended = getBoundsFloatLeft(bounds);
-      map.flyToBounds(bounds_extended);
-    } else {
-      map.fitWorld();
-    }
+    if (!isMobile())
+      if (show_details) {
+        if (args.detail.country != "World") {
+          var country_json = L.geoJson(
+            Object.entries(countries_bounds).filter(
+              e => args.detail.country == e[0]
+            )[0]
+          );
+          var bounds = country_json.getBounds();
+          var bounds_extended = getBoundsFloatLeft(bounds);
+          map.flyToBounds(bounds_extended);
+        }
+      } else {
+        if (selected_country) map.removeLayer(selected_country);
+        country_clicked = "";
+        country_name_clicked = "World";
+        selected_country_id = "";
+        map.setView([20, 0], 2.5);
+      }
   }
 
   function getBoundsFloatLeft(bounds) {
@@ -628,7 +634,7 @@
 
   function cchange() {
     show = "";
-    show_details = !show_details;
+    if (show_details) fitMap();
   }
   function nchange() {
     show = "";

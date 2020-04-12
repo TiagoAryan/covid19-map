@@ -103,20 +103,22 @@ label {
   transition-duration: 0.2s;
 }
 
-.container-icon i ,  .container-icon svg{
+.container-icon i,
+.container-icon svg {
   opacity: 0.6;
 }
-.container-icon svg{
-  fill:white;
+.container-icon svg {
+  fill: white;
   display: block;
-  margin:0 auto;
+  margin: 0 auto;
   width: 24px;
 }
 .container-icon:hover {
   cursor: pointer;
   background-color: #38383b;
 }
-.container-icon:hover i ,.container-icon:hover svg{
+.container-icon:hover i,
+.container-icon:hover svg {
   opacity: 1;
 }
 .container-bottom {
@@ -511,10 +513,9 @@ button:hover,
   top: 56px;
   left: 12px;
 }
-.trigger p{
+.trigger p {
   display: inline-block;
   margin: 0;
-  
 }
 @keyframes lds-roller {
   0% {
@@ -553,22 +554,20 @@ button:hover,
   .progress {
     height: 16px;
   }
-  .dropdown{
+  .dropdown {
     min-width: auto;
   }
-  .options{
+  .options {
     width: 160px;
     right: 0;
   }
-  .trigger p{
+  .trigger p {
     display: none;
-
   }
-  .trigger .fa-chevron-down{
-    float: right; 
+  .trigger .fa-chevron-down {
+    float: right;
     margin: 15% 0;
   }
-  
 }
 @media (max-width: 480px) {
   html,
@@ -611,36 +610,36 @@ button:hover,
     height: 16px;
     width: 28px;
   }
-  .container-icon svg{
+  .container-icon svg {
     width: 18px;
   }
   .container-icon {
     width: 42px;
     height: 42px;
   }
-  .options{
+  .options {
     width: 140px;
     right: 0;
   }
-  .dot{
+  .dot {
     margin-right: 2px;
   }
-  .col-block .data{
+  .col-block .data {
     margin-left: 14px;
     letter-spacing: -0.5px;
   }
-  .col-block{
+  .col-block {
     width: 27%;
   }
-  .dropdown .trigger{
+  .dropdown .trigger {
     width: 36px;
     padding: 2px 4px;
   }
-  .dropdown i{
+  .dropdown i {
     margin-right: 0px;
     font-size: 0.8rem;
   }
-  .options{
-    top:32px;
+  .options {
+    top: 32px;
   }
 }
