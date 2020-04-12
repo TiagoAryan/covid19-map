@@ -36,7 +36,6 @@
   }
   label {
     display: inline-block;
-    width: 100%;
     margin-bottom: 4px;
     font-size: 1rem;
   }
@@ -68,14 +67,36 @@
   section {
     padding: 4rem 0px;
   }
-  .button {
+  .go-back {
     position: fixed;
     top: 12px;
     left: 12px;
     z-index: 100;
   }
-  .button i {
+  .go-back i {
     margin-right: 4px;
+  }
+  .container-header {
+    display: block;
+    border-bottom: 1px solid rgba(151, 151, 151, 0.3);
+    width: 100%;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+  }
+  .container-body {
+    display: block;
+    padding: 0px 24px;
+  }
+  .container-header h5{
+    padding:0px 24px;
+    display: inline-block;
+  }
+  .subtitle{
+    padding: 6px 0px;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(151, 151, 151, 0.3);
+
   }
 </style>
 
@@ -86,7 +107,7 @@
 <section>
 
   <div class="block-about">
-    <a href="/" class="button secondary">
+    <a href="/" class="button secondary go-back">
       <i class="fas fa-chevron-left" />
       Go Back to Map
     </a>
@@ -96,11 +117,15 @@
     <h3>About this Project</h3>
 
     <div class="container-basic">
-      <div class="container-body">
-        <h3>
+      <div class="container-header">
+       <h5>
           Covid 19 Information Map
+        </h5>
           <label>v1</label>
-        </h3>
+
+      </div>
+      <div class="container-body">
+       
 
         <div class="container-row">
           <label>Last Updated</label>
@@ -112,7 +137,7 @@
         </div>
         <div class="container-row">
 
-          <h5>Sources</h5>
+          <h5 class="subtitle">Sources</h5>
           <label>Data</label>
           <p>
             <a
@@ -164,7 +189,9 @@
           </p>
         </div>
         <div class="container-row">
-          <label>Code at</label>
+          <h5 class="subtitle">Code</h5>
+
+          <label>Repository at</label>
           <p>
             <a href="https://github.com/TiagoAryan/covid19-map" target="_blank">
               github:TiagoAryan/covid19-map
@@ -178,12 +205,12 @@
             by
           </label>
           <p>
-            <a href="">Tiago Aryan</a>
+            Tiago Aryan
             &
-            <a href="">Beatriz Diogo</a>
+          Beatriz Diogo
           </p>
           <p class="fit">
-            <a href="https://www.buymeacoffee.com/tiagoaryan" target="_blank">
+            <a  class="button secondary" href="https://www.buymeacoffee.com/tiagoaryan" target="_blank">
               Buy me a Coffee
             </a>
           </p>
