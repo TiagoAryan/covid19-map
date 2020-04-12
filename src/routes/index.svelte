@@ -20,7 +20,7 @@
   var selected_country, selected_country_id;
   var colors = ["#FFC831", "#FF4E34", "#40C0A5"];
   var circle_size = 8000;
-  var play_speed = 500;
+  var play_speed = 400;
   var circle = [];
   var c = 0;
   let country_clicked,
