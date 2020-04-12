@@ -118,6 +118,10 @@
     font-size: 1rem;
     padding: 5px;
   }
+  .container_details_box-half .container_details,
+  .container_details_box-half .box-half {
+    width: 100%;
+  }
   @media (max-width: 1280px) {
     .container_details_box-half {
       max-width: 600px;
@@ -133,8 +137,9 @@
       margin-left: 0px;
     }
     .container_details_box {
+      width: 98%;
       top: 4px;
-      right: 22px;
+      right: 4px;
     }
     .container_details {
       width: calc(100vw - 2px);
