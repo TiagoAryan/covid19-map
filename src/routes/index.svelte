@@ -20,7 +20,7 @@
   var selected_country, selected_country_id;
   var colors = ["#FFC831", "#FF4E34", "#40C0A5"];
   var circle_size = 8000;
-  var play_speed = 400;
+  var play_speed = 200;
   var circle = [];
   var c = 0;
   let country_clicked,
@@ -1092,5 +1092,6 @@
   {#if news !== undefined && news !== '' && news !== []}
     <News data={news} {view_news} on:nchange={() => nchange()} />
   {/if}
-
+  <a href="/covid19/about" style="visibility: hidden; position: absolute;" />
+  <a href="/covid19/news" style="visibility: hidden; position: absolute;" />
 </section>

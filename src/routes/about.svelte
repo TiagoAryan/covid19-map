@@ -106,7 +106,7 @@
 <section>
 
   <div class="block-about">
-    <a href="/" class="button secondary go-back">
+    <a href="/covid19" class="button secondary go-back">
       <i class="fas fa-chevron-left" />
       Go Back to Map
     </a>

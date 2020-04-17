@@ -1,5 +1,5 @@
 <script>
-  import { getPop } from "misc";
+  import { getPop, s } from "misc";
 
   export let data;
   export let country;
@@ -144,9 +144,9 @@
           {(tests / pop_total) * 1000 < 5 ? 'label-red' : ''}
           ">
           <h4>
-            {parseInt(tests / 1000000) > 0 ? parseInt(tests / 1000000) + 'M' : ''}
-            {parseInt(tests / 1000) > 0 && parseInt(tests / 1000000) <= 0 ? parseInt(tests / 1000) + 'k' : ''}
-            {parseInt(tests / 1000) <= 0 ? tests : ''}
+            {parseInt(tests / 1000000) > 0 ? s(parseInt(tests / 1000000)) + 'M' : ''}
+            {parseInt(tests / 1000) > 0 && parseInt(tests / 1000000) <= 0 ? s(parseInt(tests / 1000)) + 'k' : ''}
+            {parseInt(tests / 1000) <= 0 ? s(tests) : ''}
           </h4>
 
         </div>
@@ -158,7 +158,7 @@
           {critical_per > 3.5 && critical_per <= 7 ? 'label-yellow' : ''}
           {critical_per < 5 ? 'label-green' : ''}
           ">
-          <h4>{critical}</h4>
+          <h4>{s(critical)}</h4>
         </div>
       </div>
       <div class="col-block">

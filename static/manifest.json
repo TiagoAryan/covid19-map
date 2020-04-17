@@ -1,11 +1,11 @@
 {
   "background_color": "#ffffff",
   "theme_color": "#333333",
-  "name": "Covid 19 Info",
+  "name": "Covid 19 Information Map",
   "short_name": "Covid 19 Info",
   "description": "Covid 19 Information Map",
   "display": "fullscreen",
-  "start_url": "/",
+  "start_url": "/covid19/",
   "orientation": "portrait",
   "icons": [
     {

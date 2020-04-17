@@ -200,7 +200,7 @@
             target="_blank">
             <i class="ico fas fa-coffee" />
           </a>
-          <a class="button secondary" href="/about" target="_blank">
+          <a class="button secondary" href="/covid19/about/" target="_blank">
             More About
           </a>
         </p>

@@ -154,13 +154,13 @@
 
   {#if data}
     <div class="block-news">
-      <a href="/" class="button secondary">
+      <a href="/covid19" class="button secondary">
         <i class="fas fa-chevron-left" />
         Go Back to Map
       </a>
 
       <h3>Current World Situation</h3>
-      <a href="/">
+      <a href="/covid19">
         <div class="container-basic" style=" padding: 40px 0">
           <div class="container-body">
             <div class="container-body body-infected">
