@@ -392,7 +392,7 @@
     </div>
   </div>
 
-  {#if confirmed}
+  {#if active}
     <div
       class="container-body"
       style=" width: 100%; padding-bottom: 28px; margin-bottom: 16px;">

@@ -38,6 +38,7 @@
     view_about = false,
     show_details = false;
   let inPlay = true;
+  let loadData = "Getting Data";
 
   let show_info = "show";
 
@@ -304,10 +305,12 @@
     }
   }
   onMount(() => {
+    loadData = "Mount Page";
     init();
   });
 
   async function init() {
+    loadData = "Getting Map";
     countries_bounds = await cbounds();
     bounds = countries_bounds;
     if (isMobile())
@@ -445,9 +448,10 @@
       gl._glMap.addImage("plane", image);
     });
 
+    loadData = "Getting Transmitions Data";
     await getSpread();
-    getNews();
 
+    loadData = "Getting Covid Data";
     await data
       .all()
       .then(async function(result) {
@@ -455,6 +459,7 @@
         result.deaths.locations = sort(result.deaths.locations);
         result.recovered.locations = sort(result.recovered.locations);
 
+        loadData = "Compile Covid Data";
         res = await mergeNewData(result);
 
         play();
@@ -462,6 +467,8 @@
       .catch(function(error) {
         console.error(error);
       });
+    loadData = "Getting News";
+    getNews();
   }
 
   async function mergeNewData(data) {
@@ -1076,7 +1083,7 @@
     <About data={res} {view_about} on:achange={() => achange()} />
   {:else}
     <div class="pane-loading">
-      <p>Getting Data</p>
+      <p>{loadData}</p>
       <div class="lds-roller">
         <div />
         <div />

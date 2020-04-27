@@ -8,6 +8,14 @@
     }
   },
   {
+    "code": "AF",
+    "transit": {
+      "air": 2,
+      "land": 0,
+      "sea": 0
+    }
+  },
+  {
     "code": "ES",
     "transit": {
       "air": 2,

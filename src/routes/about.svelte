@@ -148,9 +148,9 @@
             </a>
           </p>
           <label>
-            Transmissions (Last update:
-            <time datetime={new Date('03/26/2020')}>
-              {moment('03/26/2020').fromNow()}
+            Genomic epidemiology (Last update:
+            <time datetime={new Date('03/27/2020')}>
+              {moment('03/27/2020').fromNow()}
             </time>
             )
           </label>
