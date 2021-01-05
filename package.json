@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@rollup/plugin-json": "^4.0.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "country-iso-3-to-2": "^1.1.0",
